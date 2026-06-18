@@ -1,0 +1,830 @@
+# FASE 6 — AI COPILOT, AIOPS, RAG CORPORATIVO E CENTRO DE OPERAÇÕES AUTÔNOMAS
+
+## PAPEL DO AGENTE
+
+Atue como Arquiteto de IA Enterprise, especialista em:
+
+* Generative AI
+* AIOps
+* LLM Applications
+* RAG
+* Agentic AI
+* Knowledge Graph
+* Vector Databases
+* Observabilidade
+* ITSM
+* Automação
+* Machine Learning
+* FastAPI
+* PostgreSQL
+* pgvector
+
+Expandir a plataforma AII construída nas Fases 1 a 5.
+
+Não recriar funcionalidades existentes.
+
+Utilizar toda a infraestrutura já implementada.
+
+Implementar exclusivamente os recursos desta fase.
+
+---
+
+# OBJETIVO DA FASE
+
+Transformar a plataforma em uma solução de AIOps corporativa.
+
+A IA deverá ser capaz de:
+
+* Responder perguntas em linguagem natural
+* Consultar dados da infraestrutura
+* Consultar ativos
+* Consultar incidentes
+* Consultar métricas
+* Consultar licenças
+* Consultar vulnerabilidades
+* Consultar compliance
+* Consultar impressoras
+* Identificar causa raiz
+* Gerar recomendações
+* Classificar incidentes
+* Produzir relatórios executivos
+* Auxiliar operadores
+* Auxiliar gestores
+
+Esta fase NÃO executará ações autônomas sem aprovação.
+
+A operação totalmente autônoma será implementada em fase posterior.
+
+---
+
+# NOVOS MÓDULOS
+
+Criar:
+
+ai_gateway/
+
+llm_gateway/
+
+ai_copilot/
+
+rag_engine/
+
+vector_store/
+
+knowledge_graph/
+
+ai_operations_center/
+
+root_cause_engine/
+
+recommendation_engine/
+
+conversation_memory/
+
+prompt_management/
+
+ai_security/
+
+executive_ai/
+
+incident_ai/
+
+knowledge_ai/
+
+---
+
+# ARQUITETURA DE IA
+
+Criar camada desacoplada.
+
+Estrutura:
+
+AI Gateway
+
+↓
+
+LLM Gateway
+
+↓
+
+Tools Layer
+
+↓
+
+Platform Services
+
+↓
+
+Database
+
+---
+
+# LLM GATEWAY
+
+Criar abstração para múltiplos modelos.
+
+Suportar:
+
+OpenAI
+
+Anthropic
+
+Google Gemini
+
+Mistral
+
+DeepSeek
+
+Llama
+
+Azure OpenAI
+
+O sistema não deve depender de um único fornecedor.
+
+---
+
+# AI COPILOT
+
+Criar assistente conversacional corporativo.
+
+Permitir perguntas como:
+
+Quais ativos estão críticos?
+
+Quais servidores Dell estão com problemas?
+
+Quais impressoras estão sem toner?
+
+Quais licenças vencem este mês?
+
+Quais ativos estão offline?
+
+Qual foi o incidente mais crítico desta semana?
+
+Quais vulnerabilidades possuem maior risco?
+
+---
+
+# AI OPERATIONS CENTER
+
+Criar tela principal da IA.
+
+A IA deve exibir automaticamente:
+
+Incidentes críticos
+
+Riscos
+
+Anomalias
+
+Mudanças recentes
+
+Vulnerabilidades
+
+Licenças expirando
+
+Equipamentos críticos
+
+Recomendações
+
+---
+
+# TOOL CALLING
+
+A IA deve possuir acesso controlado às APIs internas.
+
+Permitir consultar:
+
+CMDB
+
+Discovery
+
+Monitoring
+
+Metrics
+
+Events
+
+Alerts
+
+Tickets
+
+Knowledge Base
+
+Licenças
+
+Compliance
+
+Vulnerabilidades
+
+Impressoras
+
+---
+
+# RAG ENGINE
+
+Implementar RAG corporativo.
+
+Utilizar:
+
+pgvector
+
+Embeddings
+
+Chunking
+
+Metadata
+
+Semantic Search
+
+Hybrid Search
+
+---
+
+# FONTES DE CONHECIMENTO
+
+Indexar:
+
+Base de conhecimento
+
+Procedimentos
+
+Documentações
+
+Políticas
+
+Manuais
+
+Tickets resolvidos
+
+Relatórios
+
+Artigos técnicos
+
+Documentação interna
+
+---
+
+# VECTOR DATABASE
+
+Implementar.
+
+Estrutura:
+
+Documentos
+
+Chunks
+
+Embeddings
+
+Metadados
+
+Relacionamentos
+
+Tenant
+
+Permissões
+
+---
+
+# KNOWLEDGE GRAPH
+
+Criar grafo corporativo.
+
+Relacionar:
+
+Usuários
+
+Ativos
+
+Incidentes
+
+Problemas
+
+Mudanças
+
+Serviços
+
+Aplicações
+
+Equipamentos
+
+Sites
+
+---
+
+# MEMÓRIA CONVERSACIONAL
+
+Criar:
+
+Memória curta
+
+Memória longa
+
+Histórico
+
+Contexto por usuário
+
+Contexto por tenant
+
+---
+
+# INCIDENT AI
+
+Criar inteligência para incidentes.
+
+Ao abrir incidente:
+
+Gerar resumo
+
+Classificar categoria
+
+Classificar prioridade
+
+Identificar impacto
+
+Sugerir resolução
+
+Relacionar incidentes semelhantes
+
+---
+
+# TICKET SUMMARIZATION
+
+Gerar automaticamente:
+
+Resumo executivo
+
+Resumo técnico
+
+Próximas ações
+
+Riscos
+
+---
+
+# ROOT CAUSE ANALYSIS
+
+Criar mecanismo de RCA assistido por IA.
+
+Analisar:
+
+Eventos
+
+Alertas
+
+Métricas
+
+Histórico
+
+Incidentes
+
+Dependências
+
+Gerar:
+
+Possível causa raiz
+
+Probabilidade
+
+Justificativa
+
+Impacto
+
+---
+
+# RECOMMENDATION ENGINE
+
+Gerar recomendações.
+
+Exemplos:
+
+Trocar toner
+
+Expandir armazenamento
+
+Atualizar firmware
+
+Substituir equipamento
+
+Aplicar patch
+
+Revisar política
+
+---
+
+# EXECUTIVE AI
+
+Criar assistente executivo.
+
+Perguntas:
+
+Como está a saúde da TI?
+
+Quais riscos existem?
+
+Qual o impacto financeiro dos incidentes?
+
+Quais áreas possuem mais problemas?
+
+Qual o SLA do mês?
+
+---
+
+# EXECUTIVE DASHBOARD
+
+Exibir:
+
+Health Score
+
+Disponibilidade
+
+SLA
+
+Incidentes
+
+Riscos
+
+Custos
+
+Economia
+
+Capacidade
+
+Compliance
+
+---
+
+# HEALTH SCORE GLOBAL
+
+Criar score corporativo.
+
+Escala:
+
+0 a 100
+
+Baseado em:
+
+Monitoramento
+
+Incidentes
+
+Disponibilidade
+
+Compliance
+
+Segurança
+
+Vulnerabilidades
+
+Capacidade
+
+---
+
+# AI SEARCH
+
+Implementar busca semântica.
+
+Permitir:
+
+Buscar ativos
+
+Buscar tickets
+
+Buscar documentos
+
+Buscar incidentes
+
+Buscar procedimentos
+
+Buscar artigos
+
+---
+
+# KNOWLEDGE ASSISTANT
+
+Perguntas:
+
+Como reiniciar um servidor Linux?
+
+Como configurar SNMP?
+
+Como abrir VPN?
+
+Como atualizar um firewall?
+
+Responder utilizando RAG.
+
+---
+
+# PROMPT MANAGEMENT
+
+Criar sistema de gerenciamento de prompts.
+
+Permitir:
+
+Versões
+
+Templates
+
+Categorias
+
+Testes
+
+Aprovação
+
+---
+
+# AI SECURITY
+
+Implementar:
+
+Tenant Isolation
+
+Prompt Filtering
+
+PII Protection
+
+Rate Limiting
+
+Audit Logging
+
+Model Governance
+
+---
+
+# AI AUDIT
+
+Registrar:
+
+Pergunta
+
+Resposta
+
+Usuário
+
+Tenant
+
+Modelo
+
+Tokens
+
+Tempo
+
+Fontes utilizadas
+
+---
+
+# AI INSIGHTS
+
+Criar geração automática.
+
+Exemplos:
+
+Detectei aumento de falhas em impressoras.
+
+Detectei crescimento de uso de disco.
+
+Detectei risco elevado em licenças.
+
+Detectei tendência de indisponibilidade.
+
+---
+
+# ANOMALY EXPLANATION
+
+Ao detectar anomalia:
+
+Explicar:
+
+O que ocorreu
+
+Quando
+
+Possível motivo
+
+Impacto
+
+Ações recomendadas
+
+---
+
+# RELATÓRIOS INTELIGENTES
+
+Gerar automaticamente:
+
+Resumo diário
+
+Resumo semanal
+
+Resumo mensal
+
+Resumo executivo
+
+Resumo operacional
+
+---
+
+# ASSISTENTE DE OPERAÇÕES
+
+Permitir:
+
+Mostrar ativos críticos
+
+Mostrar incidentes críticos
+
+Mostrar equipamentos offline
+
+Mostrar eventos recentes
+
+Mostrar ativos sem compliance
+
+Mostrar licenças expirando
+
+---
+
+# FRONTEND
+
+Criar menus:
+
+AI Copilot
+
+AI Operations Center
+
+AI Insights
+
+AI Search
+
+Knowledge AI
+
+Executive AI
+
+Prompt Management
+
+AI Reports
+
+---
+
+# APIs
+
+Criar APIs REST.
+
+Exemplos:
+
+POST /api/v1/ai/chat
+
+POST /api/v1/ai/search
+
+POST /api/v1/ai/incident-analysis
+
+POST /api/v1/ai/root-cause
+
+GET /api/v1/ai/insights
+
+GET /api/v1/ai/reports
+
+---
+
+# SEGURANÇA
+
+Garantir:
+
+Tenant Isolation
+
+RBAC
+
+Auditoria
+
+Controle de acesso aos dados
+
+Limitação de consultas
+
+Governança dos modelos
+
+---
+
+# PERFORMANCE
+
+Objetivo:
+
+10.000 usuários
+
+1.000 consultas simultâneas
+
+RAG otimizado
+
+Cache inteligente
+
+Preparação para múltiplos modelos
+
+---
+
+# TESTES
+
+Criar:
+
+Unitários
+
+Integração
+
+Prompt Tests
+
+Evaluation Tests
+
+RAG Tests
+
+Segurança
+
+Cobertura mínima:
+
+85%
+
+---
+
+# CRITÉRIOS DE ACEITE
+
+✓ AI Copilot funcionando
+
+✓ RAG funcionando
+
+✓ Busca semântica funcionando
+
+✓ Executive AI funcionando
+
+✓ Incident AI funcionando
+
+✓ Root Cause funcionando
+
+✓ AI Search funcionando
+
+✓ Knowledge AI funcionando
+
+✓ AI Reports funcionando
+
+✓ AI Insights funcionando
+
+✓ APIs funcionando
+
+✓ Auditoria funcionando
+
+✓ Segurança funcionando
+
+✓ Testes aprovados
+
+---
+
+# ENTREGA FINAL
+
+Gerar:
+
+1. AI Gateway
+2. LLM Gateway
+3. AI Copilot
+4. RAG Engine
+5. Knowledge Graph
+6. Root Cause Engine
+7. Recommendation Engine
+8. Executive AI
+9. AI Search
+10. AI Operations Center
+11. Prompt Management
+12. AI Reports
+13. APIs REST
+14. Banco atualizado
+15. Migrations
+16. Testes
+17. Documentação
+
+---
+
+# PREPARAÇÃO PARA FASE 7
+
+Preparar arquitetura para:
+
+Digital Twin
+
+Dependency Mapping
+
+Business Service Mapping
+
+Impact Analysis
+
+Topology Engine
+
+Infrastructure Graph
+
+Business Graph
+
+Service Graph
+
+Application Mapping
+
+Criticality Analysis
+
+Business Impact Engine
+
+A IA deverá futuramente utilizar essas informações para compreender toda a infraestrutura e seus impactos operacionais.
+
+Não implementar ainda.
+
+Apenas preparar a arquitetura para integração futura.

@@ -220,3 +220,181 @@ export const notificationApi = {
   deleteChannel: (id: number) => api.delete(`/notification/channels/${id}`),
   testChannel: (id: number) => api.post(`/notification/channels/${id}/test`),
 };
+
+// ── Phase 4: Endpoint Management & RMM ────────────────────────────────────────
+
+export const agentsApi = {
+  list: (params?: object) => api.get('/agents', { params }).then(r => r.data),
+  get: (id: number) => api.get(`/agents/${id}`).then(r => r.data),
+  getStats: () => api.get('/agents/stats').then(r => r.data),
+  enroll: (body: object) => api.post('/agents/enroll', body).then(r => r.data),
+  checkin: (body: object) => api.post('/agents/checkin', body).then(r => r.data),
+  delete: (id: number) => api.delete(`/agents/${id}`),
+};
+
+export const endpointsApi = {
+  list: (params?: object) => api.get('/endpoints', { params }).then(r => r.data),
+  get: (id: number) => api.get(`/endpoints/${id}`).then(r => r.data),
+  getStats: () => api.get('/endpoints/stats').then(r => r.data),
+  update: (id: number, body: object) => api.patch(`/endpoints/${id}`, body).then(r => r.data),
+  delete: (id: number) => api.delete(`/endpoints/${id}`),
+};
+
+export const softwareApi = {
+  list: (params?: object) => api.get('/software-inventory', { params }).then(r => r.data),
+  summary: () => api.get('/software-inventory/summary').then(r => r.data),
+  byEndpoint: (endpointId: number) => api.get('/software-inventory', { params: { endpoint_id: endpointId } }).then(r => r.data),
+};
+
+export const licensesApi = {
+  list: (params?: object) => api.get('/licenses', { params }).then(r => r.data),
+  get: (id: number) => api.get(`/licenses/${id}`).then(r => r.data),
+  create: (body: object) => api.post('/licenses', body).then(r => r.data),
+  update: (id: number, body: object) => api.patch(`/licenses/${id}`, body).then(r => r.data),
+  delete: (id: number) => api.delete(`/licenses/${id}`),
+  summary: () => api.get('/licenses/summary').then(r => r.data),
+  assign: (id: number, body: object) => api.post(`/licenses/${id}/assign`, body).then(r => r.data),
+  listAssignments: (id: number) => api.get(`/licenses/${id}/assignments`).then(r => r.data),
+};
+
+export const vulnsApi = {
+  list: (params?: object) => api.get('/vulnerabilities', { params }).then(r => r.data),
+  create: (body: object) => api.post('/vulnerabilities', body).then(r => r.data),
+  listEndpointVulns: (params?: object) => api.get('/vulnerabilities/endpoint-vulns', { params }).then(r => r.data),
+  summary: () => api.get('/vulnerabilities/summary').then(r => r.data),
+  updateEndpointVuln: (id: number, body: object) => api.patch(`/vulnerabilities/endpoint-vulns/${id}`, body).then(r => r.data),
+};
+
+export const complianceApi = {
+  listPolicies: () => api.get('/compliance/policies').then(r => r.data),
+  createPolicy: (body: object) => api.post('/compliance/policies', body).then(r => r.data),
+  updatePolicy: (id: number, body: object) => api.patch(`/compliance/policies/${id}`, body).then(r => r.data),
+  deletePolicy: (id: number) => api.delete(`/compliance/policies/${id}`),
+  listChecks: (params?: object) => api.get('/compliance/checks', { params }).then(r => r.data),
+  summary: () => api.get('/compliance/summary').then(r => r.data),
+};
+
+export const remoteActionsApi = {
+  list: (params?: object) => api.get('/remote-actions', { params }).then(r => r.data),
+  get: (id: number) => api.get(`/remote-actions/${id}`).then(r => r.data),
+  create: (body: object) => api.post('/remote-actions', body).then(r => r.data),
+  update: (id: number, body: object) => api.patch(`/remote-actions/${id}`, body).then(r => r.data),
+  cancel: (id: number) => api.post(`/remote-actions/${id}/cancel`).then(r => r.data),
+  delete: (id: number) => api.delete(`/remote-actions/${id}`),
+};
+
+export const patchesApi = {
+  list: (params?: object) => api.get('/patches', { params }).then(r => r.data),
+  listEndpointPatches: (params?: object) => api.get('/patches/endpoint-patches', { params }).then(r => r.data),
+  summary: () => api.get('/patches/summary').then(r => r.data),
+};
+
+export const jobsApi = {
+  list: (params?: object) => api.get('/jobs', { params }).then(r => r.data),
+  get: (id: number) => api.get(`/jobs/${id}`).then(r => r.data),
+  create: (body: object) => api.post('/jobs', body).then(r => r.data),
+  update: (id: number, body: object) => api.patch(`/jobs/${id}`, body).then(r => r.data),
+  cancel: (id: number) => api.post(`/jobs/${id}/cancel`).then(r => r.data),
+  delete: (id: number) => api.delete(`/jobs/${id}`),
+};
+
+export const policiesApi = {
+  list: (params?: object) => api.get('/policies', { params }).then(r => r.data),
+  get: (id: number) => api.get(`/policies/${id}`).then(r => r.data),
+  create: (body: object) => api.post('/policies', body).then(r => r.data),
+  update: (id: number, body: object) => api.patch(`/policies/${id}`, body).then(r => r.data),
+  delete: (id: number) => api.delete(`/policies/${id}`),
+  listChecks: (policyId: number, params?: object) => api.get(`/policies/${policyId}/checks`, { params }).then(r => r.data),
+};
+
+// ── Phase 5: ITSM Enterprise ─────────────────────────────────────────────────
+
+export const ticketsApi = {
+  list: (params?: object) => api.get('/tickets', { params }).then(r => r.data),
+  get: (id: number) => api.get(`/tickets/${id}`).then(r => r.data),
+  create: (body: object) => api.post('/tickets', body).then(r => r.data),
+  update: (id: number, body: object) => api.patch(`/tickets/${id}`, body).then(r => r.data),
+  delete: (id: number) => api.delete(`/tickets/${id}`),
+  getStats: () => api.get('/tickets/stats').then(r => r.data),
+  listComments: (id: number) => api.get(`/tickets/${id}/comments`).then(r => r.data),
+  addComment: (id: number, body: object) => api.post(`/tickets/${id}/comments`, body).then(r => r.data),
+  listActivities: (id: number) => api.get(`/tickets/${id}/activities`).then(r => r.data),
+};
+
+export const problemsApi = {
+  list: (params?: object) => api.get('/problems', { params }).then(r => r.data),
+  get: (id: number) => api.get(`/problems/${id}`).then(r => r.data),
+  create: (body: object) => api.post('/problems', body).then(r => r.data),
+  update: (id: number, body: object) => api.patch(`/problems/${id}`, body).then(r => r.data),
+  delete: (id: number) => api.delete(`/problems/${id}`),
+  getStats: () => api.get('/problems/stats').then(r => r.data),
+  listComments: (id: number) => api.get(`/problems/${id}/comments`).then(r => r.data),
+  addComment: (id: number, body: object) => api.post(`/problems/${id}/comments`, body).then(r => r.data),
+  linkTicket: (id: number, body: object) => api.post(`/problems/${id}/link-ticket`, body).then(r => r.data),
+  listLinkedTickets: (id: number) => api.get(`/problems/${id}/linked-tickets`).then(r => r.data),
+};
+
+export const changesApi = {
+  list: (params?: object) => api.get('/changes', { params }).then(r => r.data),
+  get: (id: number) => api.get(`/changes/${id}`).then(r => r.data),
+  create: (body: object) => api.post('/changes', body).then(r => r.data),
+  update: (id: number, body: object) => api.patch(`/changes/${id}`, body).then(r => r.data),
+  delete: (id: number) => api.delete(`/changes/${id}`),
+  getStats: () => api.get('/changes/stats').then(r => r.data),
+  getCalendar: (params?: object) => api.get('/changes/calendar', { params }).then(r => r.data),
+  listApprovals: (id: number) => api.get(`/changes/${id}/approvals`).then(r => r.data),
+  decideApproval: (changeId: number, approvalId: number, body: object) =>
+    api.post(`/changes/${changeId}/approvals/${approvalId}/decide`, body).then(r => r.data),
+  listComments: (id: number) => api.get(`/changes/${id}/comments`).then(r => r.data),
+  addComment: (id: number, body: object) => api.post(`/changes/${id}/comments`, body).then(r => r.data),
+};
+
+export const serviceCatalogApi = {
+  list: (params?: object) => api.get('/service-catalog', { params }).then(r => r.data),
+  get: (id: number) => api.get(`/service-catalog/${id}`).then(r => r.data),
+  create: (body: object) => api.post('/service-catalog', body).then(r => r.data),
+  update: (id: number, body: object) => api.patch(`/service-catalog/${id}`, body).then(r => r.data),
+  delete: (id: number) => api.delete(`/service-catalog/${id}`),
+  listCategories: () => api.get('/service-catalog/categories').then(r => r.data),
+  request: (id: number, body: object) => api.post(`/service-catalog/${id}/request`, body).then(r => r.data),
+};
+
+export const knowledgeBaseApi = {
+  list: (params?: object) => api.get('/knowledge-base', { params }).then(r => r.data),
+  get: (id: number) => api.get(`/knowledge-base/${id}`).then(r => r.data),
+  create: (body: object) => api.post('/knowledge-base', body).then(r => r.data),
+  update: (id: number, body: object) => api.patch(`/knowledge-base/${id}`, body).then(r => r.data),
+  delete: (id: number) => api.delete(`/knowledge-base/${id}`),
+  listCategories: () => api.get('/knowledge-base/categories').then(r => r.data),
+  popular: () => api.get('/knowledge-base/popular').then(r => r.data),
+  voteHelpful: (id: number) => api.post(`/knowledge-base/${id}/vote`, { helpful: true }).then(r => r.data),
+};
+
+export const slaApi = {
+  listPolicies: () => api.get('/sla/policies').then(r => r.data),
+  getPolicy: (id: number) => api.get(`/sla/policies/${id}`).then(r => r.data),
+  createPolicy: (body: object) => api.post('/sla/policies', body).then(r => r.data),
+  updatePolicy: (id: number, body: object) => api.patch(`/sla/policies/${id}`, body).then(r => r.data),
+  deletePolicy: (id: number) => api.delete(`/sla/policies/${id}`),
+  getDashboard: () => api.get('/sla/dashboard').then(r => r.data),
+};
+
+export const workflowsApi = {
+  list: (params?: object) => api.get('/workflows', { params }).then(r => r.data),
+  get: (id: number) => api.get(`/workflows/${id}`).then(r => r.data),
+  create: (body: object) => api.post('/workflows', body).then(r => r.data),
+  update: (id: number, body: object) => api.patch(`/workflows/${id}`, body).then(r => r.data),
+  delete: (id: number) => api.delete(`/workflows/${id}`),
+  execute: (id: number, body: object) => api.post(`/workflows/${id}/execute`, body).then(r => r.data),
+  listExecutions: (id: number, params?: object) => api.get(`/workflows/${id}/executions`, { params }).then(r => r.data),
+};
+
+export const automationsApi = {
+  list: (params?: object) => api.get('/automations', { params }).then(r => r.data),
+  get: (id: number) => api.get(`/automations/${id}`).then(r => r.data),
+  create: (body: object) => api.post('/automations', body).then(r => r.data),
+  update: (id: number, body: object) => api.patch(`/automations/${id}`, body).then(r => r.data),
+  delete: (id: number) => api.delete(`/automations/${id}`),
+  toggle: (id: number) => api.post(`/automations/${id}/toggle`).then(r => r.data),
+  trigger: (id: number, body: object) => api.post(`/automations/${id}/trigger`, body).then(r => r.data),
+};

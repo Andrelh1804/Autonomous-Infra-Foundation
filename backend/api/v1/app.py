@@ -24,6 +24,28 @@ from backend.api.v1.routes.events import router as events_router
 from backend.api.v1.routes.noc import router as noc_router
 from backend.api.v1.routes.notification import router as notification_router
 
+# Phase 4 — Endpoint Management & RMM
+from backend.api.v1.routes.agents import router as agents_router
+from backend.api.v1.routes.endpoints import router as endpoints_router
+from backend.api.v1.routes.software_inventory import router as software_router
+from backend.api.v1.routes.licenses import router as licenses_router
+from backend.api.v1.routes.vulnerabilities import router as vulns_router
+from backend.api.v1.routes.compliance import router as compliance_router
+from backend.api.v1.routes.remote_actions import router as remote_actions_router
+from backend.api.v1.routes.patches import router as patches_router
+from backend.api.v1.routes.jobs import router as jobs_router
+from backend.api.v1.routes.policies import router as policies_router
+
+# Phase 5 — ITSM Enterprise
+from backend.api.v1.routes.tickets import router as tickets_router
+from backend.api.v1.routes.problems import router as problems_router
+from backend.api.v1.routes.changes import router as changes_router
+from backend.api.v1.routes.service_catalog import router as catalog_router
+from backend.api.v1.routes.knowledge_base import router as kb_router
+from backend.api.v1.routes.sla import router as sla_router
+from backend.api.v1.routes.workflows import router as workflows_router
+from backend.api.v1.routes.automations import router as automations_router
+
 limiter = Limiter(key_func=get_remote_address)
 
 
@@ -76,6 +98,28 @@ app.include_router(printers_router, prefix=PREFIX)
 app.include_router(events_router, prefix=PREFIX)
 app.include_router(noc_router, prefix=PREFIX)
 app.include_router(notification_router, prefix=PREFIX)
+
+# Phase 4 — Endpoint Management & RMM
+app.include_router(agents_router, prefix=PREFIX)
+app.include_router(endpoints_router, prefix=PREFIX)
+app.include_router(software_router, prefix=PREFIX)
+app.include_router(licenses_router, prefix=PREFIX)
+app.include_router(vulns_router, prefix=PREFIX)
+app.include_router(compliance_router, prefix=PREFIX)
+app.include_router(remote_actions_router, prefix=PREFIX)
+app.include_router(patches_router, prefix=PREFIX)
+app.include_router(jobs_router, prefix=PREFIX)
+app.include_router(policies_router, prefix=PREFIX)
+
+# Phase 5 — ITSM Enterprise
+app.include_router(tickets_router, prefix=PREFIX)
+app.include_router(problems_router, prefix=PREFIX)
+app.include_router(changes_router, prefix=PREFIX)
+app.include_router(catalog_router, prefix=PREFIX)
+app.include_router(kb_router, prefix=PREFIX)
+app.include_router(sla_router, prefix=PREFIX)
+app.include_router(workflows_router, prefix=PREFIX)
+app.include_router(automations_router, prefix=PREFIX)
 
 
 @app.get("/api/v1/health")

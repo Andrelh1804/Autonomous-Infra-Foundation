@@ -1,1 +1,2 @@
-- [AII Platform stack](aii-platform-stack.md) — Python FastAPI backend (port 8000) + Next.js 15 frontend (port 3000), NOT the Node.js workspace stack.
+- [AII Platform stack](aii-platform-stack.md) — Python FastAPI backend (port 8008) + Next.js 15 frontend (port 5000), NOT the Node.js workspace stack.
+- [Phase 4+5 architecture](phase45-architecture.md) — Phase 4 RMM (10 routes/pages) + Phase 5 ITSM (8 routes/pages) added; all tables via Base.metadata.create_all(); pip uses --break-system-packages.

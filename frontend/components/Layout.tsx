@@ -13,6 +13,8 @@ import {
   Radar, Server, Network, GitFork, History, ChevronDown,
   XCircle, Mail, Webhook, Zap, CheckCircle2, AlertTriangle,
   Activity, TrendingUp, Printer, MonitorCheck, FileBarChart2,
+  Bot, Monitor, Package, Key, ShieldAlert, Terminal, Shield, Cpu, Briefcase, FileText,
+  Ticket, AlertOctagon, GitMerge, BookOpen, Clock, Workflow, Cog,
 } from 'lucide-react';
 import type { AlertEvent } from '@/types';
 
@@ -46,6 +48,34 @@ const NAV_GROUPS = [
       { href: '/printers', icon: Printer, label: 'Impressoras' },
       { href: '/ups-network', icon: Zap, label: 'UPS & Rede' },
       { href: '/reports', icon: FileBarChart2, label: 'Relatórios' },
+    ],
+  },
+  {
+    label: 'Endpoint Management',
+    items: [
+      { href: '/agent-center', icon: Bot, label: 'Central de Agentes' },
+      { href: '/endpoints', icon: Monitor, label: 'Endpoints' },
+      { href: '/software-inventory', icon: Package, label: 'Inventário de Software' },
+      { href: '/licenses', icon: Key, label: 'Licenciamento' },
+      { href: '/vulnerabilities', icon: ShieldAlert, label: 'Vulnerabilidades' },
+      { href: '/patches', icon: Shield, label: 'Patches' },
+      { href: '/compliance', icon: CheckCircle2, label: 'Compliance' },
+      { href: '/remote-actions', icon: Terminal, label: 'Ações Remotas' },
+      { href: '/jobs', icon: Cpu, label: 'Jobs' },
+      { href: '/policies', icon: FileText, label: 'Políticas' },
+    ],
+  },
+  {
+    label: 'ITSM',
+    items: [
+      { href: '/tickets', icon: Ticket, label: 'Tickets' },
+      { href: '/problems', icon: AlertOctagon, label: 'Problemas' },
+      { href: '/changes', icon: GitMerge, label: 'Mudanças' },
+      { href: '/service-catalog', icon: Briefcase, label: 'Catálogo de Serviços' },
+      { href: '/knowledge-base', icon: BookOpen, label: 'Base de Conhecimento' },
+      { href: '/sla', icon: Clock, label: 'Gestão de SLA' },
+      { href: '/workflows', icon: Workflow, label: 'Workflows' },
+      { href: '/automations', icon: Cog, label: 'Automações' },
     ],
   },
   {
