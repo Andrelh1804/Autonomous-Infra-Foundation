@@ -1,9 +1,4 @@
 {
-  "/noc/page": "app/noc/page.js",
-  "/assets/page": "app/assets/page.js",
-  "/monitoring/page": "app/monitoring/page.js",
-  "/settings/page": "app/settings/page.js",
-  "/network-map/page": "app/network-map/page.js",
-  "/login/page": "app/login/page.js",
-  "/dashboard/page": "app/dashboard/page.js"
+  "/page": "app/page.js",
+  "/login/page": "app/login/page.js"
 }

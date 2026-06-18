@@ -1,0 +1,898 @@
+# FASE 5 — ITSM ENTERPRISE, SERVICE DESK, WORKFLOW ENGINE E AUTOMAÇÃO OPERACIONAL
+
+## PAPEL DO AGENTE
+
+Atue como Arquiteto Enterprise especializado em:
+
+* ITSM
+* ITIL v4
+* Service Desk
+* Incident Management
+* Change Management
+* Problem Management
+* Workflow Automation
+* Enterprise Integrations
+* FastAPI
+* PostgreSQL
+* Event-Driven Architecture
+* AIOps
+
+Expandir a plataforma AII já construída nas Fases 1, 2, 3 e 4.
+
+Não recriar funcionalidades existentes.
+
+Utilizar toda a arquitetura já implementada.
+
+Implementar apenas os módulos desta fase.
+
+---
+
+# OBJETIVO DA FASE
+
+Transformar a plataforma em uma solução completa de ITSM Enterprise integrada ao monitoramento.
+
+A plataforma deverá:
+
+* Abrir chamados automaticamente
+* Gerenciar incidentes
+* Gerenciar problemas
+* Gerenciar mudanças
+* Gerenciar SLA
+* Gerenciar catálogos de serviços
+* Automatizar workflows
+* Integrar plataformas externas
+* Relacionar ativos, eventos e chamados
+* Preparar o ambiente para IA Operacional da Fase 6
+
+Ao final desta fase a plataforma deverá competir com plataformas de ITSM corporativo.
+
+---
+
+# NOVOS MÓDULOS
+
+Criar:
+
+itsm/
+
+service_desk/
+
+incident_management/
+
+problem_management/
+
+change_management/
+
+service_catalog/
+
+workflow_engine/
+
+automation_engine/
+
+approval_engine/
+
+knowledge_base/
+
+sla_management/
+
+integrations/
+
+notification_center/
+
+---
+
+# MODELO ITIL
+
+Implementar suporte para:
+
+Incident Management
+
+Problem Management
+
+Change Management
+
+Service Request
+
+Knowledge Management
+
+Asset Relationship
+
+Configuration Management
+
+---
+
+# INCIDENT MANAGEMENT
+
+Criar módulo completo.
+
+Campos:
+
+Número
+
+Título
+
+Descrição
+
+Categoria
+
+Subcategoria
+
+Prioridade
+
+Impacto
+
+Urgência
+
+Status
+
+Origem
+
+Responsável
+
+Grupo
+
+Data Abertura
+
+Data Encerramento
+
+SLA
+
+Tenant
+
+---
+
+# ORIGENS DE INCIDENTES
+
+Manual
+
+Monitoramento
+
+Agent
+
+API
+
+Webhook
+
+Integração externa
+
+IA
+
+---
+
+# INCIDENTES AUTOMÁTICOS
+
+Quando ocorrer:
+
+Servidor Offline
+
+CPU Crítica
+
+Disco Crítico
+
+Switch Offline
+
+Firewall Offline
+
+Toner Baixo
+
+UPS Crítico
+
+Vulnerabilidade Crítica
+
+Criar incidente automaticamente.
+
+---
+
+# PROBLEM MANAGEMENT
+
+Criar módulo.
+
+Objetivo:
+
+Identificar causa raiz.
+
+Relacionar:
+
+Incidentes recorrentes
+
+Equipamentos
+
+Aplicações
+
+Mudanças
+
+Permitir:
+
+Abertura manual
+
+Abertura automática
+
+Relacionamentos
+
+Histórico
+
+---
+
+# CHANGE MANAGEMENT
+
+Criar módulo.
+
+Tipos:
+
+Padrão
+
+Normal
+
+Emergencial
+
+Campos:
+
+Solicitante
+
+Justificativa
+
+Risco
+
+Impacto
+
+Plano
+
+Rollback
+
+Aprovação
+
+Janela
+
+---
+
+# CHANGE CALENDAR
+
+Criar calendário visual.
+
+Exibir:
+
+Mudanças
+
+Aprovações
+
+Janelas
+
+Conflitos
+
+---
+
+# SERVICE REQUESTS
+
+Criar catálogo de solicitações.
+
+Exemplos:
+
+Criar usuário
+
+Resetar senha
+
+Instalar software
+
+Liberar acesso
+
+Solicitar equipamento
+
+Solicitar licença
+
+Solicitar VPN
+
+---
+
+# SERVICE CATALOG
+
+Criar catálogo configurável.
+
+Campos:
+
+Nome
+
+Descrição
+
+Categoria
+
+SLA
+
+Workflow
+
+Aprovação
+
+Responsável
+
+---
+
+# KNOWLEDGE BASE
+
+Criar base de conhecimento.
+
+Categorias:
+
+Infraestrutura
+
+Rede
+
+Segurança
+
+Aplicações
+
+Banco de Dados
+
+Cloud
+
+Procedimentos
+
+---
+
+# ARTIGOS
+
+Campos:
+
+Título
+
+Conteúdo
+
+Categoria
+
+Tags
+
+Autor
+
+Versão
+
+Status
+
+Aprovação
+
+---
+
+# SLA MANAGEMENT
+
+Criar módulo.
+
+Definir:
+
+SLA Resposta
+
+SLA Atendimento
+
+SLA Resolução
+
+---
+
+# PRIORIDADES
+
+Baixa
+
+Média
+
+Alta
+
+Crítica
+
+Emergência
+
+---
+
+# ESCALONAMENTO
+
+Nível 1
+
+Nível 2
+
+Nível 3
+
+Gerência
+
+Diretoria
+
+---
+
+# SLA DASHBOARD
+
+Exibir:
+
+Tempo Médio Resposta
+
+Tempo Médio Resolução
+
+Incidentes Atrasados
+
+Incidentes Dentro SLA
+
+SLA Geral
+
+---
+
+# WORKFLOW ENGINE
+
+Criar motor visual.
+
+Permitir:
+
+Condições
+
+Ações
+
+Aprovações
+
+Notificações
+
+Integrações
+
+---
+
+# EXEMPLO DE WORKFLOW
+
+Evento:
+
+CPU > 95%
+
+↓
+
+Criar incidente
+
+↓
+
+Notificar responsável
+
+↓
+
+Executar diagnóstico
+
+↓
+
+Aguardar retorno
+
+↓
+
+Escalonar
+
+---
+
+# AUTOMATION ENGINE
+
+Criar mecanismo de automação.
+
+Permitir:
+
+SSH
+
+PowerShell
+
+Scripts
+
+API Calls
+
+Webhooks
+
+Jobs
+
+---
+
+# EXEMPLO DE AUTOMAÇÃO
+
+Servidor sem espaço
+
+↓
+
+Executar limpeza
+
+↓
+
+Validar espaço
+
+↓
+
+Atualizar incidente
+
+↓
+
+Encerrar automaticamente
+
+---
+
+# APPROVAL ENGINE
+
+Criar aprovações.
+
+Tipos:
+
+Manual
+
+Automática
+
+Múltiplos aprovadores
+
+Hierárquica
+
+---
+
+# INTEGRAÇÕES NATIVAS
+
+Implementar conectores.
+
+ITSM:
+
+ServiceNow
+
+Zendesk
+
+Jira Service Management
+
+Freshservice
+
+GLPI
+
+ManageEngine ServiceDesk
+
+---
+
+# COLABORAÇÃO
+
+Microsoft Teams
+
+Slack
+
+Discord
+
+Telegram
+
+WhatsApp Business (estrutura preparada)
+
+---
+
+# EMAIL
+
+SMTP
+
+Microsoft 365
+
+Google Workspace
+
+---
+
+# WEBHOOKS
+
+Entrada
+
+Saída
+
+Bidirecional
+
+---
+
+# SINCRONIZAÇÃO
+
+Permitir:
+
+Criar ticket
+
+Atualizar ticket
+
+Fechar ticket
+
+Sincronizar comentários
+
+Sincronizar status
+
+Sincronizar anexos
+
+---
+
+# RELACIONAMENTOS
+
+Relacionar:
+
+Incidente → Ativo
+
+Incidente → Evento
+
+Incidente → Alerta
+
+Incidente → Mudança
+
+Incidente → Problema
+
+Incidente → Usuário
+
+---
+
+# CENTRAL OPERACIONAL
+
+Criar tela.
+
+Exibir:
+
+Incidentes
+
+Problemas
+
+Mudanças
+
+Solicitações
+
+SLA
+
+Fila
+
+Escalonamentos
+
+---
+
+# DASHBOARD EXECUTIVO
+
+Exibir:
+
+Incidentes por mês
+
+SLA
+
+Tempo médio
+
+Problemas recorrentes
+
+Custos operacionais
+
+Ativos com mais falhas
+
+---
+
+# AUDITORIA
+
+Registrar:
+
+Criação
+
+Alteração
+
+Aprovação
+
+Execução
+
+Automação
+
+Integração
+
+Encerramento
+
+---
+
+# APIs
+
+Criar APIs REST completas.
+
+Exemplos:
+
+GET /api/v1/incidents
+
+POST /api/v1/incidents
+
+GET /api/v1/problems
+
+POST /api/v1/problems
+
+GET /api/v1/changes
+
+POST /api/v1/changes
+
+GET /api/v1/catalog
+
+GET /api/v1/workflows
+
+POST /api/v1/workflows
+
+---
+
+# FRONTEND
+
+Criar menus:
+
+Service Desk
+
+Incidents
+
+Problems
+
+Changes
+
+Catalog
+
+Knowledge Base
+
+Workflows
+
+Automation
+
+Approvals
+
+SLA
+
+Integrations
+
+Reports
+
+---
+
+# RELATÓRIOS
+
+Incidentes
+
+Problemas
+
+Mudanças
+
+SLA
+
+Equipe
+
+Ativos
+
+Custos
+
+Compliance
+
+Exportação:
+
+PDF
+
+Excel
+
+CSV
+
+---
+
+# PERFORMANCE
+
+Objetivo:
+
+100.000 tickets
+
+1.000.000 eventos
+
+Processamento assíncrono
+
+Fila preparada para Kafka
+
+Arquitetura preparada para microsserviços
+
+---
+
+# SEGURANÇA
+
+Respeitar:
+
+Tenant
+
+RBAC
+
+Auditoria
+
+Logs
+
+Criptografia
+
+Permissões
+
+---
+
+# TESTES
+
+Criar:
+
+Unitários
+
+Integração
+
+Carga
+
+Segurança
+
+Cobertura mínima:
+
+85%
+
+---
+
+# CRITÉRIOS DE ACEITE
+
+✓ Incident Management funcionando
+
+✓ Problem Management funcionando
+
+✓ Change Management funcionando
+
+✓ Service Catalog funcionando
+
+✓ Knowledge Base funcionando
+
+✓ Workflow Engine funcionando
+
+✓ Automation Engine funcionando
+
+✓ Approval Engine funcionando
+
+✓ SLA funcionando
+
+✓ Integrações funcionando
+
+✓ Dashboards funcionando
+
+✓ APIs funcionando
+
+✓ Auditoria funcionando
+
+✓ Testes aprovados
+
+---
+
+# ENTREGA FINAL
+
+Gerar:
+
+1. ITSM Platform
+2. Service Desk
+3. Incident Management
+4. Problem Management
+5. Change Management
+6. Service Catalog
+7. Knowledge Base
+8. Workflow Engine
+9. Automation Engine
+10. Approval Engine
+11. SLA Management
+12. Integrations Hub
+13. Dashboards
+14. APIs REST
+15. Banco atualizado
+16. Migrations
+17. Testes
+18. Documentação
+
+---
+
+# PREPARAÇÃO PARA FASE 6
+
+Ao concluir esta fase, preparar a plataforma para:
+
+AI Copilot
+
+RAG
+
+LLM Gateway
+
+AI Operations Center
+
+Root Cause Analysis por IA
+
+AI Recommendations
+
+AI Ticket Classification
+
+AI Incident Summarization
+
+AI Knowledge Search
+
+AI Executive Assistant
+
+AI Infrastructure Assistant
+
+Autonomous Operations Foundation
+
+A arquitetura deve ser preparada para que a IA tenha acesso controlado a:
+
+* CMDB
+* Discovery
+* Monitoring
+* Events
+* Alerts
+* Tickets
+* Knowledge Base
+* Licenças
+* Vulnerabilidades
+* Compliance
+* Automações
+
+sem necessidade de refatoração futura.

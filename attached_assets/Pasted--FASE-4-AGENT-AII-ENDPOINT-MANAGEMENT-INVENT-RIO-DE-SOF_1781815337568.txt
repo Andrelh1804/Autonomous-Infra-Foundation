@@ -1,0 +1,802 @@
+# FASE 4 — AGENT AII, ENDPOINT MANAGEMENT, INVENTÁRIO DE SOFTWARE, LICENCIAMENTO E COMPLIANCE
+
+## PAPEL DO AGENTE
+
+Atue como Arquiteto de Software Enterprise especializado em:
+
+* Endpoint Management
+* RMM (Remote Monitoring and Management)
+* EDR
+* Asset Management
+* Software Asset Management (SAM)
+* Compliance
+* Vulnerability Management
+* FastAPI
+* Windows Internals
+* Linux Administration
+* macOS Management
+* Cybersecurity
+
+Expandir a plataforma AII desenvolvida nas Fases 1, 2 e 3.
+
+Não recriar funcionalidades existentes.
+
+Implementar apenas os módulos desta fase.
+
+---
+
+# OBJETIVO DA FASE
+
+Transformar a plataforma em uma solução completa de gerenciamento de endpoints.
+
+A plataforma deverá:
+
+* Possuir agente próprio
+* Monitorar dispositivos remotamente
+* Inventariar softwares
+* Controlar licenças
+* Gerenciar vulnerabilidades
+* Verificar compliance
+* Executar comandos remotos
+* Automatizar tarefas operacionais
+
+Ao final desta fase a plataforma deverá competir com soluções RMM corporativas.
+
+---
+
+# NOVOS MÓDULOS
+
+Criar:
+
+agent_core/
+
+agent_gateway/
+
+endpoint_management/
+
+software_inventory/
+
+license_management/
+
+vulnerability_management/
+
+compliance/
+
+remote_actions/
+
+patch_management/
+
+agent_updates/
+
+policy_engine/
+
+endpoint_security/
+
+---
+
+# AGENT AII
+
+Criar agente próprio.
+
+Compatível com:
+
+Windows 10
+
+Windows 11
+
+Windows Server
+
+Linux
+
+macOS
+
+---
+
+# ARQUITETURA DO AGENTE
+
+Componentes:
+
+Collector
+
+Inventory Engine
+
+Metrics Engine
+
+Software Scanner
+
+Patch Scanner
+
+Security Scanner
+
+Command Executor
+
+Updater
+
+Communication Client
+
+---
+
+# COMUNICAÇÃO
+
+Protocolo:
+
+HTTPS
+
+TLS 1.3
+
+Mutual Authentication preparado
+
+JWT por dispositivo
+
+Compressão de payload
+
+Fila local offline
+
+Retry automático
+
+---
+
+# GERENCIAMENTO DE AGENTES
+
+Criar tela:
+
+Agent Center
+
+Exibir:
+
+Agentes Online
+
+Agentes Offline
+
+Versão
+
+Último Check-in
+
+Sistema Operacional
+
+Tenant
+
+Status
+
+---
+
+# DEPLOYMENT DO AGENTE
+
+Permitir instalação:
+
+Manual
+
+Script
+
+MSI
+
+EXE
+
+PowerShell
+
+Linux Package
+
+macOS Package
+
+---
+
+# INVENTÁRIO DE SOFTWARE
+
+Coletar automaticamente:
+
+Nome
+
+Fabricante
+
+Versão
+
+Editora
+
+Data Instalação
+
+Local Instalação
+
+Tipo Licença
+
+Uso
+
+Última Execução
+
+---
+
+# SOFTWARES MONITORADOS
+
+Microsoft Office
+
+Microsoft 365
+
+Adobe
+
+Autodesk
+
+Oracle
+
+VMware
+
+Java
+
+SQL Server
+
+MySQL
+
+PostgreSQL
+
+Chrome
+
+Firefox
+
+Edge
+
+Antivírus
+
+ERP
+
+Softwares corporativos
+
+---
+
+# SOFTWARE ASSET MANAGEMENT
+
+Criar módulo SAM.
+
+Capaz de:
+
+Detectar instalações
+
+Detectar duplicidade
+
+Detectar softwares proibidos
+
+Detectar softwares sem licença
+
+Detectar softwares obsoletos
+
+---
+
+# LICENCIAMENTO
+
+Criar License Management.
+
+Campos:
+
+Fornecedor
+
+Produto
+
+Quantidade
+
+Utilizadas
+
+Disponíveis
+
+Expiração
+
+Renovação
+
+Valor
+
+Centro de Custo
+
+---
+
+# IA DE LICENCIAMENTO
+
+Detectar:
+
+Licenças ociosas
+
+Licenças subutilizadas
+
+Licenças expirando
+
+Risco de auditoria
+
+Gerar recomendações.
+
+---
+
+# PATCH MANAGEMENT
+
+Monitorar atualizações.
+
+Windows:
+
+Windows Update
+
+WSUS
+
+---
+
+Linux:
+
+APT
+
+YUM
+
+DNF
+
+---
+
+macOS:
+
+Software Update
+
+---
+
+Coletar:
+
+Instaladas
+
+Pendentes
+
+Falhas
+
+Críticas
+
+---
+
+# GERENCIAMENTO DE PATCHES
+
+Permitir:
+
+Aprovar
+
+Rejeitar
+
+Agendar
+
+Implantar
+
+Rollback
+
+---
+
+# VULNERABILITY MANAGEMENT
+
+Criar scanner interno.
+
+Identificar:
+
+CVE
+
+CVSS
+
+Softwares vulneráveis
+
+Sistemas vulneráveis
+
+Falhas críticas
+
+---
+
+# BASE DE VULNERABILIDADES
+
+Estruturar integração futura com:
+
+NVD
+
+CISA
+
+Microsoft Security
+
+Vendor Advisories
+
+---
+
+# RISK SCORE
+
+Gerar score.
+
+0 a 100
+
+Baseado em:
+
+Patches
+
+Vulnerabilidades
+
+Antivírus
+
+Compliance
+
+Configuração
+
+---
+
+# COMPLIANCE ENGINE
+
+Criar módulo.
+
+Verificar:
+
+Windows Hardening
+
+Linux Hardening
+
+Políticas Corporativas
+
+Senha
+
+Firewall
+
+BitLocker
+
+Antivírus
+
+Atualizações
+
+---
+
+# POLICIES
+
+Criar Policy Engine.
+
+Exemplos:
+
+Senha mínima
+
+Antivírus obrigatório
+
+Firewall habilitado
+
+Criptografia obrigatória
+
+Bloqueio USB
+
+Atualização obrigatória
+
+---
+
+# REMOTE ACTIONS
+
+Criar execução remota.
+
+Permitir:
+
+Comandos
+
+Scripts
+
+PowerShell
+
+Bash
+
+Python
+
+Batch
+
+---
+
+# REMOTE SHELL
+
+Criar console remoto.
+
+Respeitar:
+
+RBAC
+
+Auditoria
+
+Permissões
+
+---
+
+# FILE MANAGEMENT
+
+Permitir:
+
+Upload
+
+Download
+
+Distribuição
+
+Remoção
+
+Versionamento
+
+---
+
+# JOB ENGINE
+
+Criar motor de tarefas.
+
+Exemplos:
+
+Instalar software
+
+Atualizar software
+
+Executar script
+
+Limpar arquivos
+
+Reiniciar serviço
+
+Reiniciar máquina
+
+---
+
+# SOFTWARE DEPLOYMENT
+
+Permitir:
+
+Instalação remota
+
+Atualização remota
+
+Desinstalação remota
+
+Distribuição em massa
+
+---
+
+# ENDPOINT SECURITY
+
+Coletar:
+
+Antivírus
+
+Firewall
+
+EDR
+
+BitLocker
+
+Defender
+
+Status de proteção
+
+---
+
+# SECURITY SCORE
+
+Criar score de segurança.
+
+Baseado em:
+
+Vulnerabilidades
+
+Antivírus
+
+Atualizações
+
+Configuração
+
+Compliance
+
+---
+
+# DASHBOARD ENDPOINTS
+
+Criar painel.
+
+Exibir:
+
+Endpoints Online
+
+Offline
+
+Com Vulnerabilidades
+
+Sem Antivírus
+
+Sem Atualizações
+
+Em Não Conformidade
+
+---
+
+# DASHBOARD LICENÇAS
+
+Exibir:
+
+Licenças Ativas
+
+Expirando
+
+Ociosas
+
+Em Risco
+
+---
+
+# DASHBOARD COMPLIANCE
+
+Exibir:
+
+Conformes
+
+Não Conformes
+
+Por Política
+
+Por Site
+
+Por Tenant
+
+---
+
+# NOTIFICAÇÕES
+
+Gerar alertas para:
+
+Software sem licença
+
+Licença expirando
+
+Patch crítico
+
+Vulnerabilidade crítica
+
+Agente offline
+
+Compliance violado
+
+---
+
+# APIs
+
+Criar APIs REST completas.
+
+Exemplos:
+
+GET /api/v1/agents
+
+GET /api/v1/software
+
+GET /api/v1/licenses
+
+GET /api/v1/vulnerabilities
+
+GET /api/v1/compliance
+
+POST /api/v1/remote-actions
+
+POST /api/v1/jobs
+
+---
+
+# FRONTEND
+
+Criar menus:
+
+Agents
+
+Endpoints
+
+Software Inventory
+
+Licenses
+
+Vulnerabilities
+
+Compliance
+
+Policies
+
+Patch Management
+
+Remote Actions
+
+Jobs
+
+---
+
+# AUDITORIA
+
+Registrar:
+
+Instalações
+
+Desinstalações
+
+Execuções remotas
+
+Alterações
+
+Patches
+
+Políticas
+
+Uploads
+
+Downloads
+
+---
+
+# PERFORMANCE
+
+Requisitos:
+
+50.000 endpoints
+
+Check-in distribuído
+
+Fila assíncrona
+
+Processamento paralelo
+
+Preparação para Kubernetes
+
+Preparação para Kafka
+
+---
+
+# TESTES
+
+Criar:
+
+Unitários
+
+Integração
+
+Carga
+
+Segurança
+
+Cobertura mínima:
+
+85%
+
+---
+
+# CRITÉRIOS DE ACEITE
+
+✓ Agent Windows funcionando
+
+✓ Agent Linux funcionando
+
+✓ Agent macOS funcionando
+
+✓ Inventário de software funcionando
+
+✓ Licenciamento funcionando
+
+✓ Vulnerabilidades funcionando
+
+✓ Compliance funcionando
+
+✓ Patch Management funcionando
+
+✓ Execução remota funcionando
+
+✓ Dashboard funcionando
+
+✓ APIs funcionando
+
+✓ Auditoria funcionando
+
+✓ Docker funcionando
+
+✓ Testes aprovados
+
+---
+
+# ENTREGA FINAL
+
+Gerar:
+
+1. Agent AII
+2. Endpoint Management
+3. Software Asset Management
+4. License Management
+5. Vulnerability Management
+6. Compliance Engine
+7. Policy Engine
+8. Patch Management
+9. Remote Actions
+10. Job Engine
+11. Dashboards
+12. APIs REST
+13. Banco atualizado
+14. Migrations
+15. Testes
+16. Documentação
+
+Preparar arquitetura para a Fase 5 — ITSM Enterprise, Service Desk, ServiceNow, Zendesk, Jira Service Management, GLPI, automação operacional e workflows inteligentes.
