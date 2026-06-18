@@ -198,3 +198,19 @@ export interface DiscoveryStats {
   pending: number;
   total_hosts_found: number;
 }
+
+export interface DiscoverySchedule {
+  id: number;
+  organization_id: number;
+  site_id?: number;
+  name: string;
+  targets: string;
+  methods?: string;
+  interval_minutes: number;
+  is_enabled: boolean;
+  last_run_at?: string;
+  next_run_at?: string;
+  last_job_id?: number;
+  created_at: string;
+  updated_at?: string;
+}

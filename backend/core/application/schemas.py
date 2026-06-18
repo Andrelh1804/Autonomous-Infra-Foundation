@@ -439,3 +439,40 @@ class DiscoveryResultResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class DiscoveryScheduleCreate(BaseModel):
+    name: str
+    organization_id: Optional[int] = None
+    site_id: Optional[int] = None
+    targets: List[str]
+    methods: Optional[List[str]] = ["icmp", "dns"]
+    interval_minutes: int = 60
+    is_enabled: bool = True
+
+
+class DiscoveryScheduleUpdate(BaseModel):
+    name: Optional[str] = None
+    targets: Optional[List[str]] = None
+    methods: Optional[List[str]] = None
+    interval_minutes: Optional[int] = None
+    is_enabled: Optional[bool] = None
+
+
+class DiscoveryScheduleResponse(BaseModel):
+    id: int
+    organization_id: int
+    site_id: Optional[int]
+    name: str
+    targets: str
+    methods: Optional[str]
+    interval_minutes: int
+    is_enabled: bool
+    last_run_at: Optional[datetime]
+    next_run_at: Optional[datetime]
+    last_job_id: Optional[int]
+    created_at: datetime
+    updated_at: Optional[datetime]
+
+    class Config:
+        from_attributes = True

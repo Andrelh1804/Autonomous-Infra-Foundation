@@ -312,6 +312,33 @@ class DiscoveryResult(Base):
     asset = relationship("Asset")
 
 
+class DiscoverySchedule(Base):
+    __tablename__ = "discovery_schedules"
+
+    id = Column(Integer, primary_key=True, index=True)
+    organization_id = Column(Integer, ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False)
+    site_id = Column(Integer, ForeignKey("sites.id", ondelete="SET NULL"), nullable=True)
+    created_by = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+
+    name = Column(String(255), nullable=False)
+    targets = Column(Text, nullable=False)
+    methods = Column(String(255), default="icmp,dns")
+    interval_minutes = Column(Integer, nullable=False, default=60)
+    is_enabled = Column(Boolean, default=True)
+
+    last_run_at = Column(DateTime, nullable=True)
+    next_run_at = Column(DateTime, nullable=True)
+    last_job_id = Column(Integer, ForeignKey("discovery_jobs.id", ondelete="SET NULL"), nullable=True)
+
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    organization = relationship("Organization")
+    site = relationship("Site")
+    creator = relationship("User")
+    last_job = relationship("DiscoveryJob", foreign_keys=[last_job_id])
+
+
 # ── Audit Log (existing) ───────────────────────────────────────────────────────
 
 class AuditLog(Base):

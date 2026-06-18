@@ -141,3 +141,14 @@ export const discoveryApi = {
   stats: () => api.get('/discovery/stats'),
   allRelationships: () => api.get('/discovery/relationships/all'),
 };
+
+// Discovery Schedules
+export const schedulesApi = {
+  list: () => api.get('/schedules'),
+  create: (data: object) => api.post('/schedules', data),
+  update: (id: number, data: object) => api.patch(`/schedules/${id}`, data),
+  delete: (id: number) => api.delete(`/schedules/${id}`),
+  toggle: (id: number) => api.post(`/schedules/${id}/toggle`),
+  runNow: (id: number) => api.post(`/schedules/${id}/run-now`),
+  status: () => api.get('/schedules/status'),
+};

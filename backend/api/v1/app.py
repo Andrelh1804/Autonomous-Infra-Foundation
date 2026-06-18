@@ -1,4 +1,5 @@
 import os
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter, _rate_limit_exceeded_handler
@@ -15,8 +16,18 @@ from backend.api.v1.routes.dashboard import router as dashboard_router
 from backend.api.v1.routes.settings import router as settings_router
 from backend.api.v1.routes.assets import router as assets_router
 from backend.api.v1.routes.discovery import router as discovery_router
+from backend.api.v1.routes.schedules import router as schedules_router
 
 limiter = Limiter(key_func=get_remote_address)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    from backend.modules.scheduler.scheduler import start_scheduler, stop_scheduler
+    start_scheduler()
+    yield
+    stop_scheduler()
+
 
 app = FastAPI(
     title="AII — Autonomous Infrastructure Intelligence",
@@ -25,6 +36,7 @@ app = FastAPI(
     docs_url="/api/v1/docs",
     redoc_url="/api/v1/redoc",
     openapi_url="/api/v1/openapi.json",
+    lifespan=lifespan,
 )
 
 app.state.limiter = limiter
@@ -51,6 +63,7 @@ app.include_router(dashboard_router, prefix=PREFIX)
 app.include_router(settings_router, prefix=PREFIX)
 app.include_router(assets_router, prefix=PREFIX)
 app.include_router(discovery_router, prefix=PREFIX)
+app.include_router(schedules_router, prefix=PREFIX)
 
 
 @app.get("/api/v1/health")
