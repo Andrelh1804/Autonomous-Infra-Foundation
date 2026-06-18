@@ -142,6 +142,18 @@ export const discoveryApi = {
   allRelationships: () => api.get('/discovery/relationships/all'),
 };
 
+// Alerts
+export const alertsApi = {
+  rules: () => api.get('/alerts/rules'),
+  createRule: (data: object) => api.post('/alerts/rules', data),
+  updateRule: (id: number, data: object) => api.patch(`/alerts/rules/${id}`, data),
+  deleteRule: (id: number) => api.delete(`/alerts/rules/${id}`),
+  toggleRule: (id: number) => api.post(`/alerts/rules/${id}/toggle`),
+  testRule: (id: number) => api.post(`/alerts/rules/${id}/test`),
+  events: (params?: object) => api.get('/alerts/events', { params }),
+  stats: () => api.get('/alerts/stats'),
+};
+
 // Discovery Schedules
 export const schedulesApi = {
   list: () => api.get('/schedules'),

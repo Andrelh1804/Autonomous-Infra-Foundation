@@ -312,6 +312,56 @@ class DiscoveryResult(Base):
     asset = relationship("Asset")
 
 
+class AlertRule(Base):
+    __tablename__ = "alert_rules"
+
+    id = Column(Integer, primary_key=True, index=True)
+    organization_id = Column(Integer, ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False)
+    created_by = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+
+    name = Column(String(255), nullable=False)
+    is_enabled = Column(Boolean, default=True)
+
+    # Trigger: job_completed | job_failed | new_assets_found
+    trigger = Column(String(50), nullable=False, default="job_completed")
+    min_hosts_found = Column(Integer, default=1)   # for new_assets_found trigger
+
+    # Channel: email | webhook | both
+    channel = Column(String(20), nullable=False, default="email")
+
+    # Email
+    email_recipients = Column(Text)   # comma-separated addresses
+
+    # Webhook
+    webhook_url = Column(String(512))
+    webhook_secret = Column(String(255))   # used for HMAC-SHA256 signature header
+
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    organization = relationship("Organization")
+    creator = relationship("User")
+    events = relationship("AlertEvent", back_populates="rule", cascade="all, delete-orphan")
+
+
+class AlertEvent(Base):
+    __tablename__ = "alert_events"
+
+    id = Column(Integer, primary_key=True, index=True)
+    rule_id = Column(Integer, ForeignKey("alert_rules.id", ondelete="CASCADE"))
+    discovery_job_id = Column(Integer, ForeignKey("discovery_jobs.id", ondelete="SET NULL"), nullable=True)
+
+    trigger = Column(String(50))
+    channel = Column(String(20))
+    status = Column(String(20), default="sent")   # sent | failed
+    payload = Column(Text)
+    error_message = Column(Text)
+    sent_at = Column(DateTime, default=datetime.utcnow)
+
+    rule = relationship("AlertRule", back_populates="events")
+    job = relationship("DiscoveryJob")
+
+
 class DiscoverySchedule(Base):
     __tablename__ = "discovery_schedules"
 

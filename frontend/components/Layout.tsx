@@ -34,6 +34,7 @@ const NAV_GROUPS = [
   {
     label: 'Administration',
     items: [
+      { href: '/alerts', icon: Bell, label: 'Alerts' },
       { href: '/permissions', icon: ShieldCheck, label: 'Permissions' },
       { href: '/audit', icon: ScrollText, label: 'Audit Log' },
       { href: '/settings', icon: Settings, label: 'Settings' },

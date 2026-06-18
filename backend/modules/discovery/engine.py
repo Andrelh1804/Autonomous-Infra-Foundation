@@ -149,9 +149,26 @@ async def run_discovery(
         job.hosts_scanned = sum(len(expand_target(t)) for t in targets)
         db.commit()
 
+        # Fire alerts
+        try:
+            from backend.modules.alerts.sender import fire_alerts
+            fire_alerts(db, job.id, "job_completed")
+            if found > 0:
+                fire_alerts(db, job.id, "new_assets_found")
+        except Exception as ae:
+            import logging
+            logging.getLogger("aii.engine").warning(f"Alert dispatch error: {ae}")
+
     except Exception as e:
         job.status = "failed"
         job.error_message = str(e)
         job.finished_at = datetime.utcnow()
         db.commit()
+
+        try:
+            from backend.modules.alerts.sender import fire_alerts
+            fire_alerts(db, job.id, "job_failed")
+        except Exception as ae:
+            import logging
+            logging.getLogger("aii.engine").warning(f"Alert dispatch error: {ae}")
         raise

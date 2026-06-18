@@ -17,6 +17,7 @@ from backend.api.v1.routes.settings import router as settings_router
 from backend.api.v1.routes.assets import router as assets_router
 from backend.api.v1.routes.discovery import router as discovery_router
 from backend.api.v1.routes.schedules import router as schedules_router
+from backend.api.v1.routes.alerts import router as alerts_router
 
 limiter = Limiter(key_func=get_remote_address)
 
@@ -64,6 +65,7 @@ app.include_router(settings_router, prefix=PREFIX)
 app.include_router(assets_router, prefix=PREFIX)
 app.include_router(discovery_router, prefix=PREFIX)
 app.include_router(schedules_router, prefix=PREFIX)
+app.include_router(alerts_router, prefix=PREFIX)
 
 
 @app.get("/api/v1/health")

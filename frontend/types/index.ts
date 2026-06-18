@@ -199,6 +199,39 @@ export interface DiscoveryStats {
   total_hosts_found: number;
 }
 
+export interface AlertRule {
+  id: number;
+  organization_id: number;
+  name: string;
+  is_enabled: boolean;
+  trigger: string;
+  min_hosts_found: number;
+  channel: string;
+  email_recipients?: string;
+  webhook_url?: string;
+  created_at: string;
+  updated_at?: string;
+}
+
+export interface AlertEvent {
+  id: number;
+  rule_id: number;
+  discovery_job_id?: number;
+  trigger: string;
+  channel: string;
+  status: string;
+  error_message?: string;
+  sent_at: string;
+}
+
+export interface AlertStats {
+  total_rules: number;
+  enabled_rules: number;
+  total_events: number;
+  sent_events: number;
+  failed_events: number;
+}
+
 export interface DiscoverySchedule {
   id: number;
   organization_id: number;

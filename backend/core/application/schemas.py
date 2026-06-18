@@ -441,6 +441,60 @@ class DiscoveryResultResponse(BaseModel):
         from_attributes = True
 
 
+class AlertRuleCreate(BaseModel):
+    name: str
+    organization_id: Optional[int] = None
+    is_enabled: bool = True
+    trigger: str = "job_completed"
+    min_hosts_found: int = 1
+    channel: str = "email"
+    email_recipients: Optional[str] = None
+    webhook_url: Optional[str] = None
+    webhook_secret: Optional[str] = None
+
+
+class AlertRuleUpdate(BaseModel):
+    name: Optional[str] = None
+    is_enabled: Optional[bool] = None
+    trigger: Optional[str] = None
+    min_hosts_found: Optional[int] = None
+    channel: Optional[str] = None
+    email_recipients: Optional[str] = None
+    webhook_url: Optional[str] = None
+    webhook_secret: Optional[str] = None
+
+
+class AlertRuleResponse(BaseModel):
+    id: int
+    organization_id: int
+    name: str
+    is_enabled: bool
+    trigger: str
+    min_hosts_found: int
+    channel: str
+    email_recipients: Optional[str]
+    webhook_url: Optional[str]
+    created_at: datetime
+    updated_at: Optional[datetime]
+
+    class Config:
+        from_attributes = True
+
+
+class AlertEventResponse(BaseModel):
+    id: int
+    rule_id: int
+    discovery_job_id: Optional[int]
+    trigger: str
+    channel: str
+    status: str
+    error_message: Optional[str]
+    sent_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
 class DiscoveryScheduleCreate(BaseModel):
     name: str
     organization_id: Optional[int] = None
