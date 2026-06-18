@@ -29,7 +29,7 @@ export default function PermissionsPage() {
   const save = useMutation({
     mutationFn: (d: any) => editing ? rolesApi.update(editing.id, d) : rolesApi.create(d),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['roles'] }); closeModal(); },
-    onError: (e: any) => setError(e.response?.data?.detail || 'Error saving'),
+    onError: (e: any) => setError(e.response?.data?.detail || 'Erro ao salvar'),
   });
 
   const del = useMutation({
@@ -57,11 +57,11 @@ export default function PermissionsPage() {
       <div className="space-y-5">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">Roles & Permissions</h1>
-            <p className="text-sm text-muted-foreground mt-0.5">Manage access control</p>
+            <h1 className="text-2xl font-bold">Perfis & Permissões</h1>
+            <p className="text-sm text-muted-foreground mt-0.5">Gerenciar controle de acesso</p>
           </div>
           <button onClick={openCreate} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-medium transition shadow-lg shadow-indigo-500/20">
-            <Plus className="w-4 h-4" /> New Role
+            <Plus className="w-4 h-4" /> Novo Perfil
           </button>
         </div>
 
@@ -90,8 +90,8 @@ export default function PermissionsPage() {
                 </div>
                 <div className="flex flex-wrap gap-1">
                   {role.permissions.slice(0, 6).map(p => <Badge key={p} variant="default">{p}</Badge>)}
-                  {role.permissions.length > 6 && <Badge variant="info">+{role.permissions.length - 6} more</Badge>}
-                  {role.permissions.length === 0 && <span className="text-xs text-muted-foreground">No permissions</span>}
+                  {role.permissions.length > 6 && <Badge variant="info">+{role.permissions.length - 6} mais</Badge>}
+                  {role.permissions.length === 0 && <span className="text-xs text-muted-foreground">Sem permissões</span>}
                 </div>
               </div>
             ))
@@ -99,21 +99,21 @@ export default function PermissionsPage() {
         </div>
       </div>
 
-      <Modal open={modalOpen} onClose={closeModal} title={editing ? 'Edit Role' : 'New Role'} size="lg">
+      <Modal open={modalOpen} onClose={closeModal} title={editing ? 'Editar Perfil' : 'Novo Perfil'} size="lg">
         {error && <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500 text-sm">{error}</div>}
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1.5">Name *</label>
+            <label className="block text-sm font-medium mb-1.5">Nome *</label>
             <input className="w-full px-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               value={form.name} onChange={e => setForm((p: any) => ({ ...p, name: e.target.value }))} />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1.5">Description</label>
+            <label className="block text-sm font-medium mb-1.5">Descrição</label>
             <input className="w-full px-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               value={form.description} onChange={e => setForm((p: any) => ({ ...p, description: e.target.value }))} />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-2">Permissions</label>
+            <label className="block text-sm font-medium mb-2">Permissões</label>
             <div className="border border-border rounded-lg overflow-hidden max-h-60 overflow-y-auto scrollbar-thin">
               {Object.entries(moduleGroups).map(([module, perms]) => (
                 <div key={module}>
@@ -137,22 +137,22 @@ export default function PermissionsPage() {
             </div>
           </div>
           <div className="flex justify-end gap-3 pt-2">
-            <button onClick={closeModal} className="px-4 py-2 text-sm border border-border rounded-lg hover:bg-accent transition">Cancel</button>
+            <button onClick={closeModal} className="px-4 py-2 text-sm border border-border rounded-lg hover:bg-accent transition">Cancelar</button>
             <button onClick={() => save.mutate(form)} disabled={save.isPending}
               className="px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg disabled:opacity-60 transition">
-              {save.isPending ? 'Saving...' : editing ? 'Update' : 'Create'}
+              {save.isPending ? 'Salvando...' : editing ? 'Atualizar' : 'Criar'}
             </button>
           </div>
         </div>
       </Modal>
 
-      <Modal open={!!deleteConfirm} onClose={() => setDeleteConfirm(null)} title="Delete Role" size="sm">
-        <p className="text-sm text-muted-foreground mb-4">Delete role <strong className="text-foreground">{deleteConfirm?.name}</strong>?</p>
+      <Modal open={!!deleteConfirm} onClose={() => setDeleteConfirm(null)} title="Excluir Perfil" size="sm">
+        <p className="text-sm text-muted-foreground mb-4">Excluir o perfil <strong className="text-foreground">{deleteConfirm?.name}</strong>?</p>
         <div className="flex justify-end gap-3">
-          <button onClick={() => setDeleteConfirm(null)} className="px-4 py-2 text-sm border border-border rounded-lg hover:bg-accent transition">Cancel</button>
+          <button onClick={() => setDeleteConfirm(null)} className="px-4 py-2 text-sm border border-border rounded-lg hover:bg-accent transition">Cancelar</button>
           <button onClick={() => del.mutate(deleteConfirm!.id)} disabled={del.isPending}
             className="px-4 py-2 text-sm bg-red-600 hover:bg-red-500 text-white rounded-lg disabled:opacity-60 transition">
-            {del.isPending ? 'Deleting...' : 'Delete'}
+            {del.isPending ? 'Excluindo...' : 'Excluir'}
           </button>
         </div>
       </Modal>

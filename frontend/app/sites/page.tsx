@@ -29,7 +29,7 @@ export default function SitesPage() {
   const save = useMutation({
     mutationFn: (d: any) => editing ? sitesApi.update(editing.id, d) : sitesApi.create(d),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['sites'] }); closeModal(); },
-    onError: (e: any) => setError(e.response?.data?.detail || 'Error saving'),
+    onError: (e: any) => setError(e.response?.data?.detail || 'Erro ao salvar'),
   });
 
   const del = useMutation({
@@ -53,12 +53,12 @@ export default function SitesPage() {
         </div>
       )
     },
-    { key: 'address', label: 'Address', render: (r: Site) => r.address || '—' },
+    { key: 'address', label: 'Endereço', render: (r: Site) => r.address || '—' },
     {
-      key: 'location', label: 'Location',
+      key: 'location', label: 'Localização',
       render: (r: Site) => [r.city, r.state, r.country].filter(Boolean).join(', ') || '—'
     },
-    { key: 'created_at', label: 'Created', render: (r: Site) => formatDate(r.created_at) },
+    { key: 'created_at', label: 'Criado em', render: (r: Site) => formatDate(r.created_at) },
     {
       key: 'actions', label: '', className: 'w-20',
       render: (r: Site) => (
@@ -71,11 +71,11 @@ export default function SitesPage() {
   ];
 
   const fields = [
-    { key: 'name', label: 'Name', required: true },
-    { key: 'address', label: 'Address' },
-    { key: 'city', label: 'City' },
-    { key: 'state', label: 'State' },
-    { key: 'country', label: 'Country' },
+    { key: 'name', label: 'Nome', required: true },
+    { key: 'address', label: 'Endereço' },
+    { key: 'city', label: 'Cidade' },
+    { key: 'state', label: 'Estado' },
+    { key: 'country', label: 'País' },
   ];
 
   return (
@@ -84,23 +84,23 @@ export default function SitesPage() {
         <div className="flex items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold">Sites</h1>
-            <p className="text-sm text-muted-foreground mt-0.5">Manage physical locations</p>
+            <p className="text-sm text-muted-foreground mt-0.5">Gerenciar localizações físicas</p>
           </div>
           <button onClick={openCreate} className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-medium transition shadow-lg shadow-indigo-500/20">
-            <Plus className="w-4 h-4" /> New Site
+            <Plus className="w-4 h-4" /> Novo Site
           </button>
         </div>
 
         <div className="relative max-w-xs">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input className="w-full pl-9 pr-4 py-2 bg-card border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            placeholder="Search sites..." value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} />
+            placeholder="Buscar sites..." value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} />
         </div>
 
         <DataTable columns={columns} data={data?.items ?? []} loading={isLoading} total={data?.total ?? 0} page={page} perPage={20} onPageChange={setPage} />
       </div>
 
-      <Modal open={modalOpen} onClose={closeModal} title={editing ? 'Edit Site' : 'New Site'}>
+      <Modal open={modalOpen} onClose={closeModal} title={editing ? 'Editar Site' : 'Novo Site'}>
         {error && <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500 text-sm">{error}</div>}
         <div className="space-y-4">
           {fields.map(f => (
@@ -111,22 +111,22 @@ export default function SitesPage() {
             </div>
           ))}
           <div className="flex justify-end gap-3 pt-2">
-            <button onClick={closeModal} className="px-4 py-2 text-sm border border-border rounded-lg hover:bg-accent transition">Cancel</button>
+            <button onClick={closeModal} className="px-4 py-2 text-sm border border-border rounded-lg hover:bg-accent transition">Cancelar</button>
             <button onClick={() => save.mutate(form)} disabled={save.isPending}
               className="px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg disabled:opacity-60 transition">
-              {save.isPending ? 'Saving...' : editing ? 'Update' : 'Create'}
+              {save.isPending ? 'Salvando...' : editing ? 'Atualizar' : 'Criar'}
             </button>
           </div>
         </div>
       </Modal>
 
-      <Modal open={!!deleteConfirm} onClose={() => setDeleteConfirm(null)} title="Delete Site" size="sm">
-        <p className="text-sm text-muted-foreground mb-4">Delete site <strong className="text-foreground">{deleteConfirm?.name}</strong>?</p>
+      <Modal open={!!deleteConfirm} onClose={() => setDeleteConfirm(null)} title="Excluir Site" size="sm">
+        <p className="text-sm text-muted-foreground mb-4">Excluir o site <strong className="text-foreground">{deleteConfirm?.name}</strong>?</p>
         <div className="flex justify-end gap-3">
-          <button onClick={() => setDeleteConfirm(null)} className="px-4 py-2 text-sm border border-border rounded-lg hover:bg-accent transition">Cancel</button>
+          <button onClick={() => setDeleteConfirm(null)} className="px-4 py-2 text-sm border border-border rounded-lg hover:bg-accent transition">Cancelar</button>
           <button onClick={() => del.mutate(deleteConfirm!.id)} disabled={del.isPending}
             className="px-4 py-2 text-sm bg-red-600 hover:bg-red-500 text-white rounded-lg disabled:opacity-60 transition">
-            {del.isPending ? 'Deleting...' : 'Delete'}
+            {del.isPending ? 'Excluindo...' : 'Excluir'}
           </button>
         </div>
       </Modal>

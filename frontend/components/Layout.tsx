@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 import { useAuthStore, useThemeStore } from '@/store/auth';
 import { authApi, alertsApi } from '@/services/api';
@@ -17,11 +18,11 @@ import type { AlertEvent } from '@/types';
 
 const NAV_GROUPS = [
   {
-    label: 'Platform',
+    label: 'Plataforma',
     items: [
       { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-      { href: '/organizations', icon: Building2, label: 'Organizations' },
-      { href: '/users', icon: Users, label: 'Users' },
+      { href: '/organizations', icon: Building2, label: 'Organizações' },
+      { href: '/users', icon: Users, label: 'Usuários' },
       { href: '/sites', icon: MapPin, label: 'Sites' },
     ],
   },
@@ -29,41 +30,41 @@ const NAV_GROUPS = [
     label: 'Discovery & CMDB',
     items: [
       { href: '/discovery', icon: Radar, label: 'Discovery' },
-      { href: '/assets', icon: Server, label: 'Assets / CMDB' },
-      { href: '/network-map', icon: Network, label: 'Network Map' },
-      { href: '/relationships', icon: GitFork, label: 'Relationships' },
-      { href: '/asset-history', icon: History, label: 'Asset History' },
+      { href: '/assets', icon: Server, label: 'Ativos / CMDB' },
+      { href: '/network-map', icon: Network, label: 'Mapa de Rede' },
+      { href: '/relationships', icon: GitFork, label: 'Relacionamentos' },
+      { href: '/asset-history', icon: History, label: 'Histórico de Ativos' },
     ],
   },
   {
-    label: 'Monitoring',
+    label: 'Monitoramento',
     items: [
-      { href: '/noc', icon: MonitorCheck, label: 'NOC Center' },
-      { href: '/monitoring', icon: Activity, label: 'Monitoring Targets' },
-      { href: '/metrics', icon: TrendingUp, label: 'Metrics Viewer' },
-      { href: '/events', icon: AlertTriangle, label: 'Events & Incidents' },
-      { href: '/printers', icon: Printer, label: 'Printers' },
-      { href: '/ups-network', icon: Zap, label: 'UPS & Network' },
-      { href: '/reports', icon: FileBarChart2, label: 'Reports' },
+      { href: '/noc', icon: MonitorCheck, label: 'Centro NOC' },
+      { href: '/monitoring', icon: Activity, label: 'Alvos de Monitoramento' },
+      { href: '/metrics', icon: TrendingUp, label: 'Visualizador de Métricas' },
+      { href: '/events', icon: AlertTriangle, label: 'Eventos & Incidentes' },
+      { href: '/printers', icon: Printer, label: 'Impressoras' },
+      { href: '/ups-network', icon: Zap, label: 'UPS & Rede' },
+      { href: '/reports', icon: FileBarChart2, label: 'Relatórios' },
     ],
   },
   {
-    label: 'Administration',
+    label: 'Administração',
     items: [
-      { href: '/alerts', icon: Bell, label: 'Alerts' },
-      { href: '/permissions', icon: ShieldCheck, label: 'Permissions' },
-      { href: '/audit', icon: ScrollText, label: 'Audit Log' },
-      { href: '/settings', icon: Settings, label: 'Settings' },
+      { href: '/alerts', icon: Bell, label: 'Alertas' },
+      { href: '/permissions', icon: ShieldCheck, label: 'Permissões' },
+      { href: '/audit', icon: ScrollText, label: 'Log de Auditoria' },
+      { href: '/settings', icon: Settings, label: 'Configurações' },
     ],
   },
 ];
 
-// ── Notification Bell ─────────────────────────────────────────────────────────
+// ── Sino de Notificações ───────────────────────────────────────────────────────
 
 const TRIGGER_LABELS: Record<string, string> = {
-  job_completed:    'Job Completed',
-  job_failed:       'Job Failed',
-  new_assets_found: 'New Assets Found',
+  job_completed:    'Job Concluído',
+  job_failed:       'Falha no Job',
+  new_assets_found: 'Novos Ativos Encontrados',
 };
 
 function channelIcon(channel: string) {
@@ -77,7 +78,6 @@ function NotificationBell() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  // Poll all recent events; filter failed client-side for badge
   const { data } = useQuery<{ items: AlertEvent[]; total: number }>({
     queryKey: ['notif-events'],
     queryFn:  () => alertsApi.events({ per_page: 20, page: 1 }).then(r => r.data),
@@ -89,7 +89,6 @@ function NotificationBell() {
   const failedCount = allEvents.filter(e => e.status === 'failed').length;
   const preview     = allEvents.slice(0, 8);
 
-  // Close on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
@@ -103,7 +102,7 @@ function NotificationBell() {
       <button
         onClick={() => setOpen(o => !o)}
         className="p-2 rounded-lg hover:bg-accent transition text-muted-foreground hover:text-foreground relative"
-        title="Alert notifications"
+        title="Notificações de alertas"
       >
         <Bell className="w-5 h-5" />
         {failedCount > 0 && (
@@ -118,37 +117,35 @@ function NotificationBell() {
 
       {open && (
         <div className="absolute right-0 top-full mt-2 w-80 bg-card border border-border rounded-2xl shadow-2xl z-50 overflow-hidden">
-          {/* Header */}
+          {/* Cabeçalho */}
           <div className="px-4 py-3 border-b border-border flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Bell className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm font-semibold">Recent Alerts</span>
+              <span className="text-sm font-semibold">Alertas Recentes</span>
             </div>
             {failedCount > 0 && (
               <span className="text-xs bg-red-500/15 text-red-400 px-2 py-0.5 rounded-full font-medium">
-                {failedCount} failed
+                {failedCount} com falha
               </span>
             )}
           </div>
 
-          {/* Events list */}
+          {/* Lista de eventos */}
           <div className="max-h-72 overflow-y-auto divide-y divide-border/50">
             {preview.length === 0 ? (
               <div className="py-8 text-center">
                 <Bell className="w-7 h-7 text-muted-foreground/30 mx-auto mb-2" />
-                <p className="text-xs text-muted-foreground">No alert events yet</p>
+                <p className="text-xs text-muted-foreground">Nenhum evento de alerta ainda</p>
               </div>
             ) : (
               preview.map(ev => (
                 <div key={ev.id} className="flex items-start gap-3 px-4 py-3 hover:bg-muted/30 transition-colors">
-                  {/* Status icon */}
                   <div className="flex-shrink-0 mt-0.5">
                     {ev.status === 'sent'
                       ? <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                       : <XCircle      className="w-4 h-4 text-red-400" />
                     }
                   </div>
-                  {/* Body */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 mb-0.5">
                       <span className={`text-xs font-medium ${ev.status === 'failed' ? 'text-red-400' : 'text-foreground'}`}>
@@ -163,7 +160,7 @@ function NotificationBell() {
                       </p>
                     )}
                     <p className="text-[11px] text-muted-foreground mt-0.5">
-                      {ev.discovery_job_id ? `Job #${ev.discovery_job_id} · ` : 'Test · '}
+                      {ev.discovery_job_id ? `Job #${ev.discovery_job_id} · ` : 'Teste · '}
                       {formatDate(ev.sent_at)}
                     </p>
                   </div>
@@ -172,14 +169,14 @@ function NotificationBell() {
             )}
           </div>
 
-          {/* Footer */}
+          {/* Rodapé */}
           <div className="border-t border-border px-4 py-2.5">
             <Link
               href="/alerts"
               onClick={() => setOpen(false)}
               className="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition"
             >
-              View all in Alerts →
+              Ver todos em Alertas →
             </Link>
           </div>
         </div>
@@ -217,7 +214,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">
-      {/* Mobile overlay */}
+      {/* Overlay mobile */}
       {mobileOpen && (
         <div className="fixed inset-0 bg-black/50 z-20 lg:hidden" onClick={() => setMobileOpen(false)} />
       )}
@@ -229,13 +226,22 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
       )}>
         {/* Logo */}
-        <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10">
-          <div className="flex-shrink-0 w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" />
-            </svg>
+        <div className="flex items-center gap-2 px-3 py-4 border-b border-white/10">
+          <div className="flex-shrink-0 w-9 h-9 flex items-center justify-center">
+            <Image
+              src="/images/nexaops-logo.png"
+              alt="NexaOps"
+              width={36}
+              height={36}
+              className="rounded-md object-contain"
+            />
           </div>
-          {!collapsed && <span className="font-bold text-lg tracking-tight">AII Platform</span>}
+          {!collapsed && (
+            <div className="min-w-0">
+              <span className="font-bold text-base tracking-tight leading-tight block">NexaOps</span>
+              <span className="text-[10px] text-slate-400 leading-tight">Smart Infrastructure</span>
+            </div>
+          )}
         </div>
 
         {/* Nav */}
@@ -272,7 +278,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           ))}
         </nav>
 
-        {/* Collapse toggle */}
+        {/* Botão recolher */}
         <button
           onClick={() => setCollapsed(c => !c)}
           className="hidden lg:flex items-center justify-center p-3 border-t border-white/10 hover:bg-white/5 transition text-slate-400 hover:text-white"
@@ -281,9 +287,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </button>
       </aside>
 
-      {/* Main */}
+      {/* Principal */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Topbar */}
+        {/* Barra superior */}
         <header className="flex items-center justify-between px-4 lg:px-6 py-3 border-b border-border bg-card flex-shrink-0">
           <button
             onClick={() => setMobileOpen(o => !o)}
@@ -293,30 +299,31 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </button>
           <div className="flex-1 lg:flex-none" />
           <div className="flex items-center gap-2">
-            {/* Theme toggle */}
+            {/* Alternar tema */}
             <button
               onClick={toggle}
               className="p-2 rounded-lg hover:bg-accent transition text-muted-foreground hover:text-foreground"
+              title={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
             >
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
 
-            {/* Notifications */}
+            {/* Notificações */}
             <NotificationBell />
 
-            {/* User */}
+            {/* Usuário */}
             <div className="flex items-center gap-2 pl-2 border-l border-border">
               <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
                 {initials}
               </div>
               <div className="hidden md:block text-sm">
                 <p className="font-medium leading-none">{user?.first_name} {user?.last_name}</p>
-                <p className="text-xs text-muted-foreground mt-0.5 capitalize">{user?.roles[0]?.replace('_', ' ') || 'user'}</p>
+                <p className="text-xs text-muted-foreground mt-0.5 capitalize">{user?.roles[0]?.replace('_', ' ') || 'usuário'}</p>
               </div>
               <button
                 onClick={handleLogout}
                 className="p-2 rounded-lg hover:bg-accent transition text-muted-foreground hover:text-destructive"
-                title="Logout"
+                title="Sair"
               >
                 <LogOut className="w-4 h-4" />
               </button>
@@ -324,7 +331,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </header>
 
-        {/* Content */}
+        {/* Conteúdo */}
         <main className="flex-1 overflow-auto p-4 lg:p-6">
           {children}
         </main>

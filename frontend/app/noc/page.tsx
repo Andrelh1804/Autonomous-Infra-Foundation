@@ -9,31 +9,35 @@ import {
   RefreshCw, Bell,
 } from 'lucide-react';
 
-const SEV_COLOR: Record<string,string> = {
-  info: 'border-l-blue-400 bg-blue-400/5',
-  warning: 'border-l-amber-400 bg-amber-400/5',
-  critical: 'border-l-red-400 bg-red-400/5',
+const SEV_COLOR: Record<string, string> = {
+  info:      'border-l-blue-400 bg-blue-400/5',
+  warning:   'border-l-amber-400 bg-amber-400/5',
+  critical:  'border-l-red-400 bg-red-400/5',
   emergency: 'border-l-rose-500 bg-rose-500/8',
 };
-const STATUS_DOT: Record<string,string> = {
-  online: 'bg-emerald-500',
-  offline: 'bg-red-500',
-  warning: 'bg-amber-500',
+const STATUS_DOT: Record<string, string> = {
+  online:   'bg-emerald-500',
+  offline:  'bg-red-500',
+  warning:  'bg-amber-500',
   critical: 'bg-red-600 animate-pulse',
-  unknown: 'bg-slate-500',
+  unknown:  'bg-slate-500',
 };
-const DTYPE_ICONS: Record<string,React.ElementType> = {
+const DTYPE_ICONS: Record<string, React.ElementType> = {
   server: Server, switch: Router, router: Router,
   firewall: Monitor, printer: Printer, ups: Zap,
   ap: Wifi, storage: HardDrive,
 };
 
+const STATUS_PT: Record<string, string> = {
+  healthy: 'SAUDÁVEL', degraded: 'DEGRADADO', critical: 'CRÍTICO',
+};
+
 function relTime(iso: string) {
   const d = Date.now() - new Date(iso).getTime();
-  const m = Math.floor(d/60_000);
-  if (m < 1) return 'just now';
-  if (m < 60) return `${m}m ago`;
-  return `${Math.floor(m/60)}h ago`;
+  const m = Math.floor(d / 60_000);
+  if (m < 1) return 'agora mesmo';
+  if (m < 60) return `há ${m}min`;
+  return `há ${Math.floor(m / 60)}h`;
 }
 
 export default function NOCPage() {
@@ -55,38 +59,40 @@ export default function NOCPage() {
   });
 
   const ackMut = useMutation({ mutationFn: eventsApi.acknowledge, onSuccess: () => qc.invalidateQueries({ queryKey: ['noc-timeline'] }) });
-  const resMut = useMutation({ mutationFn: eventsApi.resolve, onSuccess: () => qc.invalidateQueries({ queryKey: ['noc-timeline'] }) });
+  const resMut = useMutation({ mutationFn: eventsApi.resolve,     onSuccess: () => qc.invalidateQueries({ queryKey: ['noc-timeline'] }) });
 
   const statusColor = overview?.status === 'healthy' ? 'text-emerald-400' : overview?.status === 'degraded' ? 'text-amber-400' : 'text-red-400';
-  const statusBg = overview?.status === 'healthy' ? 'bg-emerald-500/10 border-emerald-500/20' : overview?.status === 'degraded' ? 'bg-amber-500/10 border-amber-500/20' : 'bg-red-500/10 border-red-500/20';
+  const statusBg    = overview?.status === 'healthy' ? 'bg-emerald-500/10 border-emerald-500/20' : overview?.status === 'degraded' ? 'bg-amber-500/10 border-amber-500/20' : 'bg-red-500/10 border-red-500/20';
 
-  const mapItems = healthMap ?? [];
+  const mapItems      = healthMap ?? [];
   const timelineItems = (timeline ?? []).slice(0, 30);
 
   return (
     <Layout>
       <div className="space-y-6">
-        {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">NOC Center</h1>
-            <p className="text-muted-foreground text-sm mt-1">Network Operations Center — real-time infrastructure health</p>
+            <h1 className="text-2xl font-bold">Centro NOC</h1>
+            <p className="text-muted-foreground text-sm mt-1">Network Operations Center — saúde da infraestrutura em tempo real</p>
           </div>
           <div className={cn('flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-semibold', statusBg, statusColor)}>
-            <span className={cn('w-2 h-2 rounded-full', overview?.status === 'healthy' ? 'bg-emerald-400' : overview?.status === 'degraded' ? 'bg-amber-400 animate-pulse' : 'bg-red-400 animate-pulse')} />
-            {(overview?.status ?? 'loading').toUpperCase()}
+            <span className={cn('w-2 h-2 rounded-full',
+              overview?.status === 'healthy'  ? 'bg-emerald-400' :
+              overview?.status === 'degraded' ? 'bg-amber-400 animate-pulse' :
+              'bg-red-400 animate-pulse'
+            )} />
+            {STATUS_PT[overview?.status ?? ''] || (overview?.status?.toUpperCase() ?? 'CARREGANDO')}
           </div>
         </div>
 
-        {/* KPI row */}
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
           {[
-            { label: 'Total Targets', val: overview?.targets?.total ?? 0, icon: Activity, color: 'bg-indigo-600' },
-            { label: 'Online', val: overview?.targets?.online ?? 0, icon: Wifi, color: 'bg-emerald-600' },
-            { label: 'Offline', val: overview?.targets?.offline ?? 0, icon: WifiOff, color: 'bg-red-600' },
-            { label: 'Open Events', val: overview?.events?.open ?? 0, icon: Bell, color: 'bg-amber-600' },
-            { label: 'Critical', val: overview?.events?.critical ?? 0, icon: AlertTriangle, color: 'bg-red-700' },
-            { label: 'Avg Health', val: `${overview?.avg_health ?? 100}`, icon: CheckCircle2, color: 'bg-violet-600' },
+            { label: 'Total de Alvos',   val: overview?.targets?.total ?? 0,  icon: Activity,     color: 'bg-indigo-600' },
+            { label: 'Online',           val: overview?.targets?.online ?? 0,  icon: Wifi,         color: 'bg-emerald-600' },
+            { label: 'Offline',          val: overview?.targets?.offline ?? 0, icon: WifiOff,      color: 'bg-red-600' },
+            { label: 'Eventos Abertos',  val: overview?.events?.open ?? 0,     icon: Bell,         color: 'bg-amber-600' },
+            { label: 'Críticos',         val: overview?.events?.critical ?? 0, icon: AlertTriangle, color: 'bg-red-700' },
+            { label: 'Saúde Média',      val: `${overview?.avg_health ?? 100}`, icon: CheckCircle2, color: 'bg-violet-600' },
           ].map(({ label, val, icon: Icon, color }) => (
             <div key={label} className="bg-card border border-border rounded-xl p-3 flex items-center gap-2">
               <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${color}`}>
@@ -101,15 +107,14 @@ export default function NOCPage() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-6">
-          {/* Health Map */}
           <div className="bg-card border border-border rounded-xl overflow-hidden">
             <div className="px-5 py-3 border-b border-border flex items-center justify-between">
-              <h2 className="font-semibold text-sm flex items-center gap-2"><Activity className="w-4 h-4 text-indigo-400" /> Health Map</h2>
-              <span className="text-xs text-muted-foreground">{mapItems.length} devices</span>
+              <h2 className="font-semibold text-sm flex items-center gap-2"><Activity className="w-4 h-4 text-indigo-400" /> Mapa de Saúde</h2>
+              <span className="text-xs text-muted-foreground">{mapItems.length} dispositivo{mapItems.length !== 1 ? 's' : ''}</span>
             </div>
             <div className="p-4 grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-96 overflow-y-auto">
               {mapItems.length === 0 ? (
-                <div className="col-span-3 py-8 text-center text-muted-foreground text-sm">No targets monitored yet</div>
+                <div className="col-span-3 py-8 text-center text-muted-foreground text-sm">Nenhum alvo monitorado ainda</div>
               ) : mapItems.map((t: any) => {
                 const Icon = DTYPE_ICONS[t.device_type] ?? Server;
                 return (
@@ -129,17 +134,17 @@ export default function NOCPage() {
             </div>
           </div>
 
-          {/* Event timeline */}
           <div className="bg-card border border-border rounded-xl overflow-hidden">
             <div className="px-5 py-3 border-b border-border flex items-center justify-between">
-              <h2 className="font-semibold text-sm flex items-center gap-2"><Clock className="w-4 h-4 text-indigo-400" /> Event Timeline (24h)</h2>
-              <button onClick={() => qc.invalidateQueries({ queryKey: ['noc-timeline'] })} className="text-muted-foreground hover:text-foreground transition p-1 rounded">
+              <h2 className="font-semibold text-sm flex items-center gap-2"><Clock className="w-4 h-4 text-indigo-400" /> Linha do Tempo de Eventos (24h)</h2>
+              <button onClick={() => qc.invalidateQueries({ queryKey: ['noc-timeline'] })}
+                className="text-muted-foreground hover:text-foreground transition p-1 rounded">
                 <RefreshCw className="w-3.5 h-3.5" />
               </button>
             </div>
             <div className="divide-y divide-border max-h-96 overflow-y-auto">
               {timelineItems.length === 0 ? (
-                <div className="py-8 text-center text-muted-foreground text-sm">No events in last 24h</div>
+                <div className="py-8 text-center text-muted-foreground text-sm">Nenhum evento nas últimas 24h</div>
               ) : timelineItems.map((e: any) => (
                 <div key={e.id} className={cn('px-4 py-2.5 border-l-2', SEV_COLOR[e.severity] ?? SEV_COLOR.info)}>
                   <div className="flex items-start justify-between gap-2">

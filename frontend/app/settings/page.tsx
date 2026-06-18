@@ -30,18 +30,16 @@ export default function SettingsPage() {
     <Layout>
       <div className="space-y-6 max-w-4xl">
         <div>
-          <h1 className="text-2xl font-bold">Settings</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">Platform configuration and security</p>
+          <h1 className="text-2xl font-bold">Configurações</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">Configuração da plataforma e segurança</p>
         </div>
 
-        {/* MFA Card */}
         <MfaSetupCard mfaEnabled={!!me?.mfa_enabled} />
 
-        {/* Platform Settings */}
         <div className="bg-card border border-border rounded-xl overflow-hidden">
           <div className="px-5 py-4 border-b border-border">
-            <h2 className="font-semibold">Platform Settings</h2>
-            <p className="text-xs text-muted-foreground mt-0.5">Click any value to edit inline</p>
+            <h2 className="font-semibold">Configurações da Plataforma</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">Clique em qualquer valor para editar diretamente</p>
           </div>
           <div className="divide-y divide-border">
             {settings?.map(s => (
@@ -70,7 +68,7 @@ export default function SettingsPage() {
                       <Save className="w-4 h-4" />
                     </button>
                     <button onClick={() => setEditKey(null)} className="text-xs text-muted-foreground hover:text-foreground">
-                      Cancel
+                      Cancelar
                     </button>
                   </div>
                 ) : (

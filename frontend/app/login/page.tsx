@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authApi } from '@/services/api';
 import { useAuthStore } from '@/store/auth';
+import Image from 'next/image';
 
 type Step = 'credentials' | 'mfa';
 
@@ -34,7 +35,7 @@ export default function LoginPage() {
         router.push('/dashboard');
       }
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Invalid credentials');
+      setError(err.response?.data?.detail || 'Credenciais inválidas');
     } finally {
       setLoading(false);
     }
@@ -51,7 +52,7 @@ export default function LoginPage() {
       setUser(meRes.data);
       router.push('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Invalid code. Please try again.');
+      setError(err.response?.data?.detail || 'Código inválido. Tente novamente.');
       setCode('');
     } finally {
       setLoading(false);
@@ -64,21 +65,23 @@ export default function LoginPage() {
 
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl mb-4 shadow-lg shadow-indigo-500/30">
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" />
-            </svg>
+          <div className="inline-flex items-center justify-center mb-4">
+            <Image
+              src="/images/nexaops-logo.png"
+              alt="NexaOps"
+              width={160}
+              height={160}
+              className="drop-shadow-2xl"
+              priority
+            />
           </div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">AII Platform</h1>
-          <p className="text-indigo-300 mt-1 text-sm">Autonomous Infrastructure Intelligence</p>
         </div>
 
         <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl">
 
           {step === 'credentials' ? (
             <>
-              <h2 className="text-xl font-semibold text-white mb-6">Sign in to your account</h2>
+              <h2 className="text-xl font-semibold text-white mb-6">Entrar na sua conta</h2>
 
               {error && (
                 <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
@@ -88,24 +91,25 @@ export default function LoginPage() {
 
               <form onSubmit={handleCredentials} className="space-y-5" noValidate>
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Email</label>
+                  <label className="block text-sm font-medium text-slate-300 mb-1.5">E-mail</label>
                   <input
                     type="text"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     required
-                    placeholder="admin@aii.local"
+                    placeholder="admin@nexaops.local"
                     className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
+                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Senha</label>
                   <input
                     type="password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     required
                     placeholder="••••••••"
+                    autoComplete="current-password"
                     className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                   />
                 </div>
@@ -120,36 +124,36 @@ export default function LoginPage() {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                       </svg>
-                      Signing in...
+                      Entrando...
                     </span>
-                  ) : 'Sign in'}
+                  ) : 'Entrar'}
                 </button>
               </form>
 
               <p className="mt-6 text-center text-xs text-slate-500">
-                Default: admin@aii.local / Admin@2024!
+                Padrão: admin@aii.local / Admin@2024!
               </p>
             </>
           ) : (
             <>
-              {/* Step indicator */}
+              {/* Voltar */}
               <div className="flex items-center gap-3 mb-6">
                 <button
                   onClick={() => { setStep('credentials'); setError(''); setCode(''); }}
                   className="text-slate-400 hover:text-white transition"
-                  title="Back"
+                  title="Voltar"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                   </svg>
                 </button>
                 <div>
-                  <h2 className="text-xl font-semibold text-white">Two-factor authentication</h2>
-                  <p className="text-slate-400 text-sm mt-0.5">Enter the 6-digit code from your authenticator app</p>
+                  <h2 className="text-xl font-semibold text-white">Autenticação em dois fatores</h2>
+                  <p className="text-slate-400 text-sm mt-0.5">Digite o código de 6 dígitos do seu aplicativo autenticador</p>
                 </div>
               </div>
 
-              {/* Shield icon */}
+              {/* Ícone escudo */}
               <div className="flex justify-center mb-6">
                 <div className="w-14 h-14 bg-indigo-600/20 border border-indigo-500/30 rounded-2xl flex items-center justify-center">
                   <svg className="w-7 h-7 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -167,7 +171,7 @@ export default function LoginPage() {
 
               <form onSubmit={handleMfa} className="space-y-5">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Verification Code</label>
+                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Código de verificação</label>
                   <input
                     type="text"
                     inputMode="numeric"
@@ -193,14 +197,14 @@ export default function LoginPage() {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                       </svg>
-                      Verifying...
+                      Verificando...
                     </span>
-                  ) : 'Verify'}
+                  ) : 'Verificar'}
                 </button>
               </form>
 
               <p className="mt-5 text-center text-xs text-slate-500">
-                Open your authenticator app (Google Authenticator, Authy, etc.) and enter the current code for <span className="text-slate-400">{email}</span>
+                Abra seu aplicativo autenticador (Google Authenticator, Authy, etc.) e insira o código atual de <span className="text-slate-400">{email}</span>
               </p>
             </>
           )}

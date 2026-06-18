@@ -4,20 +4,23 @@ import Layout from '@/components/Layout';
 import { monitoringApi } from '@/services/api';
 import { Zap, Router, Wifi, Activity, RefreshCw, WifiOff, Clock, Server } from 'lucide-react';
 
-const TYPE_ICONS: Record<string,React.ElementType> = {
+const TYPE_ICONS: Record<string, React.ElementType> = {
   ups: Zap, switch: Router, router: Router, ap: Wifi, firewall: Server,
 };
-const TYPE_COLORS: Record<string,string> = {
+const TYPE_COLORS: Record<string, string> = {
   ups: 'bg-amber-600', switch: 'bg-indigo-600', router: 'bg-violet-600', ap: 'bg-cyan-600', firewall: 'bg-rose-600',
+};
+const TYPE_LABELS: Record<string, string> = {
+  ups: 'Nobreaks (UPS)', switch: 'Switches', router: 'Roteadores', ap: 'Access Points', firewall: 'Firewalls',
 };
 
 function relTime(iso: string | null) {
-  if (!iso) return 'Never';
+  if (!iso) return 'Nunca';
   const d = Date.now() - new Date(iso).getTime();
-  const m = Math.floor(d/60_000);
-  if (m < 1) return 'just now';
-  if (m < 60) return `${m}m ago`;
-  return `${Math.floor(m/60)}h ago`;
+  const m = Math.floor(d / 60_000);
+  if (m < 1) return 'agora mesmo';
+  if (m < 60) return `há ${m}min`;
+  return `há ${Math.floor(m / 60)}h`;
 }
 
 function HealthRing({ score }: { score: number }) {
@@ -47,7 +50,7 @@ export default function UpsNetworkPage() {
   });
 
   const allTargets = (data?.items ?? []).filter((t: any) =>
-    ['ups','switch','router','ap','firewall'].includes(t.device_type)
+    ['ups', 'switch', 'router', 'ap', 'firewall'].includes(t.device_type)
   );
 
   const byType: Record<string, any[]> = {};
@@ -55,26 +58,26 @@ export default function UpsNetworkPage() {
     (byType[t.device_type] = byType[t.device_type] ?? []).push(t);
   }
 
-  const typeOrder = ['ups','switch','router','ap','firewall'];
+  const typeOrder = ['ups', 'switch', 'router', 'ap', 'firewall'];
   const orderedTypes = typeOrder.filter(t => byType[t]?.length);
 
-  const online = allTargets.filter((t: any) => t.is_online).length;
+  const online  = allTargets.filter((t: any) => t.is_online).length;
   const offline = allTargets.filter((t: any) => t.is_online === false).length;
 
   return (
     <Layout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">UPS & Network Devices</h1>
-          <p className="text-muted-foreground text-sm mt-1">Power systems, switches, routers and access points</p>
+          <h1 className="text-2xl font-bold">UPS e Dispositivos de Rede</h1>
+          <p className="text-muted-foreground text-sm mt-1">Sistemas de energia, switches, roteadores e access points</p>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
-            { label: 'Total Devices', val: allTargets.length, icon: Activity, color: 'bg-indigo-600' },
-            { label: 'Online', val: online, icon: Wifi, color: 'bg-emerald-600' },
-            { label: 'Offline', val: offline, icon: WifiOff, color: 'bg-red-600' },
-            { label: 'Device Types', val: orderedTypes.length, icon: Router, color: 'bg-violet-600' },
+            { label: 'Total de Dispositivos', val: allTargets.length, icon: Activity, color: 'bg-indigo-600' },
+            { label: 'Online',                val: online,            icon: Wifi,     color: 'bg-emerald-600' },
+            { label: 'Offline',               val: offline,           icon: WifiOff,  color: 'bg-red-600' },
+            { label: 'Tipos de Dispositivo',  val: orderedTypes.length, icon: Router, color: 'bg-violet-600' },
           ].map(({ label, val, icon: Icon, color }) => (
             <div key={label} className="bg-card border border-border rounded-xl p-4 flex items-center gap-3">
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${color}`}>
@@ -92,8 +95,8 @@ export default function UpsNetworkPage() {
         ) : allTargets.length === 0 ? (
           <div className="py-20 text-center bg-card border border-border rounded-xl">
             <Zap className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
-            <p className="text-muted-foreground">No UPS or network devices monitored</p>
-            <p className="text-xs text-muted-foreground mt-1">Add targets with type ups, switch, router, ap, or firewall</p>
+            <p className="text-muted-foreground">Nenhum UPS ou dispositivo de rede monitorado</p>
+            <p className="text-xs text-muted-foreground mt-1">Adicione alvos do tipo ups, switch, router, ap ou firewall</p>
           </div>
         ) : (
           orderedTypes.map(type => {
@@ -106,7 +109,7 @@ export default function UpsNetworkPage() {
                   <div className={`w-6 h-6 rounded-lg flex items-center justify-center ${color}`}>
                     <Icon className="w-3.5 h-3.5 text-white" />
                   </div>
-                  <h2 className="font-semibold text-sm capitalize">{type === 'ups' ? 'UPS' : type === 'ap' ? 'Access Points' : `${type}es`.replace('routeres','routers').replace('switchs','switches')}</h2>
+                  <h2 className="font-semibold text-sm">{TYPE_LABELS[type] || type}</h2>
                   <span className="text-xs text-muted-foreground">({items.length})</span>
                 </div>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -120,15 +123,16 @@ export default function UpsNetworkPage() {
                           {t.vendor && <p className="text-xs text-muted-foreground">{t.vendor}</p>}
                         </div>
                         <div className="flex items-center gap-1.5 flex-shrink-0">
-                          {t.is_online === true && <Wifi className="w-3.5 h-3.5 text-emerald-400" />}
+                          {t.is_online === true  && <Wifi  className="w-3.5 h-3.5 text-emerald-400" />}
                           {t.is_online === false && <WifiOff className="w-3.5 h-3.5 text-red-400" />}
-                          {t.is_online === null && <Clock className="w-3.5 h-3.5 text-muted-foreground" />}
+                          {t.is_online === null  && <Clock className="w-3.5 h-3.5 text-muted-foreground" />}
                         </div>
                       </div>
                       <div className="mt-3 flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">Last: {relTime(t.last_polled_at)}</span>
-                        <button onClick={() => pollMut.mutate(t.id)} className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
-                          <RefreshCw className={`w-3 h-3 ${pollMut.isPending ? 'animate-spin' : ''}`} /> Poll
+                        <span className="text-xs text-muted-foreground">Última: {relTime(t.last_polled_at)}</span>
+                        <button onClick={() => pollMut.mutate(t.id)}
+                          className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition">
+                          <RefreshCw className={`w-3 h-3 ${pollMut.isPending ? 'animate-spin' : ''}`} /> Sondar
                         </button>
                       </div>
                       {t.last_error && (

@@ -85,7 +85,7 @@ export default function AuditPage() {
 
   function downloadCSV() {
     if (!data?.items?.length) return;
-    const header = ['ID', 'User', 'Action', 'Module', 'IP Address', 'Timestamp'];
+    const header = ['ID', 'Usuário', 'Ação', 'Módulo', 'Endereço IP', 'Data/Hora'];
     const rows = data.items.map(l => [
       l.id, l.user_email ?? '', l.action, l.module, l.ip_address ?? '', l.created_at
     ]);
@@ -93,7 +93,7 @@ export default function AuditPage() {
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = `audit-log-page${page}.csv`; a.click();
+    a.href = url; a.download = `log-auditoria-pagina${page}.csv`; a.click();
     URL.revokeObjectURL(url);
   }
 
@@ -101,12 +101,11 @@ export default function AuditPage() {
     <Layout>
       <div className="space-y-5">
 
-        {/* Header */}
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <div>
-            <h1 className="text-2xl font-bold">Audit Log</h1>
+            <h1 className="text-2xl font-bold">Log de Auditoria</h1>
             <p className="text-sm text-muted-foreground mt-0.5">
-              {data ? `${data.total.toLocaleString()} events recorded` : 'System activity trail'}
+              {data ? `${data.total.toLocaleString('pt-BR')} eventos registrados` : 'Trilha de atividades do sistema'}
             </p>
           </div>
           <button
@@ -114,58 +113,53 @@ export default function AuditPage() {
             disabled={!data?.items?.length}
             className="flex items-center gap-2 px-3 py-2 text-sm border border-border rounded-lg hover:bg-accent transition disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            <Download className="w-4 h-4" /> Export CSV
+            <Download className="w-4 h-4" /> Exportar CSV
           </button>
         </div>
 
-        {/* Filter bar */}
         <div className="bg-card border border-border rounded-xl p-4 space-y-3">
           <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
             <Filter className="w-4 h-4" />
-            Filters
+            Filtros
             {hasActiveFilters && (
-              <span className="ml-1 px-1.5 py-0.5 rounded-full bg-indigo-600 text-white text-xs">active</span>
+              <span className="ml-1 px-1.5 py-0.5 rounded-full bg-indigo-600 text-white text-xs">ativo</span>
             )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-            {/* User email search */}
             <div className="relative lg:col-span-2">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 className="w-full pl-9 pr-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-muted-foreground"
-                placeholder="Search by user email…"
+                placeholder="Buscar por e-mail do usuário…"
                 value={filters.user_email}
                 onChange={e => setFilters(p => ({ ...p, user_email: e.target.value }))}
                 onKeyDown={e => e.key === 'Enter' && applyFilters()}
               />
             </div>
 
-            {/* Action */}
             <select
               className="px-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-foreground"
               value={filters.action}
               onChange={e => setFilters(p => ({ ...p, action: e.target.value }))}
             >
-              <option value="">All Actions</option>
+              <option value="">Todas as Ações</option>
               {(meta?.actions ?? []).map(a => (
                 <option key={a} value={a}>{a}</option>
               ))}
             </select>
 
-            {/* Module */}
             <select
               className="px-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-foreground"
               value={filters.module}
               onChange={e => setFilters(p => ({ ...p, module: e.target.value }))}
             >
-              <option value="">All Modules</option>
+              <option value="">Todos os Módulos</option>
               {(meta?.modules ?? []).map(m => (
                 <option key={m} value={m} className="capitalize">{m}</option>
               ))}
             </select>
 
-            {/* Date from */}
             <input
               type="date"
               className="px-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-foreground"
@@ -175,7 +169,6 @@ export default function AuditPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-            {/* Date to */}
             <input
               type="date"
               className="px-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-foreground"
@@ -187,25 +180,24 @@ export default function AuditPage() {
                 onClick={resetFilters}
                 className="flex items-center gap-1.5 px-3 py-2 text-sm border border-border rounded-lg hover:bg-accent transition text-muted-foreground"
               >
-                <RotateCcw className="w-3.5 h-3.5" /> Reset
+                <RotateCcw className="w-3.5 h-3.5" /> Limpar
               </button>
               <button
                 onClick={applyFilters}
                 className="flex items-center gap-1.5 px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition font-medium"
               >
-                <Search className="w-3.5 h-3.5" /> Apply
+                <Search className="w-3.5 h-3.5" /> Aplicar
               </button>
             </div>
           </div>
         </div>
 
-        {/* Table */}
         <div className={`bg-card border border-border rounded-xl overflow-hidden transition-opacity ${isFetching ? 'opacity-60' : ''}`}>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border bg-muted/30">
-                  {['#', 'User', 'Action', 'Module', 'IP Address', 'Payload', 'Timestamp'].map(h => (
+                  {['#', 'Usuário', 'Ação', 'Módulo', 'Endereço IP', 'Payload', 'Data/Hora'].map(h => (
                     <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide whitespace-nowrap">
                       {h}
                     </th>
@@ -228,7 +220,7 @@ export default function AuditPage() {
                     <td colSpan={7} className="px-4 py-16 text-center text-muted-foreground text-sm">
                       <div className="flex flex-col items-center gap-2">
                         <ScrollText className="w-8 h-8 opacity-30" />
-                        No audit events match your filters
+                        Nenhum evento de auditoria corresponde aos filtros
                       </div>
                     </td>
                   </tr>
@@ -268,11 +260,10 @@ export default function AuditPage() {
             </table>
           </div>
 
-          {/* Pagination */}
           {data && data.total > 0 && (
             <div className="px-4 py-3 border-t border-border flex items-center justify-between gap-4 flex-wrap">
               <p className="text-xs text-muted-foreground">
-                Showing <span className="font-medium text-foreground">{((page - 1) * PER_PAGE) + 1}–{Math.min(page * PER_PAGE, data.total)}</span> of <span className="font-medium text-foreground">{data.total.toLocaleString()}</span> events
+                Exibindo <span className="font-medium text-foreground">{((page - 1) * PER_PAGE) + 1}–{Math.min(page * PER_PAGE, data.total)}</span> de <span className="font-medium text-foreground">{data.total.toLocaleString('pt-BR')}</span> eventos
               </p>
               <div className="flex items-center gap-1">
                 <button

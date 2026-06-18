@@ -27,12 +27,14 @@ function ChangeRow({ history }: { history: AssetHistory }) {
           <div className="flex items-center gap-2 flex-wrap">
             <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
               history.change_source === 'discovery' ? 'bg-indigo-500/10 text-indigo-400' :
-              history.change_source === 'manual' ? 'bg-amber-500/10 text-amber-400' :
+              history.change_source === 'manual'    ? 'bg-amber-500/10 text-amber-400' :
               'bg-slate-500/10 text-slate-400'
             }`}>
-              {history.change_source === 'discovery' ? <span className="flex items-center gap-1"><Radar className="w-3 h-3 inline" /> Discovery</span> : history.change_source}
+              {history.change_source === 'discovery'
+                ? <span className="flex items-center gap-1"><Radar className="w-3 h-3 inline" /> Discovery</span>
+                : history.change_source === 'manual' ? 'Manual' : history.change_source}
             </span>
-            <span className="text-sm font-medium">{fields.length} field{fields.length !== 1 ? 's' : ''} changed</span>
+            <span className="text-sm font-medium">{fields.length} campo{fields.length !== 1 ? 's' : ''} alterado{fields.length !== 1 ? 's' : ''}</span>
             <span className="text-xs text-muted-foreground hidden md:block">{fields.join(', ')}</span>
           </div>
         </div>
@@ -45,9 +47,9 @@ function ChangeRow({ history }: { history: AssetHistory }) {
             <table className="w-full text-xs">
               <thead>
                 <tr className="border-b border-border">
-                  <th className="px-3 py-2 text-left font-medium text-muted-foreground">Field</th>
-                  <th className="px-3 py-2 text-left font-medium text-muted-foreground">Before</th>
-                  <th className="px-3 py-2 text-left font-medium text-muted-foreground">After</th>
+                  <th className="px-3 py-2 text-left font-medium text-muted-foreground">Campo</th>
+                  <th className="px-3 py-2 text-left font-medium text-muted-foreground">Antes</th>
+                  <th className="px-3 py-2 text-left font-medium text-muted-foreground">Depois</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
@@ -89,16 +91,19 @@ export default function AssetHistoryPage() {
 
   const selectedAsset = assets.find(a => a.id === selectedAssetId);
 
+  const statusLabel: Record<string, string> = {
+    active: 'Ativo', inactive: 'Inativo', maintenance: 'Manutenção',
+  };
+
   return (
     <Layout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">Asset History</h1>
-          <p className="text-muted-foreground text-sm mt-1">Track all changes to your assets over time</p>
+          <h1 className="text-2xl font-bold">Histórico de Ativos</h1>
+          <p className="text-muted-foreground text-sm mt-1">Acompanhe todas as alterações em seus ativos ao longo do tempo</p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* Asset list */}
           <div className="lg:col-span-1">
             <div className="bg-card border border-border rounded-xl overflow-hidden h-fit">
               <div className="px-4 py-3 border-b border-border">
@@ -108,14 +113,14 @@ export default function AssetHistoryPage() {
                     type="text"
                     value={search}
                     onChange={e => setSearch(e.target.value)}
-                    placeholder="Search assets…"
+                    placeholder="Buscar ativos…"
                     className="w-full pl-9 pr-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
               </div>
               <div className="divide-y divide-border max-h-[60vh] overflow-y-auto">
                 {filtered.length === 0 ? (
-                  <div className="p-6 text-center text-muted-foreground text-sm">No assets found</div>
+                  <div className="p-6 text-center text-muted-foreground text-sm">Nenhum ativo encontrado</div>
                 ) : (
                   filtered.map(a => (
                     <button
@@ -125,8 +130,8 @@ export default function AssetHistoryPage() {
                     >
                       <Cpu className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" />
                       <div className="min-w-0">
-                        <p className="text-sm font-medium truncate">{a.hostname || a.ip_address || `Asset #${a.id}`}</p>
-                        <p className="text-xs text-muted-foreground">{a.asset_type?.name ?? '—'} · {a.status}</p>
+                        <p className="text-sm font-medium truncate">{a.hostname || a.ip_address || `Ativo #${a.id}`}</p>
+                        <p className="text-xs text-muted-foreground">{a.asset_type?.name ?? '—'} · {statusLabel[a.status] || a.status}</p>
                       </div>
                     </button>
                   ))
@@ -135,33 +140,32 @@ export default function AssetHistoryPage() {
             </div>
           </div>
 
-          {/* History timeline */}
           <div className="lg:col-span-2">
             <div className="bg-card border border-border rounded-xl overflow-hidden">
               <div className="px-5 py-4 border-b border-border flex items-center gap-3">
                 <History className="w-5 h-5 text-indigo-400" />
                 <div>
                   <h2 className="font-semibold text-sm">
-                    {selectedAsset ? `${selectedAsset.hostname || selectedAsset.ip_address || `Asset #${selectedAsset.id}`}` : 'Change History'}
+                    {selectedAsset ? `${selectedAsset.hostname || selectedAsset.ip_address || `Ativo #${selectedAsset.id}`}` : 'Histórico de Alterações'}
                   </h2>
                   {selectedAsset && (
-                    <p className="text-xs text-muted-foreground">{selectedAsset.asset_type?.name} · {selectedAsset.status}</p>
+                    <p className="text-xs text-muted-foreground">{selectedAsset.asset_type?.name} · {statusLabel[selectedAsset.status] || selectedAsset.status}</p>
                   )}
                 </div>
-                {history && <span className="ml-auto text-xs text-muted-foreground">{history.length} change{history.length !== 1 ? 's' : ''}</span>}
+                {history && <span className="ml-auto text-xs text-muted-foreground">{history.length} alteraç{history.length !== 1 ? 'ões' : 'ão'}</span>}
               </div>
 
               {!selectedAssetId ? (
                 <div className="p-12 text-center">
                   <History className="w-10 h-10 text-muted-foreground mx-auto mb-3 opacity-30" />
-                  <p className="text-muted-foreground text-sm">Select an asset from the list to view its change history</p>
+                  <p className="text-muted-foreground text-sm">Selecione um ativo da lista para ver seu histórico de alterações</p>
                 </div>
               ) : isLoading ? (
                 <div className="p-8 flex justify-center"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
               ) : !history || history.length === 0 ? (
                 <div className="p-12 text-center">
                   <History className="w-10 h-10 text-muted-foreground mx-auto mb-3 opacity-30" />
-                  <p className="text-muted-foreground text-sm">No change history for this asset yet</p>
+                  <p className="text-muted-foreground text-sm">Nenhum histórico de alterações para este ativo ainda</p>
                 </div>
               ) : (
                 <div>
