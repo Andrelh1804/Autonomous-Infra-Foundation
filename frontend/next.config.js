@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   outputFileTracingRoot: require('path').join(__dirname, '../'),
+  allowedDevOrigins: ['*.replit.dev', '*.repl.co', '*.spock.replit.dev'],
   async rewrites() {
     return [
       {
