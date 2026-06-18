@@ -1,0 +1,97 @@
+Correção do Login e Atualização da Identidade Visual NexaOps
+Objetivo
+
+Corrigir integralmente o fluxo de autenticação da plataforma e atualizar a identidade visual para a marca NexaOps.
+
+1. Correção do Login
+
+Realizar diagnóstico completo do sistema de autenticação.
+
+Verificar:
+Conexão com banco de dados.
+Configuração de autenticação (JWT, Session, OAuth ou provider utilizado).
+Rotas de login.
+API de autenticação.
+Middleware de autenticação.
+Tratamento de senha e hash.
+Variáveis de ambiente (.env).
+CORS.
+Cookies e sessão.
+Redirecionamento pós-login.
+Controle de permissões.
+Corrigir:
+Usuário válido não consegue autenticar.
+Erros de credenciais sem feedback adequado.
+Loops de redirecionamento.
+Expiração incorreta de sessão.
+Problemas de armazenamento do token.
+Falhas de comunicação Frontend ↔ Backend.
+Implementar logs detalhados:
+console.error('Login Error:', error);
+
+ou equivalente para backend.
+
+Exibir mensagens amigáveis:
+"Usuário ou senha inválidos."
+"Sessão expirada. Faça login novamente."
+"Erro de conexão com o servidor."
+2. Atualização da Logo
+
+Substituir todas as logos atuais pela nova logo oficial da NexaOps.
+
+Aplicar em:
+Tela de Login
+Navbar
+Sidebar
+Header
+Footer
+Splash Screen
+Página inicial
+Tela de recuperação de senha
+Favicon
+Manifest da aplicação (PWA)
+3. Atualização do Branding
+
+Alterar qualquer referência antiga para:
+
+Nome
+NexaOps
+Slogan
+Smart Infrastructure
+4. Tela de Login
+
+Atualizar layout para:
+
+Cabeçalho
+NexaOps
+Smart Infrastructure
+Componentes
+Logo centralizada
+Nome da plataforma abaixo da logo
+Slogan em destaque
+Campo Usuário
+Campo Senha
+Botão Entrar
+5. Testes Obrigatórios
+
+Validar:
+
+Login com usuário válido
+Login com senha inválida
+Logout
+Recuperação de senha
+Persistência da sessão
+Renovação de token
+Redirecionamento para dashboard
+6. Critério de Aceitação
+
+O sistema somente será considerado concluído quando:
+
+Login funcionar sem erros.
+Logout funcionar.
+Sessão permanecer ativa corretamente.
+Todas as referências visuais forem alteradas para NexaOps.
+A nova logo estiver presente em toda a aplicação.
+Não existir nenhuma referência ao nome anterior da plataforma.
+
+Importante: Antes de realizar alterações, identificar a causa raiz da falha de autenticação e documentar no relatório final quais arquivos foram modificados, quais erros foram encontrados e quais correções foram aplicadas.
