@@ -1,35 +1,19 @@
-'use client';
+import type { Metadata } from 'next';
 import './globals.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
-import { useThemeStore } from '@/store/auth';
+import Providers from '@/components/Providers';
 
-const queryClient = new QueryClient({
-  defaultOptions: { queries: { retry: 1, staleTime: 30_000 } },
-});
+export const metadata: Metadata = {
+  title: 'AII Platform',
+  description: 'Autonomous Infrastructure Intelligence',
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const { theme } = useThemeStore();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    document.documentElement.classList.toggle('dark', theme === 'dark');
-  }, [theme]);
-
-  if (!mounted) return <html><body /></html>;
-
   return (
-    <html lang="pt-BR" className={theme === 'dark' ? 'dark' : ''}>
-      <head>
-        <title>AII Platform</title>
-        <meta name="description" content="Autonomous Infrastructure Intelligence" />
-        <link rel="icon" href="/favicon.ico" />
-      </head>
+    <html lang="en">
       <body className="font-sans antialiased">
-        <QueryClientProvider client={queryClient}>
+        <Providers>
           {children}
-        </QueryClientProvider>
+        </Providers>
       </body>
     </html>
   );
