@@ -204,7 +204,7 @@ function DiscoveryHealthWidget() {
               <div className="flex items-center gap-2 mt-0.5 text-xs">
                 <span className="text-emerald-400">{data?.jobs_last_7d.completed ?? 0} ok</span>
                 {(data?.jobs_last_7d.failed ?? 0) > 0 && (
-                  <span className="text-red-400">{data.jobs_last_7d.failed} failed</span>
+                  <span className="text-red-400">{data?.jobs_last_7d.failed} failed</span>
                 )}
               </div>
             </div>

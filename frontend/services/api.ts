@@ -165,3 +165,52 @@ export const schedulesApi = {
   runNow: (id: number) => api.post(`/schedules/${id}/run-now`),
   status: () => api.get('/schedules/status'),
 };
+
+// ── Phase 3: Monitoring ───────────────────────────────────────────────────────
+export const monitoringApi = {
+  listTargets: (params?: object) => api.get('/monitoring/targets', { params }),
+  getTarget: (id: number) => api.get(`/monitoring/targets/${id}`),
+  createTarget: (body: object) => api.post('/monitoring/targets', body),
+  updateTarget: (id: number, body: object) => api.patch(`/monitoring/targets/${id}`, body),
+  deleteTarget: (id: number) => api.delete(`/monitoring/targets/${id}`),
+  pollTarget: (id: number) => api.post(`/monitoring/targets/${id}/poll`),
+  getMetrics: (id: number, params?: object) => api.get(`/monitoring/targets/${id}/metrics`, { params }),
+  metricsSummary: () => api.get('/monitoring/metrics/summary'),
+  listAlertRules: () => api.get('/monitoring/alert-rules'),
+  createAlertRule: (body: object) => api.post('/monitoring/alert-rules', body),
+  updateAlertRule: (id: number, body: object) => api.patch(`/monitoring/alert-rules/${id}`, body),
+  deleteAlertRule: (id: number) => api.delete(`/monitoring/alert-rules/${id}`),
+  listOids: (params?: object) => api.get('/monitoring/oids', { params }),
+};
+
+export const printersApi = {
+  list: (params?: object) => api.get('/printers', { params }),
+  get: (id: number) => api.get(`/printers/${id}`),
+  getSupplies: (id: number, params?: object) => api.get(`/printers/${id}/supplies`, { params }),
+  criticalSupplies: () => api.get('/printers/summary/critical'),
+};
+
+export const eventsApi = {
+  list: (params?: object) => api.get('/events', { params }),
+  stats: () => api.get('/events/stats'),
+  acknowledge: (id: number) => api.patch(`/events/${id}/acknowledge`),
+  resolve: (id: number) => api.patch(`/events/${id}/resolve`),
+  listIncidents: (params?: object) => api.get('/events/incidents', { params }),
+  createIncident: (body: object) => api.post('/events/incidents', body),
+  acknowledgeIncident: (id: number) => api.patch(`/events/incidents/${id}/acknowledge`),
+  resolveIncident: (id: number) => api.patch(`/events/incidents/${id}/resolve`),
+};
+
+export const nocApi = {
+  overview: () => api.get('/noc/overview'),
+  timeline: (hours?: number) => api.get('/noc/timeline', { params: { hours } }),
+  healthMap: () => api.get('/noc/health-map'),
+};
+
+export const notificationApi = {
+  listChannels: () => api.get('/notification/channels'),
+  createChannel: (body: object) => api.post('/notification/channels', body),
+  updateChannel: (id: number, body: object) => api.patch(`/notification/channels/${id}`, body),
+  deleteChannel: (id: number) => api.delete(`/notification/channels/${id}`),
+  testChannel: (id: number) => api.post(`/notification/channels/${id}/test`),
+};

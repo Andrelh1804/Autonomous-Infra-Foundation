@@ -18,6 +18,11 @@ from backend.api.v1.routes.assets import router as assets_router
 from backend.api.v1.routes.discovery import router as discovery_router
 from backend.api.v1.routes.schedules import router as schedules_router
 from backend.api.v1.routes.alerts import router as alerts_router
+from backend.api.v1.routes.monitoring import router as monitoring_router
+from backend.api.v1.routes.printers import router as printers_router
+from backend.api.v1.routes.events import router as events_router
+from backend.api.v1.routes.noc import router as noc_router
+from backend.api.v1.routes.notification import router as notification_router
 
 limiter = Limiter(key_func=get_remote_address)
 
@@ -66,6 +71,11 @@ app.include_router(assets_router, prefix=PREFIX)
 app.include_router(discovery_router, prefix=PREFIX)
 app.include_router(schedules_router, prefix=PREFIX)
 app.include_router(alerts_router, prefix=PREFIX)
+app.include_router(monitoring_router, prefix=PREFIX)
+app.include_router(printers_router, prefix=PREFIX)
+app.include_router(events_router, prefix=PREFIX)
+app.include_router(noc_router, prefix=PREFIX)
+app.include_router(notification_router, prefix=PREFIX)
 
 
 @app.get("/api/v1/health")

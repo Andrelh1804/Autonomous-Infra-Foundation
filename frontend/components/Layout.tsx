@@ -11,6 +11,7 @@ import {
   Settings, LogOut, Bell, Sun, Moon, ChevronLeft, ChevronRight, Menu, ScrollText,
   Radar, Server, Network, GitFork, History, ChevronDown,
   XCircle, Mail, Webhook, Zap, CheckCircle2, AlertTriangle,
+  Activity, TrendingUp, Printer, MonitorCheck, FileBarChart2,
 } from 'lucide-react';
 import type { AlertEvent } from '@/types';
 
@@ -32,6 +33,18 @@ const NAV_GROUPS = [
       { href: '/network-map', icon: Network, label: 'Network Map' },
       { href: '/relationships', icon: GitFork, label: 'Relationships' },
       { href: '/asset-history', icon: History, label: 'Asset History' },
+    ],
+  },
+  {
+    label: 'Monitoring',
+    items: [
+      { href: '/noc', icon: MonitorCheck, label: 'NOC Center' },
+      { href: '/monitoring', icon: Activity, label: 'Monitoring Targets' },
+      { href: '/metrics', icon: TrendingUp, label: 'Metrics Viewer' },
+      { href: '/events', icon: AlertTriangle, label: 'Events & Incidents' },
+      { href: '/printers', icon: Printer, label: 'Printers' },
+      { href: '/ups-network', icon: Zap, label: 'UPS & Network' },
+      { href: '/reports', icon: FileBarChart2, label: 'Reports' },
     ],
   },
   {

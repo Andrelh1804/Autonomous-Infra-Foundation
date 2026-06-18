@@ -86,11 +86,11 @@ export default function LoginPage() {
                 </div>
               )}
 
-              <form onSubmit={handleCredentials} className="space-y-5">
+              <form onSubmit={handleCredentials} className="space-y-5" noValidate>
                 <div>
                   <label className="block text-sm font-medium text-slate-300 mb-1.5">Email</label>
                   <input
-                    type="email"
+                    type="text"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     required

@@ -1,0 +1,860 @@
+# FASE 3 — MONITORAMENTO AVANÇADO, OBSERVABILIDADE, ALERTAS E GESTÃO DE IMPRESSORAS
+
+## PAPEL DO AGENTE
+
+Atue como Arquiteto de Software Enterprise Sênior especializado em:
+
+* AIOps
+* Observabilidade
+* Monitoramento de Infraestrutura
+* SNMP
+* Time Series Databases
+* Event Processing
+* Network Monitoring
+* Performance Monitoring
+* Printer Monitoring
+* FastAPI
+* PostgreSQL
+* TimescaleDB
+
+Você deve expandir a plataforma AII já construída nas Fases 1 e 2.
+
+NÃO recriar módulos existentes.
+
+Utilizar toda a arquitetura já implementada.
+
+Expandir somente os recursos desta fase.
+
+---
+
+# OBJETIVO DA FASE
+
+Transformar a plataforma em uma solução de monitoramento corporativo em tempo real.
+
+A plataforma deverá:
+
+* Monitorar servidores
+* Monitorar estações
+* Monitorar equipamentos de rede
+* Monitorar impressoras
+* Coletar métricas continuamente
+* Armazenar histórico
+* Criar dashboards em tempo real
+* Detectar anomalias
+* Gerar alertas inteligentes
+* Criar eventos operacionais
+
+Esta fase representa o núcleo de monitoramento da plataforma.
+
+---
+
+# NOVA ARQUITETURA
+
+Criar módulos:
+
+monitoring/
+
+metrics/
+
+telemetry/
+
+alerts/
+
+events/
+
+timeseries/
+
+printers/
+
+network_monitoring/
+
+vendor_adapters/
+
+oid_library/
+
+anomaly_detection/
+
+notification_engine/
+
+---
+
+# BANCO DE SÉRIES TEMPORAIS
+
+Implementar:
+
+TimescaleDB
+
+Integrado ao PostgreSQL existente.
+
+---
+
+# TABELAS DE MÉTRICAS
+
+Criar estrutura otimizada para:
+
+CPU
+
+Memória
+
+Disco
+
+Temperatura
+
+Interfaces
+
+Tráfego
+
+Toner
+
+Eventos
+
+Alertas
+
+---
+
+# COLETA DE MÉTRICAS
+
+Criar motor de coleta.
+
+Modos:
+
+Polling
+
+Push
+
+Agent
+
+SNMP
+
+WMI
+
+SSH
+
+API
+
+---
+
+# FREQUÊNCIA DE COLETA
+
+Permitir:
+
+30 segundos
+
+1 minuto
+
+5 minutos
+
+15 minutos
+
+30 minutos
+
+1 hora
+
+Configurável por ativo.
+
+---
+
+# MONITORAMENTO DE SERVIDORES
+
+Windows
+
+Linux
+
+macOS
+
+Monitorar:
+
+CPU %
+
+Memória %
+
+Swap
+
+Disco %
+
+IOPS
+
+Latência
+
+Processos
+
+Serviços
+
+Uptime
+
+Temperatura
+
+SMART
+
+RAID
+
+Load Average
+
+Sessões
+
+---
+
+# MONITORAMENTO DE REDE
+
+Switches
+
+Firewalls
+
+Roteadores
+
+Access Points
+
+Monitorar:
+
+CPU
+
+Memória
+
+Temperatura
+
+Uptime
+
+Interfaces
+
+Erros
+
+CRC
+
+Descartes
+
+Largura de banda
+
+Pacotes
+
+Latência
+
+Jitter
+
+Perda
+
+---
+
+# MONITORAMENTO DE IMPRESSORAS
+
+Criar módulo dedicado.
+
+Coletar via SNMP.
+
+Monitorar:
+
+Toner Preto
+
+Toner Ciano
+
+Toner Magenta
+
+Toner Amarelo
+
+Drum
+
+Fusor
+
+Bandejas
+
+Contador de páginas
+
+Status
+
+Erros
+
+Temperatura
+
+---
+
+# GESTÃO PREDITIVA DE SUPRIMENTOS
+
+Calcular:
+
+Consumo diário
+
+Consumo semanal
+
+Consumo mensal
+
+Previsão de esgotamento
+
+Gerar:
+
+Dias restantes
+
+Data prevista de troca
+
+Risco operacional
+
+---
+
+# UPS E ENERGIA
+
+Monitorar:
+
+Nobreaks
+
+UPS
+
+PDU
+
+Coletar:
+
+Carga
+
+Temperatura
+
+Bateria
+
+Autonomia
+
+Ciclos
+
+Tensão
+
+Corrente
+
+Frequência
+
+---
+
+# MONITORAMENTO DE STORAGE
+
+Monitorar:
+
+NAS
+
+SAN
+
+Storage Corporativo
+
+Coletar:
+
+Capacidade
+
+IOPS
+
+Latência
+
+Temperatura
+
+Discos
+
+RAID
+
+Falhas
+
+---
+
+# VENDOR ADAPTERS
+
+Criar arquitetura de adaptadores.
+
+Fabricantes:
+
+UniFi
+
+Cisco
+
+Mikrotik
+
+Fortinet
+
+Sophos
+
+Aruba
+
+Huawei
+
+Juniper
+
+Dell
+
+HP
+
+Lenovo
+
+Synology
+
+QNAP
+
+VMware
+
+Proxmox
+
+Hyper-V
+
+Cada fabricante deverá possuir:
+
+Adapter
+
+Parser
+
+Discovery Rules
+
+Monitoring Rules
+
+---
+
+# OID LIBRARY
+
+Criar biblioteca de OIDs.
+
+Estrutura:
+
+Vendor
+
+Device Type
+
+OID
+
+Descrição
+
+Unidade
+
+Tipo
+
+Permitir cadastro dinâmico.
+
+---
+
+# EVENT ENGINE
+
+Criar motor de eventos.
+
+Eventos:
+
+Metric Event
+
+State Event
+
+Change Event
+
+Failure Event
+
+Prediction Event
+
+Security Event
+
+---
+
+# ALERT ENGINE
+
+Criar mecanismo avançado.
+
+Níveis:
+
+Informational
+
+Warning
+
+Critical
+
+Emergency
+
+---
+
+# REGRAS
+
+Exemplos:
+
+CPU > 90%
+
+Memória > 95%
+
+Disco > 85%
+
+Toner < 15%
+
+UPS Bateria < 20%
+
+Interface Down
+
+Servidor Offline
+
+---
+
+# CORRELAÇÃO DE EVENTOS
+
+Implementar Event Correlation.
+
+Exemplo:
+
+Switch caiu
+
+↓
+
+50 ativos ficaram offline
+
+↓
+
+Gerar apenas um incidente principal.
+
+---
+
+# DETECÇÃO DE ANOMALIAS
+
+Implementar:
+
+Baseline Learning
+
+Análise estatística
+
+Desvio padrão
+
+Anomalias comportamentais
+
+Detectar:
+
+Uso anormal
+
+Consumo anormal
+
+Mudanças inesperadas
+
+---
+
+# DASHBOARD OPERACIONAL
+
+Criar NOC Dashboard.
+
+Exibir:
+
+Ativos online
+
+Ativos offline
+
+Alertas
+
+Eventos
+
+Consumo
+
+Saúde geral
+
+Mapa operacional
+
+---
+
+# NOC CENTER
+
+Criar tela operacional.
+
+Widgets:
+
+Mapa
+
+Alertas
+
+Top CPU
+
+Top Memória
+
+Top Banda
+
+Top Erros
+
+Impressoras Críticas
+
+Incidentes
+
+---
+
+# HEALTH SCORE
+
+Criar score por ativo.
+
+0 a 100
+
+Baseado em:
+
+Disponibilidade
+
+Performance
+
+Erros
+
+Temperatura
+
+Capacidade
+
+Alertas
+
+---
+
+# SLA MONITORING
+
+Monitorar:
+
+Disponibilidade
+
+Tempo de resposta
+
+Uptime
+
+Gerar:
+
+SLA Diário
+
+SLA Mensal
+
+SLA Anual
+
+---
+
+# NOTIFICATION ENGINE
+
+Implementar notificações.
+
+Canais:
+
+Email
+
+Microsoft Teams
+
+Slack
+
+Discord
+
+Webhook
+
+Telegram
+
+WhatsApp Business (estrutura preparada)
+
+---
+
+# ESCALONAMENTO
+
+Permitir:
+
+Nível 1
+
+Nível 2
+
+Nível 3
+
+Gerenciamento automático.
+
+---
+
+# FRONTEND
+
+Criar menus:
+
+Monitoring
+
+Metrics
+
+Alerts
+
+Events
+
+Printers
+
+UPS
+
+Network
+
+NOC Center
+
+Reports
+
+---
+
+# VISUALIZAÇÕES
+
+Criar:
+
+Gráficos tempo real
+
+Heatmaps
+
+Top Lists
+
+Histórico
+
+Comparativos
+
+Tendências
+
+---
+
+# RELATÓRIOS
+
+Gerar:
+
+Disponibilidade
+
+Capacidade
+
+Alertas
+
+Impressoras
+
+Ativos críticos
+
+Infraestrutura
+
+Exportar:
+
+PDF
+
+Excel
+
+CSV
+
+---
+
+# APIs
+
+Criar APIs REST.
+
+Exemplos:
+
+GET /api/v1/metrics
+
+GET /api/v1/alerts
+
+GET /api/v1/events
+
+GET /api/v1/printers
+
+GET /api/v1/health
+
+POST /api/v1/alerts/rules
+
+---
+
+# SEGURANÇA
+
+Respeitar:
+
+Tenant
+
+RBAC
+
+Auditoria
+
+Logs
+
+Permissões
+
+---
+
+# AUDITORIA
+
+Registrar:
+
+Criação de regras
+
+Alteração de regras
+
+Alertas gerados
+
+Eventos processados
+
+Notificações enviadas
+
+---
+
+# PERFORMANCE
+
+Requisitos mínimos:
+
+10.000 ativos
+
+100.000 métricas/minuto
+
+Processamento assíncrono
+
+Coleta paralela
+
+Escalabilidade horizontal
+
+Preparação para Kafka
+
+Preparação para Redis Streams
+
+---
+
+# TESTES
+
+Criar:
+
+Testes Unitários
+
+Testes Integração
+
+Testes API
+
+Testes de carga
+
+Cobertura mínima:
+
+80%
+
+---
+
+# CRITÉRIOS DE ACEITE
+
+A fase será considerada concluída quando:
+
+✓ TimescaleDB funcionando
+
+✓ Coleta SNMP funcionando
+
+✓ Coleta WMI funcionando
+
+✓ Coleta SSH funcionando
+
+✓ Monitoramento de servidores funcionando
+
+✓ Monitoramento de rede funcionando
+
+✓ Monitoramento de impressoras funcionando
+
+✓ Dashboard operacional funcionando
+
+✓ Alert Engine funcionando
+
+✓ Event Engine funcionando
+
+✓ Correlation Engine funcionando
+
+✓ Health Score funcionando
+
+✓ SLA funcionando
+
+✓ Relatórios funcionando
+
+✓ APIs documentadas
+
+✓ Docker funcionando
+
+✓ Testes aprovados
+
+---
+
+# ENTREGA FINAL
+
+Gerar:
+
+1. Monitoring Engine
+2. Metrics Engine
+3. Alert Engine
+4. Event Engine
+5. Correlation Engine
+6. Printer Monitoring
+7. Vendor Adapters
+8. OID Library
+9. Dashboards
+10. NOC Center
+11. Relatórios
+12. APIs REST
+13. Banco atualizado
+14. Migrations
+15. Testes
+16. Documentação
+
+Ao concluir esta fase, preparar a plataforma para a Fase 4 — Agent AII, coleta avançada de endpoints, inventário de software, licenciamento, vulnerabilidades, compliance e gerenciamento remoto.
