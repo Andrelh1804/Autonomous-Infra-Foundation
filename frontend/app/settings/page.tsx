@@ -1,11 +1,10 @@
 'use client';
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { settingsApi, auditApi } from '@/services/api';
+import { settingsApi, authApi } from '@/services/api';
 import Layout from '@/components/Layout';
+import MfaSetupCard from '@/components/MfaSetupCard';
 import { Save } from 'lucide-react';
-import { formatDate } from '@/lib/utils';
-import type { AuditLog, PaginatedResponse } from '@/types';
 
 export default function SettingsPage() {
   const qc = useQueryClient();
@@ -17,9 +16,9 @@ export default function SettingsPage() {
     queryFn: () => settingsApi.list().then(r => r.data),
   });
 
-  const { data: auditData } = useQuery<PaginatedResponse<AuditLog>>({
-    queryKey: ['audit'],
-    queryFn: () => auditApi.list({ per_page: 20 }).then(r => r.data),
+  const { data: me } = useQuery<any>({
+    queryKey: ['me'],
+    queryFn: () => authApi.me().then(r => r.data),
   });
 
   const save = useMutation({
@@ -32,13 +31,17 @@ export default function SettingsPage() {
       <div className="space-y-6 max-w-4xl">
         <div>
           <h1 className="text-2xl font-bold">Settings</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">Platform configuration</p>
+          <p className="text-sm text-muted-foreground mt-0.5">Platform configuration and security</p>
         </div>
 
-        {/* Settings */}
+        {/* MFA Card */}
+        <MfaSetupCard mfaEnabled={!!me?.mfa_enabled} />
+
+        {/* Platform Settings */}
         <div className="bg-card border border-border rounded-xl overflow-hidden">
           <div className="px-5 py-4 border-b border-border">
             <h2 className="font-semibold">Platform Settings</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">Click any value to edit inline</p>
           </div>
           <div className="divide-y divide-border">
             {settings?.map(s => (
@@ -54,7 +57,10 @@ export default function SettingsPage() {
                       className="px-3 py-1.5 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-48"
                       value={editValue}
                       onChange={e => setEditValue(e.target.value)}
-                      onKeyDown={e => e.key === 'Escape' && setEditKey(null)}
+                      onKeyDown={e => {
+                        if (e.key === 'Escape') setEditKey(null);
+                        if (e.key === 'Enter') save.mutate({ key: s.key, value: editValue });
+                      }}
                     />
                     <button
                       onClick={() => save.mutate({ key: s.key, value: editValue })}
@@ -63,7 +69,9 @@ export default function SettingsPage() {
                     >
                       <Save className="w-4 h-4" />
                     </button>
-                    <button onClick={() => setEditKey(null)} className="text-xs text-muted-foreground hover:text-foreground">Cancel</button>
+                    <button onClick={() => setEditKey(null)} className="text-xs text-muted-foreground hover:text-foreground">
+                      Cancel
+                    </button>
                   </div>
                 ) : (
                   <button
@@ -75,36 +83,6 @@ export default function SettingsPage() {
                 )}
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Audit Log */}
-        <div className="bg-card border border-border rounded-xl overflow-hidden">
-          <div className="px-5 py-4 border-b border-border">
-            <h2 className="font-semibold">Audit Log</h2>
-            <p className="text-xs text-muted-foreground mt-0.5">Recent system activity</p>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border bg-muted/30">
-                  {['User', 'Action', 'Module', 'IP', 'Time'].map(h => (
-                    <th key={h} className="px-4 py-2.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {auditData?.items?.map(log => (
-                  <tr key={log.id} className="hover:bg-muted/20">
-                    <td className="px-4 py-2.5 text-sm">{log.user_email || '—'}</td>
-                    <td className="px-4 py-2.5"><span className="font-mono text-xs bg-muted px-1.5 py-0.5 rounded">{log.action}</span></td>
-                    <td className="px-4 py-2.5 text-xs text-muted-foreground capitalize">{log.module}</td>
-                    <td className="px-4 py-2.5 text-xs text-muted-foreground font-mono">{log.ip_address || '—'}</td>
-                    <td className="px-4 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{formatDate(log.created_at)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
         </div>
       </div>

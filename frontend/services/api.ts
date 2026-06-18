@@ -44,6 +44,12 @@ export default api;
 export const authApi = {
   login: (email: string, password: string) =>
     api.post('/auth/login', { email, password }),
+  mfaVerify: (mfa_token: string, code: string) =>
+    api.post('/auth/mfa/verify', { mfa_token, code }),
+  mfaSetup: () => api.get('/auth/mfa/setup'),
+  mfaEnable: (code: string) => api.post('/auth/mfa/enable', { code }),
+  mfaDisable: (opts: { code?: string; password?: string }) =>
+    api.post('/auth/mfa/disable', opts),
   logout: () => api.post('/auth/logout'),
   me: () => api.get('/auth/me'),
 };

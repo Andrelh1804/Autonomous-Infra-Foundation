@@ -43,3 +43,26 @@ def decode_token(token: str) -> Optional[dict]:
         return payload
     except JWTError:
         return None
+
+
+MFA_TOKEN_EXPIRE_MINUTES = 5
+
+
+def create_mfa_token(user_id: int) -> str:
+    jti = str(uuid.uuid4())
+    expire = datetime.utcnow() + timedelta(minutes=MFA_TOKEN_EXPIRE_MINUTES)
+    return jwt.encode(
+        {"sub": str(user_id), "exp": expire, "jti": jti, "type": "mfa_challenge"},
+        SECRET_KEY,
+        algorithm=ALGORITHM,
+    )
+
+
+def decode_mfa_token(token: str) -> Optional[dict]:
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("type") != "mfa_challenge":
+            return None
+        return payload
+    except JWTError:
+        return None
