@@ -1,15 +1,18 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { useQuery } from '@tanstack/react-query';
 import { useAuthStore, useThemeStore } from '@/store/auth';
-import { authApi } from '@/services/api';
-import { cn } from '@/lib/utils';
+import { authApi, alertsApi } from '@/services/api';
+import { cn, formatDate } from '@/lib/utils';
 import {
   LayoutDashboard, Building2, Users, MapPin, ShieldCheck,
   Settings, LogOut, Bell, Sun, Moon, ChevronLeft, ChevronRight, Menu, ScrollText,
-  Radar, Server, Network, GitFork, History, ChevronDown
+  Radar, Server, Network, GitFork, History, ChevronDown,
+  XCircle, Mail, Webhook, Zap, CheckCircle2, AlertTriangle,
 } from 'lucide-react';
+import type { AlertEvent } from '@/types';
 
 const NAV_GROUPS = [
   {
@@ -41,6 +44,137 @@ const NAV_GROUPS = [
     ],
   },
 ];
+
+// ── Notification Bell ─────────────────────────────────────────────────────────
+
+const TRIGGER_LABELS: Record<string, string> = {
+  job_completed:    'Job Completed',
+  job_failed:       'Job Failed',
+  new_assets_found: 'New Assets Found',
+};
+
+function channelIcon(channel: string) {
+  if (channel.includes(',')) return <Zap    className="w-3 h-3 text-amber-400" />;
+  if (channel === 'email')   return <Mail   className="w-3 h-3 text-blue-400" />;
+  if (channel === 'webhook') return <Webhook className="w-3 h-3 text-violet-400" />;
+  return null;
+}
+
+function NotificationBell() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Poll all recent events; filter failed client-side for badge
+  const { data } = useQuery<{ items: AlertEvent[]; total: number }>({
+    queryKey: ['notif-events'],
+    queryFn:  () => alertsApi.events({ per_page: 20, page: 1 }).then(r => r.data),
+    refetchInterval: 30_000,
+    retry: false,
+  });
+
+  const allEvents   = data?.items ?? [];
+  const failedCount = allEvents.filter(e => e.status === 'failed').length;
+  const preview     = allEvents.slice(0, 8);
+
+  // Close on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="p-2 rounded-lg hover:bg-accent transition text-muted-foreground hover:text-foreground relative"
+        title="Alert notifications"
+      >
+        <Bell className="w-5 h-5" />
+        {failedCount > 0 && (
+          <span className="absolute top-1 right-1 min-w-[16px] h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1 leading-none">
+            {failedCount > 9 ? '9+' : failedCount}
+          </span>
+        )}
+        {failedCount === 0 && allEvents.length > 0 && (
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-emerald-500 rounded-full" />
+        )}
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full mt-2 w-80 bg-card border border-border rounded-2xl shadow-2xl z-50 overflow-hidden">
+          {/* Header */}
+          <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Bell className="w-4 h-4 text-muted-foreground" />
+              <span className="text-sm font-semibold">Recent Alerts</span>
+            </div>
+            {failedCount > 0 && (
+              <span className="text-xs bg-red-500/15 text-red-400 px-2 py-0.5 rounded-full font-medium">
+                {failedCount} failed
+              </span>
+            )}
+          </div>
+
+          {/* Events list */}
+          <div className="max-h-72 overflow-y-auto divide-y divide-border/50">
+            {preview.length === 0 ? (
+              <div className="py-8 text-center">
+                <Bell className="w-7 h-7 text-muted-foreground/30 mx-auto mb-2" />
+                <p className="text-xs text-muted-foreground">No alert events yet</p>
+              </div>
+            ) : (
+              preview.map(ev => (
+                <div key={ev.id} className="flex items-start gap-3 px-4 py-3 hover:bg-muted/30 transition-colors">
+                  {/* Status icon */}
+                  <div className="flex-shrink-0 mt-0.5">
+                    {ev.status === 'sent'
+                      ? <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      : <XCircle      className="w-4 h-4 text-red-400" />
+                    }
+                  </div>
+                  {/* Body */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                      <span className={`text-xs font-medium ${ev.status === 'failed' ? 'text-red-400' : 'text-foreground'}`}>
+                        {TRIGGER_LABELS[ev.trigger] ?? ev.trigger}
+                      </span>
+                      <span className="text-muted-foreground/50">·</span>
+                      <span className="flex items-center gap-0.5">{channelIcon(ev.channel)}</span>
+                    </div>
+                    {ev.error_message && (
+                      <p className="text-xs text-red-400/80 truncate" title={ev.error_message}>
+                        {ev.error_message}
+                      </p>
+                    )}
+                    <p className="text-[11px] text-muted-foreground mt-0.5">
+                      {ev.discovery_job_id ? `Job #${ev.discovery_job_id} · ` : 'Test · '}
+                      {formatDate(ev.sent_at)}
+                    </p>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Footer */}
+          <div className="border-t border-border px-4 py-2.5">
+            <Link
+              href="/alerts"
+              onClick={() => setOpen(false)}
+              className="text-xs text-indigo-400 hover:text-indigo-300 font-medium transition"
+            >
+              View all in Alerts →
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -155,10 +289,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </button>
 
             {/* Notifications */}
-            <button className="p-2 rounded-lg hover:bg-accent transition text-muted-foreground hover:text-foreground relative">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-500 rounded-full" />
-            </button>
+            <NotificationBell />
 
             {/* User */}
             <div className="flex items-center gap-2 pl-2 border-l border-border">
