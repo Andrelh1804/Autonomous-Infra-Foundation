@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api/v1',
+  baseURL: '/nexaops/api/v1',
   headers: { 'Content-Type': 'application/json' },
 });
 
@@ -20,7 +20,7 @@ api.interceptors.response.use(
       const refresh = localStorage.getItem('refresh_token');
       if (refresh) {
         try {
-          const res = await axios.post('/api/v1/auth/refresh', { refresh_token: refresh });
+          const res = await axios.post('/nexaops/api/v1/auth/refresh', { refresh_token: refresh });
           localStorage.setItem('access_token', res.data.access_token);
           localStorage.setItem('refresh_token', res.data.refresh_token);
           original.headers.Authorization = `Bearer ${res.data.access_token}`;
@@ -114,11 +114,6 @@ export const dashboardApi = {
   discoveryHealth: () => api.get('/dashboard/discovery-health'),
 };
 
-// Settings
-export const settingsApi = {
-  list: () => api.get('/settings'),
-  update: (key: string, value: string) => api.patch(`/settings/${key}`, { value }),
-};
 
 // Assets (CMDB)
 export const assetsApi = {
@@ -210,6 +205,12 @@ export const nocApi = {
   overview: () => api.get('/noc/overview'),
   timeline: (hours?: number) => api.get('/noc/timeline', { params: { hours } }),
   healthMap: () => api.get('/noc/health-map'),
+};
+
+export const settingsApi = {
+  list: () => api.get('/settings'),
+  update: (key: string, value: string) => api.patch(`/settings/${key}`, { value }),
+  testEmail: (to_email: string) => api.post('/settings/test-email', { to_email }),
 };
 
 export const notificationApi = {

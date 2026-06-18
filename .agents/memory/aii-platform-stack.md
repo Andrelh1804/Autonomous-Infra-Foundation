@@ -1,25 +1,42 @@
 ---
 name: AII Platform Stack
-description: AII Platform uses Python FastAPI + Next.js, not the default Node.js workspace stack. Both run as separate workflows.
+description: Port layout, routing architecture, and key gotchas for the AII/NexaOps platform on Replit.
 ---
 
 The AII Platform is a custom build outside the pnpm workspace:
-- **Backend**: `backend/` — Python 3.12 FastAPI, SQLAlchemy, argon2, JWT. Runs on port 8000.
-- **Frontend**: `frontend/` — Next.js 15 (App Router), React 19, TailwindCSS v4, React Query, Zustand. Runs on port 3000.
+- **Backend**: `backend/` — Python 3.12 FastAPI, SQLAlchemy, argon2, JWT. Runs on **port 8008**.
+- **Frontend**: `frontend/` — Next.js 15 (App Router), React 19, TailwindCSS v4, React Query, Zustand. Runs on port 5000 (external 80).
 - **DB**: Uses Replit's managed PostgreSQL via `DATABASE_URL` secret.
 
-**Why:** User explicitly requested Python FastAPI + Next.js stack instead of the workspace default (Node.js/Express + React Vite).
+**Why:** User explicitly requested Python FastAPI + Next.js stack instead of the workspace default.
 
-**How to apply:** When continuing work on this project, always target `backend/` for API changes and `frontend/` for UI changes. Do NOT add routes to `artifacts/api-server` (the old Node.js stub).
+## Port Layout (critical)
 
-**PostCSS**: Uses `@tailwindcss/postcss` (not `tailwindcss` directly) because Tailwind v4 split its PostCSS plugin.
+| Service | Internal port | Notes |
+|---|---|---|
+| REPLIT_ARTIFACT_ROUTER | 8000 | Replit's gateway — MUST own this port |
+| Artifact api-server (Express) | 8080 | Auto-started by artifact router |
+| FastAPI (uvicorn) | **8008** | Cannot use 8000 — artifact router needs it |
+| Next.js | 5000 | External port 80 |
 
-**Email validation**: Custom regex validator (not pydantic's EmailStr) to allow `.local` TLD for `admin@aii.local`.
+**Root cause of old 502 errors:** `REPLIT_ARTIFACT_ROUTER` starts automatically and tries to listen on port 8000 as the browser API gateway. FastAPI was on 8000, causing a port conflict — the router crashed and all browser API requests returned 502.
 
-**Proxy**: Next.js rewrites `/api/*` → `http://localhost:8000/api/*` in `next.config.js`. Replit's shared proxy routes `/__mockup` and `/api` to other artifacts, so the AII frontend is accessed directly on port 3000 in the preview pane by switching to the frontend workflow.
+**Fix:** Moved FastAPI to port 8008. Now the artifact router successfully starts, routes `/api/*` to the artifact api-server (8080), which proxies to FastAPI (8008).
 
-**Workflows**:
-- `AII Backend (FastAPI)` — console, port 8000
-- `AII Frontend (Next.js)` — webview, port 3000
+## Browser API routing path
 
-**Default admin**: `admin@aii.local` / `Admin@2024!`
+Browser → Replit mTLS proxy → `REPLIT_ARTIFACT_ROUTER` (port 8000) → `artifacts/api-server` (port 8080) → FastAPI (port 8008)
+
+**Fallback:** Next.js rewrites `/api/*` and `/nexaops/api/*` → `http://localhost:8008/api/*` (handles requests that reach Next.js directly).
+
+## Artifact api-server
+
+`artifacts/api-server/src/app.ts` proxies all `/api/*` requests to `http://localhost:${FASTAPI_PORT}` where `FASTAPI_PORT` env defaults to `"8008"`. After code changes, rebuild: `cd artifacts/api-server && pnpm run build`.
+
+## Other notes
+
+- **PostCSS**: `@tailwindcss/postcss` (Tailwind v4 plugin split).
+- **Email validation**: Custom regex validator allows `.local` TLD for `admin@aii.local`.
+- **Frontend baseURL**: `frontend/services/api.ts` uses `/nexaops/api/v1`. Artifact router does not intercept `/nexaops/*` — those requests go to Next.js which rewrites to FastAPI.
+- **Default admin**: `admin@aii.local` / `Admin@2024!`
+- **Workflows**: `AII Backend (FastAPI)` (port 8008), `AII Frontend (Next.js)` (port 5000).

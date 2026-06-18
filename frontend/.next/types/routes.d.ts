@@ -5,7 +5,7 @@ type AppRoutes = "/" | "/alerts" | "/asset-history" | "/assets" | "/audit" | "/d
 type PageRoutes = never
 type LayoutRoutes = "/"
 type RedirectRoutes = never
-type RewriteRoutes = "/api/[[...path]]"
+type RewriteRoutes = "/api/[[...path]]" | "/nexaops/api/[[...path]]"
 type Routes = AppRoutes | PageRoutes | LayoutRoutes | RedirectRoutes | RewriteRoutes
 
 
@@ -24,6 +24,7 @@ interface ParamMap {
   "/metrics": {}
   "/monitoring": {}
   "/network-map": {}
+  "/nexaops/api/[[...path]]": { "path"?: string[]; }
   "/noc": {}
   "/organizations": {}
   "/permissions": {}

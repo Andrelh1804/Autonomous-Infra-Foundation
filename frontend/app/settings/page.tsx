@@ -4,12 +4,14 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { settingsApi, authApi } from '@/services/api';
 import Layout from '@/components/Layout';
 import MfaSetupCard from '@/components/MfaSetupCard';
-import { Save } from 'lucide-react';
+import { Save, Mail, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 
 export default function SettingsPage() {
   const qc = useQueryClient();
   const [editKey, setEditKey] = useState<string | null>(null);
   const [editValue, setEditValue] = useState('');
+  const [testEmail, setTestEmail] = useState('');
+  const [testResult, setTestResult] = useState<{ ok: boolean; message: string } | null>(null);
 
   const { data: settings } = useQuery<any[]>({
     queryKey: ['settings'],
@@ -25,6 +27,23 @@ export default function SettingsPage() {
     mutationFn: ({ key, value }: { key: string; value: string }) => settingsApi.update(key, value),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['settings'] }); setEditKey(null); },
   });
+
+  const sendTest = useMutation({
+    mutationFn: (email: string) => settingsApi.testEmail(email),
+    onSuccess: (res) => {
+      setTestResult({ ok: true, message: res.data.message });
+    },
+    onError: (err: any) => {
+      const msg = err?.response?.data?.detail ?? 'Erro ao enviar e-mail de teste.';
+      setTestResult({ ok: false, message: msg });
+    },
+  });
+
+  const handleTestEmail = () => {
+    if (!testEmail.trim()) return;
+    setTestResult(null);
+    sendTest.mutate(testEmail.trim());
+  };
 
   return (
     <Layout>
@@ -81,6 +100,60 @@ export default function SettingsPage() {
                 )}
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* SMTP Test Card */}
+        <div className="bg-card border border-border rounded-xl overflow-hidden">
+          <div className="px-5 py-4 border-b border-border flex items-center gap-2">
+            <Mail className="w-4 h-4 text-indigo-400" />
+            <div>
+              <h2 className="font-semibold">Teste de E-mail SMTP</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Verifica se as configurações SMTP estão corretas enviando um e-mail de teste
+              </p>
+            </div>
+          </div>
+          <div className="px-5 py-5 space-y-4">
+            <div className="flex gap-3">
+              <input
+                type="email"
+                placeholder="destinatario@exemplo.com"
+                value={testEmail}
+                onChange={e => { setTestEmail(e.target.value); setTestResult(null); }}
+                onKeyDown={e => { if (e.key === 'Enter') handleTestEmail(); }}
+                className="flex-1 px-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder:text-muted-foreground/50"
+              />
+              <button
+                onClick={handleTestEmail}
+                disabled={sendTest.isPending || !testEmail.trim()}
+                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition"
+              >
+                {sendTest.isPending ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Mail className="w-4 h-4" />
+                )}
+                {sendTest.isPending ? 'Enviando…' : 'Enviar teste'}
+              </button>
+            </div>
+
+            {testResult && (
+              <div className={`flex items-start gap-3 px-4 py-3 rounded-lg border text-sm ${
+                testResult.ok
+                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                  : 'bg-red-500/10 border-red-500/30 text-red-400'
+              }`}>
+                {testResult.ok
+                  ? <CheckCircle className="w-4 h-4 mt-0.5 shrink-0" />
+                  : <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />}
+                <span>{testResult.message}</span>
+              </div>
+            )}
+
+            <p className="text-xs text-muted-foreground">
+              Certifique-se de que <code className="font-mono bg-background px-1 rounded">smtp_host</code> está definido nas configurações acima antes de testar.
+            </p>
           </div>
         </div>
       </div>

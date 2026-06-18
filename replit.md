@@ -4,8 +4,8 @@ Enterprise IT Operations SaaS Platform. Phase 1 foundation with multi-tenant arc
 
 ## Run & Operate
 
-- **Backend**: `python -m uvicorn backend.api.v1.app:app --host 0.0.0.0 --port 8000 --reload`
-- **Frontend**: `cd frontend && PORT=3000 npm run dev`
+- **Backend**: `python3.12 -m uvicorn backend.api.v1.app:app --host 0.0.0.0 --port 8008 --reload`
+- **Frontend**: `cd frontend && PORT=5000 npm run dev`
 - **Seed DB**: `python backend/seeds.py`
 
 ## Default Credentials
@@ -60,7 +60,8 @@ _Populate as you build._
 
 ## Gotchas
 
-- FastAPI backend runs on port 8000; Next.js proxies `/api/*` to `localhost:8000`
+- **FastAPI runs on port 8008** (not 8000). Port 8000 is reserved for `REPLIT_ARTIFACT_ROUTER`, the Replit gateway that intercepts all browser API calls and routes `/api/*` to the `artifacts/api-server` (Node.js on port 8080), which in turn proxies to FastAPI on 8008.
+- Next.js also rewrites `/api/*` and `/nexaops/api/*` → `localhost:8008` as a fallback.
 - Email validation accepts `.local` TLD (custom validator bypasses pydantic-email-validator's RFC restrictions)
-- The existing `artifacts/api-server` (Node.js/Express) artifact is unused by AII — it owns the `/api` proxy path in Replit's router, so frontend→backend communication goes through Next.js's own rewrite rule instead
 - Run `python backend/seeds.py` after any schema change to recreate default data
+- SMTP test button at Settings → "Teste de E-mail SMTP"; endpoint: `POST /api/v1/settings/test-email`

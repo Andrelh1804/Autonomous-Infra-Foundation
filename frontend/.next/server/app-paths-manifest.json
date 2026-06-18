@@ -1,4 +1,9 @@
 {
-  "/forgot-password/page": "app/forgot-password/page.js",
-  "/login/page": "app/login/page.js"
+  "/noc/page": "app/noc/page.js",
+  "/assets/page": "app/assets/page.js",
+  "/monitoring/page": "app/monitoring/page.js",
+  "/settings/page": "app/settings/page.js",
+  "/network-map/page": "app/network-map/page.js",
+  "/login/page": "app/login/page.js",
+  "/dashboard/page": "app/dashboard/page.js"
 }
