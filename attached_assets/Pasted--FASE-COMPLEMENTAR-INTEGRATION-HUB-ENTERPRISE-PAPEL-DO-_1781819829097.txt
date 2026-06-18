@@ -1,0 +1,409 @@
+# FASE COMPLEMENTAR — INTEGRATION HUB ENTERPRISE
+
+## PAPEL DO AGENTE
+
+Atue como Arquiteto Enterprise especializado em:
+
+* API Management
+* Integration Platforms
+* ITSM
+* Observabilidade
+* Segurança
+* FastAPI
+* PostgreSQL
+* Event-Driven Architecture
+* Multi-Tenant SaaS
+
+Expandir a plataforma AII existente.
+
+Não recriar módulos existentes.
+
+Implementar exclusivamente o Integration Hub Enterprise.
+
+---
+
+# OBJETIVO
+
+Criar um barramento central de integrações que permita conectar sistemas externos sem necessidade de alterar os módulos internos.
+
+O Integration Hub será responsável por:
+
+* Conectividade
+* Autenticação
+* Sincronização
+* Mapeamento
+* Auditoria
+* Eventos
+* Webhooks
+* APIs externas
+
+---
+
+# NOVOS MÓDULOS
+
+Criar:
+
+backend/modules/integrations/
+
+core/
+
+connectors/
+
+adapters/
+
+sync_engine/
+
+webhooks/
+
+event_bus/
+
+credential_vault/
+
+mapping_engine/
+
+audit/
+
+scheduler/
+
+---
+
+# ARQUITETURA
+
+```text
+Sistema Externo
+       │
+       ▼
+Connector
+       │
+       ▼
+Adapter
+       │
+       ▼
+Mapping Engine
+       │
+       ▼
+Event Bus
+       │
+       ▼
+AII Platform
+```
+
+---
+
+# SISTEMAS SUPORTADOS
+
+## Inventário
+
+* OCS Inventory NG
+* GLPI
+* Lansweeper
+
+## ITSM
+
+* ServiceNow
+* Zendesk
+* Jira Service Management
+* Freshservice
+* ManageEngine
+
+## Microsoft
+
+* Microsoft 365
+* Microsoft Graph
+* Entra ID
+* Active Directory
+
+## Virtualização
+
+* VMware
+* Proxmox
+* Hyper-V
+
+## Cloud
+
+* AWS
+* Azure
+* Google Cloud
+
+## Segurança
+
+* Microsoft Defender
+* CrowdStrike
+* SentinelOne
+* Sophos Central
+
+## Backup
+
+* Veeam
+* Acronis
+* Commvault
+
+## Redes
+
+* UniFi
+* Mikrotik
+* Cisco
+* Fortinet
+* Aruba
+
+---
+
+# CONNECTOR FRAMEWORK
+
+Criar framework para conectores.
+
+Todo conector deve possuir:
+
+Connector
+
+Authentication Layer
+
+Sync Engine
+
+Mapper
+
+Event Handler
+
+Health Check
+
+Audit
+
+Logs
+
+Retry Logic
+
+---
+
+# CREDENTIAL VAULT
+
+Criar cofre de credenciais.
+
+Armazenar:
+
+Tokens
+
+Senhas
+
+API Keys
+
+Certificates
+
+Secrets
+
+---
+
+# SEGURANÇA
+
+Implementar:
+
+AES-256
+
+Hashing
+
+Rotação de credenciais
+
+Mascaramento
+
+Auditoria
+
+---
+
+# EVENT BUS
+
+Criar barramento interno.
+
+Eventos:
+
+Asset Created
+
+Asset Updated
+
+Incident Created
+
+Alert Created
+
+License Updated
+
+User Updated
+
+Compliance Changed
+
+---
+
+# WEBHOOK ENGINE
+
+Permitir:
+
+Entrada
+
+Saída
+
+Bidirecional
+
+Retry
+
+Assinatura
+
+Validação
+
+---
+
+# MAPPING ENGINE
+
+Criar mecanismo de mapeamento.
+
+Exemplo:
+
+```text
+OCS Hostname
+       ↓
+CMDB Hostname
+```
+
+```text
+ServiceNow Ticket
+       ↓
+Incident AII
+```
+
+Mapeamentos configuráveis.
+
+---
+
+# DASHBOARD DE INTEGRAÇÕES
+
+Criar painel.
+
+Exibir:
+
+Integrações Ativas
+
+Falhas
+
+Última Sincronização
+
+Próxima Sincronização
+
+Volume de Dados
+
+Tempo Médio
+
+---
+
+# MENU
+
+Configurações
+
+↓
+
+Integrações
+
+↓
+
+Conectores
+
+↓
+
+Logs
+
+↓
+
+Mapeamentos
+
+↓
+
+Webhooks
+
+---
+
+# APIs
+
+Criar:
+
+GET /api/v1/integrations
+
+POST /api/v1/integrations
+
+GET /api/v1/integrations/status
+
+POST /api/v1/integrations/test
+
+POST /api/v1/integrations/sync
+
+GET /api/v1/integrations/logs
+
+GET /api/v1/integrations/events
+
+---
+
+# MULTI-TENANT
+
+Cada tenant possui:
+
+Integrações próprias
+
+Credenciais próprias
+
+Logs próprios
+
+Mapeamentos próprios
+
+Webhooks próprios
+
+---
+
+# IA READY
+
+Todos os dados integrados devem ficar disponíveis para:
+
+AI Copilot
+
+Executive AI
+
+Knowledge Graph
+
+RAG Engine
+
+Root Cause Engine
+
+Recommendation Engine
+
+---
+
+# CRITÉRIOS DE ACEITE
+
+✓ Framework de conectores funcionando
+
+✓ Credential Vault funcionando
+
+✓ Event Bus funcionando
+
+✓ Webhooks funcionando
+
+✓ Dashboard funcionando
+
+✓ APIs funcionando
+
+✓ Auditoria funcionando
+
+✓ Multi-Tenant funcionando
+
+✓ Testes aprovados
+
+---
+
+# ENTREGA FINAL
+
+Gerar:
+
+1. Integration Hub
+2. Connector Framework
+3. Mapping Engine
+4. Event Bus
+5. Webhook Engine
+6. Credential Vault
+7. Dashboard
+8. APIs REST
+9. Banco atualizado
+10. Testes
+11. Documentação

@@ -16,6 +16,7 @@ import {
   Bot, Monitor, Package, Key, ShieldAlert, Terminal, Shield, Cpu, Briefcase, FileText,
   Ticket, AlertOctagon, GitMerge, BookOpen, Clock, Workflow, Cog,
   BrainCircuit, MessageSquareText, Lightbulb, Search, BarChart3, Gauge,
+  Plug, Database,
 } from 'lucide-react';
 import type { AlertEvent } from '@/types';
 
@@ -88,6 +89,13 @@ const NAV_GROUPS = [
       { href: '/ai-insights', icon: Lightbulb, label: 'AI Insights' },
       { href: '/ai-search', icon: Search, label: 'AI Search' },
       { href: '/ai-reports', icon: BarChart3, label: 'AI Reports' },
+    ],
+  },
+  {
+    label: 'Integrações',
+    items: [
+      { href: '/integrations', icon: Plug, label: 'Integrações' },
+      { href: '/integrations/ocs', icon: Database, label: 'OCS Inventory NG' },
     ],
   },
   {

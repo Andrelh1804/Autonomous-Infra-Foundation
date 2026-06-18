@@ -422,6 +422,28 @@ export const aiOpsApi = {
   summarize: (body: object) => api.post('/ai/ops/summarize', body).then(r => r.data),
 };
 
+// ─── Integrations — OCS Inventory NG ─────────────────────────────────────────
+
+export const ocsApi = {
+  list: () => api.get('/integrations/ocs'),
+  get: (id: number) => api.get(`/integrations/ocs/${id}`),
+  create: (data: object) => api.post('/integrations/ocs', data),
+  update: (id: number, data: object) => api.patch(`/integrations/ocs/${id}`, data),
+  delete: (id: number) => api.delete(`/integrations/ocs/${id}`),
+  test: (id: number) => api.post(`/integrations/ocs/${id}/test`),
+  incrementalSync: (id: number) => api.post(`/integrations/ocs/${id}/sync`),
+  fullSync: (id: number) => api.post(`/integrations/ocs/${id}/full-sync`),
+  pause: (id: number) => api.post(`/integrations/ocs/${id}/pause`),
+  resume: (id: number) => api.post(`/integrations/ocs/${id}/resume`),
+  status: (id: number) => api.get(`/integrations/ocs/${id}/status`),
+  jobs: (id: number, params?: object) => api.get(`/integrations/ocs/${id}/jobs`, { params }),
+  logs: (id: number, params?: object) => api.get(`/integrations/ocs/${id}/logs`, { params }),
+  assets: (id: number, params?: object) => api.get(`/integrations/ocs/${id}/assets`, { params }),
+  software: (id: number, params?: object) => api.get(`/integrations/ocs/${id}/software`, { params }),
+  users: (id: number, params?: object) => api.get(`/integrations/ocs/${id}/users`, { params }),
+  changes: (id: number, params?: object) => api.get(`/integrations/ocs/${id}/changes`, { params }),
+};
+
 export const executiveAiApi = {
   getHealthScore: () => api.get('/ai/executive/health').then(r => r.data),
   generateReport: (body: { report_type: string }) => api.post('/ai/executive/report', body).then(r => r.data),

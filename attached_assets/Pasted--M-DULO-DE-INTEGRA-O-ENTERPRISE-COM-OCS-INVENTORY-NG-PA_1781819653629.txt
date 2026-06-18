@@ -1,0 +1,792 @@
+# MÓDULO DE INTEGRAÇÃO ENTERPRISE COM OCS INVENTORY NG
+
+## PAPEL DO AGENTE
+
+Atue como Arquiteto de Software Enterprise Sênior especializado em:
+
+* FastAPI
+* PostgreSQL
+* Integrações REST
+* IT Asset Management (ITAM)
+* CMDB
+* OCS Inventory NG
+* Software Asset Management (SAM)
+* Multi-Tenant SaaS
+* Clean Architecture
+
+Expandir a plataforma AII já existente.
+
+NÃO recriar funcionalidades já implementadas.
+
+Utilizar toda a arquitetura existente.
+
+Implementar exclusivamente o módulo de integração com OCS Inventory NG.
+
+---
+
+# OBJETIVO
+
+Criar um conector corporativo entre a plataforma AII e o OCS Inventory NG.
+
+A integração deve permitir:
+
+* Importação de hardware
+* Importação de software
+* Importação de usuários
+* Importação de redes
+* Importação de inventário
+* Sincronização contínua
+* Atualização incremental
+* Correlação com CMDB
+* Correlação com Monitoramento
+* Correlação com Licenciamento
+* Correlação com Compliance
+* Disponibilização dos dados para IA
+
+O OCS deve funcionar como uma fonte externa de inventário integrada à plataforma AII.
+
+---
+
+# NOVOS MÓDULOS
+
+Criar:
+
+backend/modules/integrations/ocs_inventory/
+
+Estrutura:
+
+backend/modules/integrations/ocs_inventory/
+
+api_client.py
+
+auth.py
+
+sync_engine.py
+
+scheduler.py
+
+asset_mapper.py
+
+software_mapper.py
+
+user_mapper.py
+
+network_mapper.py
+
+license_mapper.py
+
+models.py
+
+schemas.py
+
+services.py
+
+routes.py
+
+audit.py
+
+logs.py
+
+tests/
+
+---
+
+# TELA DE CONFIGURAÇÃO
+
+Criar menu:
+
+Configurações
+
+↓
+
+Integrações
+
+↓
+
+OCS Inventory
+
+---
+
+# CAMPOS DE CONFIGURAÇÃO
+
+Nome da Integração
+
+Tenant
+
+URL do OCS
+
+Usuário
+
+Senha
+
+API Token
+
+Timeout
+
+Tentativas
+
+Intervalo de Sincronização
+
+Status
+
+---
+
+# AÇÕES
+
+Botões:
+
+Testar Conexão
+
+Salvar
+
+Sincronização Inicial
+
+Sincronização Incremental
+
+Sincronização Completa
+
+Pausar
+
+Reativar
+
+---
+
+# STATUS
+
+Exibir:
+
+Conectado
+
+Desconectado
+
+Erro
+
+Última Sincronização
+
+Próxima Sincronização
+
+Quantidade de Ativos
+
+Quantidade de Softwares
+
+Quantidade de Usuários
+
+---
+
+# API CLIENT
+
+Criar cliente REST.
+
+Funções:
+
+Autenticação
+
+Consulta de ativos
+
+Consulta de softwares
+
+Consulta de usuários
+
+Consulta de redes
+
+Consulta incremental
+
+Retry automático
+
+Tratamento de falhas
+
+Logs
+
+---
+
+# AUTENTICAÇÃO
+
+Suportar:
+
+Basic Auth
+
+Token
+
+API Key
+
+Sessão
+
+Preparar para múltiplas versões do OCS.
+
+---
+
+# SINCRONIZAÇÃO
+
+Modos:
+
+Manual
+
+Agendada
+
+Automática
+
+Incremental
+
+Completa
+
+---
+
+# AGENDAMENTO
+
+Permitir:
+
+5 minutos
+
+15 minutos
+
+30 minutos
+
+1 hora
+
+6 horas
+
+12 horas
+
+24 horas
+
+Customizado
+
+---
+
+# IMPORTAÇÃO DE HARDWARE
+
+Importar:
+
+Hostname
+
+FQDN
+
+IP
+
+MAC
+
+Serial
+
+Fabricante
+
+Modelo
+
+Tipo
+
+Sistema Operacional
+
+Versão
+
+Arquitetura
+
+Memória
+
+CPU
+
+Discos
+
+Placa Mãe
+
+BIOS
+
+Monitor
+
+Periféricos
+
+Data Inventário
+
+---
+
+# MAPEAMENTO PARA CMDB
+
+Mapear:
+
+OCS
+
+↓
+
+Assets
+
+↓
+
+CMDB
+
+↓
+
+Relationship Engine
+
+---
+
+# REGRAS DE CORRELAÇÃO
+
+Identificar ativos por:
+
+Serial Number
+
+UUID
+
+MAC Address
+
+Hostname
+
+IP
+
+Evitar duplicidade.
+
+---
+
+# IMPORTAÇÃO DE SOFTWARE
+
+Importar:
+
+Nome
+
+Versão
+
+Fornecedor
+
+Fabricante
+
+Categoria
+
+Data Instalação
+
+Local Instalação
+
+Uso
+
+Última Execução
+
+---
+
+# INTEGRAÇÃO COM SOFTWARE INVENTORY
+
+Mapear para:
+
+Software Inventory
+
+License Management
+
+Compliance Engine
+
+Vulnerability Engine
+
+---
+
+# IMPORTAÇÃO DE USUÁRIOS
+
+Importar:
+
+Usuário
+
+Domínio
+
+Departamento
+
+Computador
+
+Localização
+
+Organização
+
+---
+
+# RELACIONAMENTOS
+
+Criar:
+
+Usuário
+
+↓
+
+Computador
+
+↓
+
+Software
+
+↓
+
+Departamento
+
+↓
+
+Site
+
+---
+
+# IMPORTAÇÃO DE REDES
+
+Importar:
+
+IP
+
+Gateway
+
+DNS
+
+Interfaces
+
+VLAN
+
+Máscara
+
+DHCP
+
+---
+
+# NETWORK ENRICHMENT
+
+Correlacionar:
+
+Discovery Engine
+
+Monitoring Engine
+
+CMDB
+
+Network Map
+
+---
+
+# IMPORTAÇÃO DE LICENÇAS
+
+Quando disponível.
+
+Importar:
+
+Produto
+
+Licença
+
+Quantidade
+
+Status
+
+Expiração
+
+---
+
+# LICENSE CORRELATION
+
+Relacionar:
+
+Software
+
+↓
+
+Licença
+
+↓
+
+Usuário
+
+↓
+
+Equipamento
+
+---
+
+# IMPORTAÇÃO INCREMENTAL
+
+Detectar:
+
+Novos ativos
+
+Ativos removidos
+
+Mudanças de hardware
+
+Mudanças de software
+
+Mudanças de usuários
+
+Mudanças de rede
+
+---
+
+# CHANGE DETECTION
+
+Registrar:
+
+Antes
+
+Depois
+
+Origem
+
+Data
+
+Tenant
+
+---
+
+# AUDITORIA
+
+Registrar:
+
+Conexão
+
+Sincronização
+
+Importação
+
+Falha
+
+Alteração
+
+Exclusão
+
+---
+
+# LOGS
+
+Criar:
+
+OCS Connection Logs
+
+Sync Logs
+
+Import Logs
+
+Error Logs
+
+Performance Logs
+
+---
+
+# DASHBOARD DE INTEGRAÇÃO
+
+Criar painel.
+
+Exibir:
+
+Status
+
+Ativos Importados
+
+Softwares Importados
+
+Usuários Importados
+
+Erros
+
+Última Execução
+
+Tempo de Sincronização
+
+---
+
+# APIs INTERNAS
+
+Criar:
+
+POST /api/v1/integrations/ocs/connect
+
+POST /api/v1/integrations/ocs/test
+
+POST /api/v1/integrations/ocs/sync
+
+POST /api/v1/integrations/ocs/full-sync
+
+GET /api/v1/integrations/ocs/status
+
+GET /api/v1/integrations/ocs/assets
+
+GET /api/v1/integrations/ocs/software
+
+GET /api/v1/integrations/ocs/users
+
+GET /api/v1/integrations/ocs/logs
+
+---
+
+# MULTI-TENANT
+
+Garantir:
+
+Cada Tenant possui:
+
+Configuração própria
+
+Credenciais próprias
+
+Sincronização própria
+
+Logs próprios
+
+Dados isolados
+
+---
+
+# RBAC
+
+Permissões:
+
+Visualizar Integração
+
+Configurar Integração
+
+Executar Sincronização
+
+Consultar Logs
+
+Excluir Integração
+
+---
+
+# SEGURANÇA
+
+Implementar:
+
+Criptografia de credenciais
+
+Secrets Storage
+
+Rate Limiting
+
+Validação SSL
+
+Mascaramento de dados sensíveis
+
+Auditoria
+
+---
+
+# PERFORMANCE
+
+Objetivo:
+
+100.000 ativos
+
+1.000.000 softwares
+
+Sincronização paralela
+
+Processamento assíncrono
+
+Paginação automática
+
+Retry inteligente
+
+---
+
+# IA READY
+
+Todos os dados importados devem ficar disponíveis para:
+
+AI Copilot
+
+RAG Engine
+
+Executive AI
+
+Knowledge Graph
+
+Root Cause Engine
+
+Recommendation Engine
+
+---
+
+# FRONTEND
+
+Criar telas:
+
+Integrações
+
+Configuração OCS
+
+Dashboard OCS
+
+Logs OCS
+
+Status OCS
+
+Histórico OCS
+
+---
+
+# TESTES
+
+Criar:
+
+Testes Unitários
+
+Testes Integração
+
+Testes API
+
+Testes de Performance
+
+Testes de Falha
+
+Cobertura mínima:
+
+85%
+
+---
+
+# CRITÉRIOS DE ACEITE
+
+✓ Conexão com OCS funcionando
+
+✓ Teste de conexão funcionando
+
+✓ Importação de hardware funcionando
+
+✓ Importação de software funcionando
+
+✓ Importação de usuários funcionando
+
+✓ Sincronização incremental funcionando
+
+✓ Sincronização completa funcionando
+
+✓ Correlação CMDB funcionando
+
+✓ Dashboard funcionando
+
+✓ Logs funcionando
+
+✓ Auditoria funcionando
+
+✓ Multi-Tenant funcionando
+
+✓ APIs funcionando
+
+✓ Testes aprovados
+
+---
+
+# ENTREGA FINAL
+
+Gerar:
+
+1. OCS Connector
+2. API Client
+3. Sync Engine
+4. Scheduler
+5. Asset Mapper
+6. Software Mapper
+7. User Mapper
+8. License Mapper
+9. Dashboard
+10. APIs REST
+11. Banco atualizado
+12. Migrations
+13. Testes
+14. Documentação
+
+Ao concluir, disponibilizar automaticamente todos os dados importados para consumo pelos módulos:
+
+* CMDB
+* Discovery
+* Monitoring
+* Software Inventory
+* License Management
+* Compliance
+* Vulnerability Management
+* AI Copilot
+* Executive AI
+* Knowledge Graph

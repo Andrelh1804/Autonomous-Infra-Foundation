@@ -24,6 +24,9 @@ from backend.api.v1.routes.events import router as events_router
 from backend.api.v1.routes.noc import router as noc_router
 from backend.api.v1.routes.notification import router as notification_router
 
+# Integrations
+from backend.api.v1.routes.ocs_integration import router as ocs_integration_router
+
 # Phase 6 — AI Copilot, AIOps, RAG
 from backend.api.v1.routes.ai_copilot import router as ai_copilot_router
 from backend.api.v1.routes.ai_ops import router as ai_ops_router
@@ -56,6 +59,10 @@ limiter = Limiter(key_func=get_remote_address)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    import backend.modules.integrations.ocs_inventory.models  # noqa: F401 — register OCS tables
+    from backend.core.infrastructure.database import engine
+    from backend.core.domain.models import Base
+    Base.metadata.create_all(bind=engine)
     from backend.modules.scheduler.scheduler import start_scheduler, stop_scheduler
     start_scheduler()
     yield
@@ -125,6 +132,9 @@ app.include_router(kb_router, prefix=PREFIX)
 app.include_router(sla_router, prefix=PREFIX)
 app.include_router(workflows_router, prefix=PREFIX)
 app.include_router(automations_router, prefix=PREFIX)
+
+# Integrations
+app.include_router(ocs_integration_router, prefix=PREFIX)
 
 # Phase 6 — AI Copilot, AIOps, RAG
 app.include_router(ai_copilot_router, prefix=PREFIX)
