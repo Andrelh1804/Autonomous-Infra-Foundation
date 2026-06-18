@@ -1,0 +1,569 @@
+# FASE 1 — FUNDAÇÃO DA PLATAFORMA AII (AUTONOMOUS INFRASTRUCTURE INTELLIGENCE)
+
+## PAPEL DO AGENTE
+
+Atue como um Arquiteto de Software Enterprise Sênior, Especialista em SaaS Multi-Tenant, Cloud Native, DevOps, FastAPI, Next.js, PostgreSQL, Segurança, Observabilidade e Inteligência Artificial.
+
+Sua missão é construir a FASE 1 da plataforma AII (Autonomous Infrastructure Intelligence), estabelecendo toda a fundação tecnológica para as próximas fases.
+
+O objetivo desta fase é criar uma base extremamente sólida, escalável e preparada para suportar monitoramento, inventário, IA, automação, ITSM e operações autônomas.
+
+Não criar código de exemplo.
+
+Criar código real pronto para execução.
+
+---
+
+# VISÃO DA PLATAFORMA
+
+AII será uma plataforma SaaS Enterprise de Operações Autônomas de TI.
+
+Ela deverá futuramente executar:
+
+* Monitoramento
+* Descoberta de ativos
+* CMDB
+* Gestão de licenças
+* Gestão de impressoras
+* Service Desk
+* IA Conversacional
+* IA Preditiva
+* Auto Remediação
+* Digital Twin
+
+Nesta fase criar apenas a fundação.
+
+---
+
+# STACK TECNOLÓGICA
+
+## Backend
+
+* Python 3.12
+* FastAPI
+* SQLAlchemy 2.x
+* Alembic
+* Pydantic
+* JWT
+* OAuth2
+
+## Frontend
+
+* Next.js 15
+* React
+* TypeScript
+* TailwindCSS
+* Shadcn/UI
+* React Query
+* Zustand
+
+## Banco
+
+* PostgreSQL
+
+## Containerização
+
+* Docker
+* Docker Compose
+
+## Documentação
+
+* Swagger
+* OpenAPI
+
+---
+
+# ARQUITETURA
+
+Utilizar:
+
+Clean Architecture
+
+Estrutura:
+
+backend/
+
+core/
+
+domain/
+
+application/
+
+infrastructure/
+
+api/
+
+tests/
+
+frontend/
+
+app/
+
+components/
+
+hooks/
+
+services/
+
+store/
+
+database/
+
+docker/
+
+docs/
+
+scripts/
+
+---
+
+# MULTI TENANT
+
+A plataforma deve ser Multi-Tenant desde o início.
+
+Cada tenant representa um cliente.
+
+Estrutura:
+
+Tenant
+├ Usuários
+├ Sites
+├ Ativos
+├ Tickets
+├ Dashboards
+
+Todo dado deve estar vinculado ao tenant.
+
+Nenhum usuário poderá visualizar dados de outro tenant.
+
+Implementar isolamento lógico.
+
+---
+
+# RBAC
+
+Criar controle granular de permissões.
+
+Perfis:
+
+## Super Admin
+
+Pode:
+
+* Gerenciar toda plataforma
+* Criar tenants
+* Gerenciar licenciamento
+
+## MSP Admin
+
+Pode:
+
+* Gerenciar múltiplos clientes
+
+## Tenant Admin
+
+Pode:
+
+* Gerenciar seu ambiente
+
+## Operador
+
+Pode:
+
+* Operar ambiente
+
+## Visualizador
+
+Somente leitura
+
+---
+
+# ENTIDADES PRINCIPAIS
+
+## Organization
+
+Campos:
+
+* id
+* uuid
+* name
+* company_name
+* document
+* status
+* created_at
+* updated_at
+
+---
+
+## User
+
+Campos:
+
+* id
+* uuid
+* organization_id
+* first_name
+* last_name
+* email
+* password_hash
+* active
+* last_login
+* created_at
+
+---
+
+## Role
+
+Campos:
+
+* id
+* name
+* description
+
+---
+
+## Permission
+
+Campos:
+
+* id
+* name
+* module
+* description
+
+---
+
+## Site
+
+Campos:
+
+* id
+* organization_id
+* name
+* address
+* city
+* state
+* country
+
+---
+
+# AUTENTICAÇÃO
+
+Implementar:
+
+## Login
+
+Email
+Senha
+
+---
+
+## JWT
+
+Access Token
+
+15 minutos
+
+Refresh Token
+
+7 dias
+
+---
+
+## Logout
+
+Revogar sessão
+
+---
+
+## Sessões
+
+Registrar:
+
+* Data
+* Hora
+* IP
+* Navegador
+
+---
+
+## MFA
+
+Preparar estrutura para:
+
+* Google Authenticator
+* Microsoft Authenticator
+
+Mesmo que não seja implementado nesta fase.
+
+---
+
+# SEGURANÇA
+
+Implementar:
+
+* Hash Argon2
+* JWT
+* HTTPS Ready
+* CORS
+* CSP
+* Rate Limiting
+* Auditoria
+
+---
+
+# AUDITORIA
+
+Criar tabela:
+
+AuditLogs
+
+Campos:
+
+* usuário
+* ação
+* módulo
+* data
+* ip
+* payload
+
+Registrar:
+
+* Login
+* Logout
+* Alterações
+* Exclusões
+* Criações
+
+---
+
+# CONFIGURAÇÕES GLOBAIS
+
+Criar módulo:
+
+Settings
+
+Configurações:
+
+* Nome da plataforma
+* Logo
+* SMTP
+* Integrações futuras
+* Idioma
+* Timezone
+
+---
+
+# DASHBOARD INICIAL
+
+Criar Dashboard inicial.
+
+Exibir:
+
+* Total de organizações
+* Total de usuários
+* Sessões ativas
+* Últimos acessos
+
+Cards responsivos.
+
+---
+
+# FRONTEND
+
+Criar Layout moderno.
+
+Menu lateral:
+
+Dashboard
+Organizações
+Usuários
+Sites
+Permissões
+Configurações
+
+Topo:
+
+* Perfil
+* Notificações
+* Tema
+
+Implementar:
+
+* Dark Mode
+* Light Mode
+
+Responsivo.
+
+---
+
+# API PADRONIZADA
+
+Criar padrão:
+
+/api/v1
+
+Exemplos:
+
+GET /organizations
+
+POST /organizations
+
+GET /users
+
+POST /users
+
+GET /sites
+
+POST /sites
+
+---
+
+# VALIDAÇÕES
+
+Implementar:
+
+* Pydantic
+* Validação backend
+* Validação frontend
+
+Mensagens amigáveis.
+
+---
+
+# BANCO DE DADOS
+
+Criar migrations automáticas.
+
+Utilizar:
+
+Alembic
+
+Criar:
+
+* Seeds
+* Usuário Admin Inicial
+* Tenant Inicial
+
+---
+
+# LOGS
+
+Criar sistema centralizado.
+
+Níveis:
+
+* INFO
+* WARNING
+* ERROR
+* CRITICAL
+
+Salvar:
+
+Arquivo
+Banco
+
+---
+
+# TESTES
+
+Implementar:
+
+Backend:
+
+* Pytest
+
+Frontend:
+
+* Jest
+
+Cobertura mínima:
+
+70%
+
+---
+
+# DOCKER
+
+Criar:
+
+docker-compose.yml
+
+Serviços:
+
+* frontend
+* backend
+* postgres
+
+Comando único:
+
+docker compose up
+
+---
+
+# DOCUMENTAÇÃO
+
+Gerar:
+
+README.md completo
+
+Conteúdo:
+
+* Instalação
+* Configuração
+* Variáveis de ambiente
+* Execução
+* Deploy
+
+---
+
+# CRITÉRIOS DE ACEITE
+
+A fase será considerada concluída quando:
+
+✓ Login funcionar
+
+✓ JWT funcionar
+
+✓ Multi-tenant funcionar
+
+✓ RBAC funcionar
+
+✓ CRUD de Organizações funcionar
+
+✓ CRUD de Usuários funcionar
+
+✓ CRUD de Sites funcionar
+
+✓ Auditoria funcionar
+
+✓ Docker funcionar
+
+✓ Swagger funcionar
+
+✓ Dashboard funcionar
+
+✓ Dark Mode funcionar
+
+✓ Testes executarem com sucesso
+
+---
+
+# ENTREGA FINAL
+
+Gerar projeto completo.
+
+Entregar:
+
+1. Estrutura de diretórios
+2. Banco de dados
+3. Backend funcional
+4. Frontend funcional
+5. Docker Compose
+6. Swagger
+7. README
+8. Seeds
+9. Testes
+10. Scripts de instalação
+
+Validar toda a aplicação antes de prosseguir para a Fase 2.
