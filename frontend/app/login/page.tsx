@@ -1,6 +1,6 @@
 'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { authApi } from '@/services/api';
 import { useAuthStore } from '@/store/auth';
 import Image from 'next/image';
@@ -9,7 +9,8 @@ type Step = 'credentials' | 'mfa';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { setTokens, setUser } = useAuthStore();
+  const searchParams = useSearchParams();
+  const { setTokens, setUser, logout } = useAuthStore();
 
   const [step, setStep] = useState<Step>('credentials');
   const [email, setEmail] = useState('');
@@ -18,6 +19,14 @@ export default function LoginPage() {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const reason = searchParams.get('reason');
+    if (reason === 'session_expired') {
+      setError('Sessão expirada. Faça login novamente.');
+      logout();
+    }
+  }, [searchParams, logout]);
 
   async function handleCredentials(e: React.FormEvent) {
     e.preventDefault();
@@ -35,7 +44,16 @@ export default function LoginPage() {
         router.push('/dashboard');
       }
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Credenciais inválidas');
+      console.error('Login Error:', err);
+      if (!err.response) {
+        setError('Erro de conexão com o servidor. Tente novamente.');
+      } else if (err.response.status === 401) {
+        setError('Usuário ou senha inválidos.');
+      } else if (err.response.status >= 500) {
+        setError('Erro de conexão com o servidor. Tente novamente.');
+      } else {
+        setError(err.response?.data?.detail || 'Erro ao autenticar. Tente novamente.');
+      }
     } finally {
       setLoading(false);
     }
@@ -52,7 +70,14 @@ export default function LoginPage() {
       setUser(meRes.data);
       router.push('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Código inválido. Tente novamente.');
+      console.error('MFA Error:', err);
+      if (!err.response) {
+        setError('Erro de conexão com o servidor. Tente novamente.');
+      } else if (err.response.status === 401) {
+        setError('Código inválido ou expirado. Tente novamente.');
+      } else {
+        setError(err.response?.data?.detail || 'Erro ao verificar código. Tente novamente.');
+      }
       setCode('');
     } finally {
       setLoading(false);
@@ -72,6 +97,7 @@ export default function LoginPage() {
               width={160}
               height={160}
               className="drop-shadow-2xl"
+              style={{ width: 160, height: 'auto' }}
               priority
             />
           </div>

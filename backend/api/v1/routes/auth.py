@@ -102,7 +102,7 @@ def mfa_setup(current_user: User = Depends(get_current_user), db: Session = Depe
         db.commit()
 
     totp = pyotp.TOTP(secret)
-    otpauth_uri = totp.provisioning_uri(name=current_user.email, issuer_name="AII Platform")
+    otpauth_uri = totp.provisioning_uri(name=current_user.email, issuer_name="NexaOps")
     return {"secret": secret, "otpauth_uri": otpauth_uri}
 
 

@@ -234,6 +234,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               width={36}
               height={36}
               className="rounded-md object-contain"
+              style={{ width: 36, height: 36 }}
             />
           </div>
           {!collapsed && (

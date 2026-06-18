@@ -25,10 +25,11 @@ api.interceptors.response.use(
           localStorage.setItem('refresh_token', res.data.refresh_token);
           original.headers.Authorization = `Bearer ${res.data.access_token}`;
           return api(original);
-        } catch {
+        } catch (refreshError) {
+          console.error('Session refresh failed:', refreshError);
           localStorage.removeItem('access_token');
           localStorage.removeItem('refresh_token');
-          window.location.href = '/login';
+          window.location.href = '/login?reason=session_expired';
         }
       } else {
         window.location.href = '/login';
