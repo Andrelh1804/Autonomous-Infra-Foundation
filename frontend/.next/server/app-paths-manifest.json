@@ -1,6 +1,13 @@
 {
   "/page": "app/page.js",
+  "/organizations/page": "app/organizations/page.js",
+  "/ai-copilot/page": "app/ai-copilot/page.js",
   "/login/page": "app/login/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/metrics/page": "app/metrics/page.js"
+  "/knowledge-base/page": "app/knowledge-base/page.js",
+  "/ai-ops/page": "app/ai-ops/page.js",
+  "/executive/page": "app/executive/page.js",
+  "/ai-insights/page": "app/ai-insights/page.js",
+  "/ai-search/page": "app/ai-search/page.js",
+  "/ai-reports/page": "app/ai-reports/page.js",
+  "/agent-center/page": "app/agent-center/page.js"
 }

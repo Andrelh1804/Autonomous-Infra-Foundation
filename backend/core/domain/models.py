@@ -1195,3 +1195,123 @@ class AutomationRule(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     organization = relationship("Organization")
     creator = relationship("User")
+
+
+# ═══════════════════════════════════════════════════════════════
+# Phase 6 — AI Copilot, AIOps, RAG Engine
+# ═══════════════════════════════════════════════════════════════
+
+from sqlalchemy import JSON
+
+class AIConversation(Base):
+    __tablename__ = "ai_conversations"
+    id = Column(Integer, primary_key=True, index=True)
+    uuid = Column(String(36), default=generate_uuid, unique=True, index=True)
+    organization_id = Column(Integer, ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    title = Column(String(500))
+    model = Column(String(100), default="gpt-4o-mini")
+    total_tokens = Column(Integer, default=0)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    organization = relationship("Organization")
+    messages = relationship("AIMessage", back_populates="conversation", cascade="all, delete-orphan")
+
+class AIMessage(Base):
+    __tablename__ = "ai_messages"
+    id = Column(Integer, primary_key=True, index=True)
+    conversation_id = Column(Integer, ForeignKey("ai_conversations.id", ondelete="CASCADE"), nullable=False)
+    role = Column(String(20), nullable=False)  # user/assistant/system/tool
+    content = Column(Text, nullable=False)
+    tool_calls = Column(JSON, nullable=True)
+    tool_results = Column(JSON, nullable=True)
+    tokens_used = Column(Integer, default=0)
+    model = Column(String(100))
+    latency_ms = Column(Integer)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    conversation = relationship("AIConversation", back_populates="messages")
+
+class VectorDocument(Base):
+    __tablename__ = "vector_documents"
+    id = Column(Integer, primary_key=True, index=True)
+    uuid = Column(String(36), default=generate_uuid, unique=True, index=True)
+    organization_id = Column(Integer, ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False)
+    source_type = Column(String(50), nullable=False)  # knowledge_article/ticket/procedure/policy
+    source_id = Column(Integer, nullable=True)
+    title = Column(String(500))
+    content = Column(Text, nullable=False)
+    chunk_index = Column(Integer, default=0)
+    embedding_model = Column(String(100), default="text-embedding-3-small")
+    embedding = Column(JSON, nullable=True)  # stored as JSON array; pgvector used via raw SQL
+    metadata_ = Column("metadata", JSON, nullable=True)
+    is_indexed = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    organization = relationship("Organization")
+
+class AIRecommendation(Base):
+    __tablename__ = "ai_recommendations"
+    id = Column(Integer, primary_key=True, index=True)
+    organization_id = Column(Integer, ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False)
+    category = Column(String(50))  # security/performance/cost/capacity/compliance
+    priority = Column(String(20), default="medium")  # critical/high/medium/low
+    title = Column(String(500), nullable=False)
+    description = Column(Text)
+    impact = Column(Text)
+    action = Column(Text)
+    status = Column(String(20), default="open")  # open/accepted/dismissed/done
+    source = Column(String(50), default="ai")
+    related_entity_type = Column(String(50))
+    related_entity_id = Column(Integer)
+    confidence_score = Column(Float, default=0.8)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    organization = relationship("Organization")
+
+class AIInsight(Base):
+    __tablename__ = "ai_insights"
+    id = Column(Integer, primary_key=True, index=True)
+    organization_id = Column(Integer, ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False)
+    insight_type = Column(String(50))  # anomaly/trend/risk/optimization
+    severity = Column(String(20), default="medium")
+    title = Column(String(500), nullable=False)
+    description = Column(Text)
+    data_points = Column(JSON)
+    is_read = Column(Boolean, default=False)
+    expires_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    organization = relationship("Organization")
+
+class AIAuditLog(Base):
+    __tablename__ = "ai_audit_logs"
+    id = Column(Integer, primary_key=True, index=True)
+    organization_id = Column(Integer, ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    conversation_id = Column(Integer, ForeignKey("ai_conversations.id", ondelete="SET NULL"), nullable=True)
+    action = Column(String(50))  # chat/search/rca/summarize
+    model = Column(String(100))
+    prompt_tokens = Column(Integer, default=0)
+    completion_tokens = Column(Integer, default=0)
+    total_tokens = Column(Integer, default=0)
+    latency_ms = Column(Integer)
+    tools_called = Column(JSON)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    organization = relationship("Organization")
+
+class PromptTemplate(Base):
+    __tablename__ = "prompt_templates"
+    id = Column(Integer, primary_key=True, index=True)
+    organization_id = Column(Integer, ForeignKey("organizations.id", ondelete="CASCADE"), nullable=True)
+    name = Column(String(255), nullable=False)
+    description = Column(Text)
+    category = Column(String(50))  # copilot/rca/summary/report/executive
+    template = Column(Text, nullable=False)
+    variables = Column(JSON)
+    version = Column(Integer, default=1)
+    is_active = Column(Boolean, default=True)
+    is_system = Column(Boolean, default=False)
+    created_by = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    organization = relationship("Organization")

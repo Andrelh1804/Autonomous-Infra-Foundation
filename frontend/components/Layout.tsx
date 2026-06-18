@@ -15,6 +15,7 @@ import {
   Activity, TrendingUp, Printer, MonitorCheck, FileBarChart2,
   Bot, Monitor, Package, Key, ShieldAlert, Terminal, Shield, Cpu, Briefcase, FileText,
   Ticket, AlertOctagon, GitMerge, BookOpen, Clock, Workflow, Cog,
+  BrainCircuit, MessageSquareText, Lightbulb, Search, BarChart3, Gauge,
 } from 'lucide-react';
 import type { AlertEvent } from '@/types';
 
@@ -76,6 +77,17 @@ const NAV_GROUPS = [
       { href: '/sla', icon: Clock, label: 'Gestão de SLA' },
       { href: '/workflows', icon: Workflow, label: 'Workflows' },
       { href: '/automations', icon: Cog, label: 'Automações' },
+    ],
+  },
+  {
+    label: 'AI & Copilot',
+    items: [
+      { href: '/ai-copilot', icon: MessageSquareText, label: 'AI Copilot' },
+      { href: '/ai-ops', icon: BrainCircuit, label: 'AI Operations' },
+      { href: '/executive', icon: Gauge, label: 'Executive AI' },
+      { href: '/ai-insights', icon: Lightbulb, label: 'AI Insights' },
+      { href: '/ai-search', icon: Search, label: 'AI Search' },
+      { href: '/ai-reports', icon: BarChart3, label: 'AI Reports' },
     ],
   },
   {

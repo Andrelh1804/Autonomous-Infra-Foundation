@@ -24,6 +24,11 @@ from backend.api.v1.routes.events import router as events_router
 from backend.api.v1.routes.noc import router as noc_router
 from backend.api.v1.routes.notification import router as notification_router
 
+# Phase 6 — AI Copilot, AIOps, RAG
+from backend.api.v1.routes.ai_copilot import router as ai_copilot_router
+from backend.api.v1.routes.ai_ops import router as ai_ops_router
+from backend.api.v1.routes.executive_ai import router as executive_ai_router
+
 # Phase 4 — Endpoint Management & RMM
 from backend.api.v1.routes.agents import router as agents_router
 from backend.api.v1.routes.endpoints import router as endpoints_router
@@ -120,6 +125,11 @@ app.include_router(kb_router, prefix=PREFIX)
 app.include_router(sla_router, prefix=PREFIX)
 app.include_router(workflows_router, prefix=PREFIX)
 app.include_router(automations_router, prefix=PREFIX)
+
+# Phase 6 — AI Copilot, AIOps, RAG
+app.include_router(ai_copilot_router, prefix=PREFIX)
+app.include_router(ai_ops_router, prefix=PREFIX)
+app.include_router(executive_ai_router, prefix=PREFIX)
 
 
 @app.get("/api/v1/health")

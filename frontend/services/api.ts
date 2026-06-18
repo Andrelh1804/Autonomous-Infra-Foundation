@@ -398,3 +398,35 @@ export const automationsApi = {
   toggle: (id: number) => api.post(`/automations/${id}/toggle`).then(r => r.data),
   trigger: (id: number, body: object) => api.post(`/automations/${id}/trigger`, body).then(r => r.data),
 };
+
+// ─── Phase 6 — AI Copilot, AIOps, RAG ───────────────────────────────────────
+
+export const aiCopilotApi = {
+  chat: (body: { message: string; conversation_id?: number; model?: string }) =>
+    api.post('/ai/chat', body).then(r => r.data),
+  listConversations: () => api.get('/ai/conversations').then(r => r.data),
+  getConversation: (id: number) => api.get(`/ai/conversations/${id}`).then(r => r.data),
+  deleteConversation: (id: number) => api.delete(`/ai/conversations/${id}`),
+  getAuditLog: (limit?: number) => api.get('/ai/audit', { params: { limit } }).then(r => r.data),
+  getStats: () => api.get('/ai/stats').then(r => r.data),
+};
+
+export const aiOpsApi = {
+  getDashboard: () => api.get('/ai/ops/dashboard').then(r => r.data),
+  listInsights: (params?: object) => api.get('/ai/ops/insights', { params }).then(r => r.data),
+  generateInsights: () => api.post('/ai/ops/insights/generate').then(r => r.data),
+  markInsightRead: (id: number) => api.patch(`/ai/ops/insights/${id}/read`).then(r => r.data),
+  listRecommendations: (params?: object) => api.get('/ai/ops/recommendations', { params }).then(r => r.data),
+  updateRecommendation: (id: number, body: object) => api.patch(`/ai/ops/recommendations/${id}`, body).then(r => r.data),
+  rootCauseAnalysis: (body: object) => api.post('/ai/ops/rca', body).then(r => r.data),
+  summarize: (body: object) => api.post('/ai/ops/summarize', body).then(r => r.data),
+};
+
+export const executiveAiApi = {
+  getHealthScore: () => api.get('/ai/executive/health').then(r => r.data),
+  generateReport: (body: { report_type: string }) => api.post('/ai/executive/report', body).then(r => r.data),
+  search: (body: { query: string; search_type?: string; limit?: number }) => api.post('/ai/search', body).then(r => r.data),
+  indexDocuments: () => api.post('/ai/rag/index').then(r => r.data),
+  listPrompts: () => api.get('/ai/prompts').then(r => r.data),
+  createPrompt: (body: object) => api.post('/ai/prompts', body).then(r => r.data),
+};
