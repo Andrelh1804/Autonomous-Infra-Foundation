@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --primary: 238 84% 60%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --ring: 238 84% 60%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 47% 8%;
+  --card-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --primary: 238 84% 65%;
+  --primary-foreground: 222.2 84% 4.9%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 55%;
+  --destructive-foreground: 210 40% 98%;
+  --ring: 238 84% 65%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-feature-settings: "rlig" 1, "calt" 1;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Utility helpers */
+.bg-background { background-color: hsl(var(--background)); }
+.bg-card { background-color: hsl(var(--card)); }
+.bg-muted { background-color: hsl(var(--muted)); }
+.bg-accent { background-color: hsl(var(--accent)); }
+.text-foreground { color: hsl(var(--foreground)); }
+.text-card-foreground { color: hsl(var(--card-foreground)); }
+.text-muted-foreground { color: hsl(var(--muted-foreground)); }
+.border-border { border-color: hsl(var(--border)); }
+
+.scrollbar-thin { scrollbar-width: thin; }
+.scrollbar-thin::-webkit-scrollbar { width: 5px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 9999px; }

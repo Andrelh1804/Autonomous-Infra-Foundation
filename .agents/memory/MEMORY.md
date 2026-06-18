@@ -1,0 +1,1 @@
+- [AII Platform stack](aii-platform-stack.md) — Python FastAPI backend (port 8000) + Next.js 15 frontend (port 3000), NOT the Node.js workspace stack.
