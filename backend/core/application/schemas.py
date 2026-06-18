@@ -32,6 +32,27 @@ class RefreshRequest(BaseModel):
     refresh_token: str
 
 
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+    @field_validator("email")
+    @classmethod
+    def validate_email(cls, v: str) -> str:
+        return validate_email_str(v)
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
+
+    @field_validator("new_password")
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        if len(v) < 8:
+            raise ValueError("A senha deve ter pelo menos 8 caracteres")
+        return v
+
+
 # ── Organization ──────────────────────────────────────────────────────────────
 
 class OrganizationCreate(BaseModel):

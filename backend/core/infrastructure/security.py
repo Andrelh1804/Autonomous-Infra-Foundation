@@ -66,3 +66,11 @@ def decode_mfa_token(token: str) -> Optional[dict]:
         return payload
     except JWTError:
         return None
+
+
+RESET_TOKEN_EXPIRE_HOURS = 1
+
+
+def generate_reset_token() -> str:
+    import secrets
+    return secrets.token_hex(32)

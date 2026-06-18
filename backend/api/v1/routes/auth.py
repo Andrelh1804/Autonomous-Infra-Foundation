@@ -7,9 +7,13 @@ from backend.core.infrastructure.database import get_db
 from backend.core.infrastructure.security import (
     verify_password, create_access_token, create_refresh_token, decode_token,
     create_mfa_token, decode_mfa_token, get_password_hash,
+    generate_reset_token, RESET_TOKEN_EXPIRE_HOURS,
 )
-from backend.core.domain.models import User, UserSession
-from backend.core.application.schemas import LoginRequest, TokenResponse, RefreshRequest
+from backend.core.domain.models import User, UserSession, PasswordResetToken
+from backend.core.application.schemas import (
+    LoginRequest, TokenResponse, RefreshRequest,
+    ForgotPasswordRequest, ResetPasswordRequest,
+)
 from backend.core.application.audit import log_action
 from backend.api.v1.dependencies import get_current_user, get_client_ip
 
@@ -206,6 +210,78 @@ def logout(
         ip_address=get_client_ip(request),
     )
     return {"message": "Logged out successfully"}
+
+
+@router.post("/forgot-password")
+def forgot_password(body: ForgotPasswordRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == body.email, User.active == True).first()
+    # Always return success to avoid user enumeration
+    if not user:
+        return {"message": "Se o e-mail existir, um link de redefinição foi gerado."}
+
+    # Invalidate any existing unused tokens for this user
+    db.query(PasswordResetToken).filter(
+        PasswordResetToken.user_id == user.id,
+        PasswordResetToken.used == False,
+    ).update({"used": True})
+
+    token = generate_reset_token()
+    expires_at = datetime.utcnow() + timedelta(hours=RESET_TOKEN_EXPIRE_HOURS)
+    reset_entry = PasswordResetToken(
+        user_id=user.id,
+        token=token,
+        expires_at=expires_at,
+    )
+    db.add(reset_entry)
+    db.commit()
+
+    log_action(db, action="PASSWORD_RESET_REQUESTED", module="auth",
+               user_id=user.id, user_email=user.email)
+
+    return {
+        "message": "Link de redefinição gerado com sucesso.",
+        "reset_token": token,
+        "expires_in_hours": RESET_TOKEN_EXPIRE_HOURS,
+    }
+
+
+@router.post("/reset-password")
+def reset_password(body: ResetPasswordRequest, db: Session = Depends(get_db)):
+    entry = db.query(PasswordResetToken).filter(
+        PasswordResetToken.token == body.token,
+        PasswordResetToken.used == False,
+    ).first()
+
+    if not entry:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="Token inválido ou já utilizado.")
+
+    if entry.expires_at < datetime.utcnow():
+        entry.used = True
+        db.commit()
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="Token expirado. Solicite um novo link.")
+
+    user = db.query(User).filter(User.id == entry.user_id, User.active == True).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="Usuário não encontrado.")
+
+    user.password_hash = get_password_hash(body.new_password)
+    entry.used = True
+
+    # Revoke all active sessions to force re-login
+    db.query(UserSession).filter(
+        UserSession.user_id == user.id,
+        UserSession.is_active == True,
+    ).update({"is_active": False})
+
+    db.commit()
+
+    log_action(db, action="PASSWORD_RESET_COMPLETED", module="auth",
+               user_id=user.id, user_email=user.email)
+
+    return {"message": "Senha redefinida com sucesso. Faça login com a nova senha."}
 
 
 @router.get("/me")

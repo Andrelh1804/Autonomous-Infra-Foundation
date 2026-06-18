@@ -84,6 +84,17 @@ class UserRole(Base):
     __table_args__ = (UniqueConstraint("user_id", "role_id"),)
 
 
+class PasswordResetToken(Base):
+    __tablename__ = "password_reset_tokens"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    token = Column(String(64), unique=True, nullable=False, index=True)
+    used = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    expires_at = Column(DateTime, nullable=False)
+    user = relationship("User")
+
+
 class UserSession(Base):
     __tablename__ = "user_sessions"
     id = Column(Integer, primary_key=True, index=True)

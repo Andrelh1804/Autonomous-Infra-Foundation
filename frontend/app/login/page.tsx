@@ -156,13 +156,21 @@ export default function LoginPage() {
                 </button>
               </form>
 
-              <button
-                type="button"
-                onClick={() => { setEmail('admin@aii.local'); setPassword('Admin@2024!'); }}
-                className="mt-6 w-full text-center text-xs text-slate-500 hover:text-slate-300 transition py-2 border border-white/5 hover:border-white/15 rounded-lg"
-              >
-                Preencher credenciais padrão: <span className="font-mono text-slate-400">admin@aii.local</span>
-              </button>
+              <div className="mt-5 flex items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={() => { setEmail('admin@aii.local'); setPassword('Admin@2024!'); }}
+                  className="flex-1 text-center text-xs text-slate-500 hover:text-slate-300 transition py-2 border border-white/5 hover:border-white/15 rounded-lg"
+                >
+                  Preencher credenciais padrão
+                </button>
+                <a
+                  href="/forgot-password"
+                  className="text-xs text-indigo-400 hover:text-indigo-300 transition whitespace-nowrap"
+                >
+                  Esqueceu a senha?
+                </a>
+              </div>
             </>
           ) : (
             <>
