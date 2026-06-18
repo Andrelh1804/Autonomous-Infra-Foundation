@@ -104,8 +104,9 @@ export const auditApi = {
 
 // Dashboard
 export const dashboardApi = {
-  stats: () => api.get('/dashboard/stats'),
-  recentAccess: () => api.get('/dashboard/recent-access'),
+  stats:           () => api.get('/dashboard/stats'),
+  recentAccess:    () => api.get('/dashboard/recent-access'),
+  discoveryHealth: () => api.get('/dashboard/discovery-health'),
 };
 
 // Settings

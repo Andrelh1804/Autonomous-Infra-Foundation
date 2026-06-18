@@ -1,7 +1,12 @@
+from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends
+from sqlalchemy import func, case
 from sqlalchemy.orm import Session
 from backend.core.infrastructure.database import get_db
-from backend.core.domain.models import Organization, User, UserSession, AuditLog
+from backend.core.domain.models import (
+    Organization, User, UserSession, AuditLog,
+    Asset, DiscoveryJob, DiscoverySchedule,
+)
 from backend.core.application.schemas import DashboardStats
 from backend.api.v1.dependencies import get_current_user
 
@@ -49,3 +54,91 @@ def get_recent_access(
         }
         for a in items
     ]
+
+
+@router.get("/discovery-health")
+def discovery_health(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    org_id = current_user.organization_id
+
+    # Total assets in CMDB
+    aq = db.query(func.count(Asset.id)).filter(Asset.organization_id == org_id)
+    total_assets = aq.scalar() or 0
+
+    # Active schedules + soonest next run
+    sq = db.query(DiscoverySchedule).filter(
+        DiscoverySchedule.organization_id == org_id,
+        DiscoverySchedule.is_enabled == True,
+    )
+    active_schedules = sq.count()
+    next_sched = sq.order_by(DiscoverySchedule.next_run_at.asc().nullslast()).first()
+    next_run_at = next_sched.next_run_at if next_sched else None
+
+    # Last finished job
+    last_job_row = (
+        db.query(DiscoveryJob)
+        .filter(DiscoveryJob.organization_id == org_id,
+                DiscoveryJob.status.in_(["completed", "failed"]))
+        .order_by(DiscoveryJob.finished_at.desc())
+        .first()
+    )
+    last_job = None
+    if last_job_row:
+        last_job = {
+            "id":          last_job_row.id,
+            "name":        last_job_row.name,
+            "status":      last_job_row.status,
+            "hosts_found": last_job_row.hosts_found or 0,
+            "finished_at": last_job_row.finished_at,
+        }
+
+    # Assets found per day — last 7 days
+    cutoff = datetime.utcnow() - timedelta(days=7)
+    rows = (
+        db.query(
+            func.date(DiscoveryJob.finished_at).label("day"),
+            func.sum(DiscoveryJob.hosts_found).label("found"),
+        )
+        .filter(
+            DiscoveryJob.organization_id == org_id,
+            DiscoveryJob.status == "completed",
+            DiscoveryJob.finished_at >= cutoff,
+        )
+        .group_by(func.date(DiscoveryJob.finished_at))
+        .order_by(func.date(DiscoveryJob.finished_at))
+        .all()
+    )
+    # Pad to exactly 7 days (fill zeros for missing days)
+    found_by_day: dict[str, int] = {str(r.day): int(r.found or 0) for r in rows}
+    daily: list[dict] = []
+    for i in range(7):
+        d = (datetime.utcnow() - timedelta(days=6 - i)).strftime("%Y-%m-%d")
+        daily.append({"date": d, "hosts_found": found_by_day.get(d, 0)})
+
+    # Job summary last 7 days
+    job_rows = (
+        db.query(DiscoveryJob.status, func.count(DiscoveryJob.id).label("n"))
+        .filter(
+            DiscoveryJob.organization_id == org_id,
+            DiscoveryJob.created_at >= cutoff,
+        )
+        .group_by(DiscoveryJob.status)
+        .all()
+    )
+    jobs_7d: dict[str, int] = {r.status: r.n for r in job_rows}
+
+    return {
+        "total_assets":       total_assets,
+        "active_schedules":   active_schedules,
+        "next_run_at":        next_run_at,
+        "last_job":           last_job,
+        "daily_assets_found": daily,
+        "jobs_last_7d": {
+            "completed": jobs_7d.get("completed", 0),
+            "failed":    jobs_7d.get("failed", 0),
+            "running":   jobs_7d.get("running", 0),
+            "total":     sum(jobs_7d.values()),
+        },
+    }
