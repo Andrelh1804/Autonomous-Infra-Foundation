@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { authApi } from '@/services/api';
 
-type Step = 'form' | 'done';
+type Step = 'form' | 'email_sent' | 'link_ready';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
@@ -12,6 +12,7 @@ export default function ForgotPasswordPage() {
   const [error, setError] = useState('');
   const [step, setStep] = useState<Step>('form');
   const [resetToken, setResetToken] = useState('');
+  const [copied, setCopied] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -19,8 +20,12 @@ export default function ForgotPasswordPage() {
     setLoading(true);
     try {
       const res = await authApi.forgotPassword(email);
-      setResetToken(res.data.reset_token ?? '');
-      setStep('done');
+      if (res.data.email_sent) {
+        setStep('email_sent');
+      } else {
+        setResetToken(res.data.reset_token ?? '');
+        setStep('link_ready');
+      }
     } catch (err: any) {
       console.error('Forgot password error:', err);
       if (!err.response) {
@@ -37,10 +42,17 @@ export default function ForgotPasswordPage() {
     ? `${typeof window !== 'undefined' ? window.location.origin : ''}/reset-password?token=${resetToken}`
     : '';
 
+  async function copyLink() {
+    await navigator.clipboard.writeText(resetLink);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
 
+        {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center mb-4">
             <Image
@@ -57,13 +69,9 @@ export default function ForgotPasswordPage() {
 
         <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl">
 
-          {/* Voltar */}
+          {/* Back + title */}
           <div className="flex items-center gap-3 mb-6">
-            <Link
-              href="/login"
-              className="text-slate-400 hover:text-white transition"
-              title="Voltar ao login"
-            >
+            <Link href="/login" className="text-slate-400 hover:text-white transition" title="Voltar">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
@@ -71,19 +79,23 @@ export default function ForgotPasswordPage() {
             <div>
               <h2 className="text-xl font-semibold text-white">Recuperar senha</h2>
               <p className="text-slate-400 text-sm mt-0.5">
-                {step === 'form' ? 'Informe o e-mail da sua conta' : 'Link de redefinição gerado'}
+                {step === 'form'
+                  ? 'Informe o e-mail da sua conta'
+                  : step === 'email_sent'
+                  ? 'Verifique sua caixa de entrada'
+                  : 'Link de redefinição gerado'}
               </p>
             </div>
           </div>
 
-          {step === 'form' ? (
+          {/* ── FORM ── */}
+          {step === 'form' && (
             <>
               {error && (
                 <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
                   {error}
                 </div>
               )}
-
               <form onSubmit={handleSubmit} className="space-y-5" noValidate>
                 <div>
                   <label className="block text-sm font-medium text-slate-300 mb-1.5">E-mail</label>
@@ -92,12 +104,12 @@ export default function ForgotPasswordPage() {
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     required
-                    placeholder="seu@email.com"
+                    autoFocus
                     autoComplete="email"
+                    placeholder="seu@email.com"
                     className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                   />
                 </div>
-
                 <button
                   type="submit"
                   disabled={loading || !email.trim()}
@@ -109,52 +121,106 @@ export default function ForgotPasswordPage() {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                       </svg>
-                      Gerando link...
+                      Enviando...
                     </span>
-                  ) : 'Gerar link de redefinição'}
+                  ) : 'Enviar link de redefinição'}
                 </button>
               </form>
             </>
-          ) : (
+          )}
+
+          {/* ── EMAIL SENT ── */}
+          {step === 'email_sent' && (
             <>
-              {/* Sucesso */}
               <div className="flex justify-center mb-5">
-                <div className="w-14 h-14 bg-emerald-600/20 border border-emerald-500/30 rounded-2xl flex items-center justify-center">
-                  <svg className="w-7 h-7 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <div className="w-16 h-16 bg-indigo-600/20 border border-indigo-500/30 rounded-2xl flex items-center justify-center">
+                  <svg className="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+              </div>
+
+              <p className="text-slate-300 text-sm text-center mb-2">
+                Enviamos um link de redefinição para
+              </p>
+              <p className="text-white font-semibold text-center mb-5 font-mono text-sm">
+                {email}
+              </p>
+              <p className="text-slate-400 text-xs text-center mb-6">
+                O link expira em <span className="text-white font-medium">1 hora</span>.
+                Verifique também a pasta de spam.
+              </p>
+
+              <div className="space-y-3">
+                <button
+                  type="button"
+                  onClick={() => { setStep('form'); setEmail(''); }}
+                  className="w-full py-2.5 px-4 bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 font-medium rounded-lg transition text-sm"
+                >
+                  Usar outro e-mail
+                </button>
+                <Link
+                  href="/login"
+                  className="block w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg transition text-sm text-center"
+                >
+                  Voltar ao login
+                </Link>
+              </div>
+            </>
+          )}
+
+          {/* ── LINK READY (SMTP not configured — fallback) ── */}
+          {step === 'link_ready' && (
+            <>
+              <div className="flex justify-center mb-5">
+                <div className="w-16 h-16 bg-emerald-600/20 border border-emerald-500/30 rounded-2xl flex items-center justify-center">
+                  <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                      d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                   </svg>
                 </div>
               </div>
 
               <p className="text-slate-300 text-sm text-center mb-5">
-                Link de redefinição gerado. Copie o link abaixo e compartilhe com o usuário.
-                O link expira em <span className="text-white font-medium">1 hora</span>.
+                Link gerado. Copie e compartilhe com o usuário — expira em{' '}
+                <span className="text-white font-medium">1 hora</span>.
               </p>
 
               {resetLink && (
                 <div className="mb-5">
-                  <label className="block text-xs font-medium text-slate-400 mb-1.5">Link de redefinição</label>
+                  <label className="block text-xs font-medium text-slate-400 mb-1.5">
+                    Link de redefinição
+                  </label>
                   <div className="flex gap-2">
                     <input
                       type="text"
                       readOnly
                       value={resetLink}
-                      className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-slate-300 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 truncate"
                       onClick={e => (e.target as HTMLInputElement).select()}
+                      className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-slate-300 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 truncate"
                     />
                     <button
                       type="button"
-                      onClick={() => navigator.clipboard.writeText(resetLink)}
-                      className="px-3 py-2 bg-indigo-600/20 hover:bg-indigo-600/40 border border-indigo-500/30 text-indigo-400 rounded-lg transition text-xs font-medium whitespace-nowrap"
+                      onClick={copyLink}
+                      className={`px-3 py-2 border rounded-lg transition text-xs font-semibold whitespace-nowrap ${
+                        copied
+                          ? 'bg-emerald-600/20 border-emerald-500/30 text-emerald-400'
+                          : 'bg-indigo-600/20 hover:bg-indigo-600/40 border-indigo-500/30 text-indigo-400'
+                      }`}
                     >
-                      Copiar
+                      {copied ? '✓ Copiado' : 'Copiar'}
                     </button>
                   </div>
                 </div>
               )}
 
-              <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg text-amber-400 text-xs mb-5">
-                <strong>Atenção:</strong> Em produção, integre um serviço de e-mail para enviar este link automaticamente.
+              <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg text-amber-400 text-xs mb-5 leading-relaxed">
+                <strong>SMTP não configurado.</strong> Configure as credenciais SMTP em{' '}
+                <Link href="/settings" className="underline hover:text-amber-300 transition">
+                  Configurações
+                </Link>{' '}
+                para enviar links por e-mail automaticamente.
               </div>
 
               <div className="flex gap-3">

@@ -213,11 +213,13 @@ def logout(
 
 
 @router.post("/forgot-password")
-def forgot_password(body: ForgotPasswordRequest, db: Session = Depends(get_db)):
+def forgot_password(body: ForgotPasswordRequest, request: Request, db: Session = Depends(get_db)):
+    from backend.modules.email.service import send_password_reset_email
+
     user = db.query(User).filter(User.email == body.email, User.active == True).first()
     # Always return success to avoid user enumeration
     if not user:
-        return {"message": "Se o e-mail existir, um link de redefinição foi gerado."}
+        return {"message": "Se o e-mail existir, um link de redefinição foi gerado.", "email_sent": False}
 
     # Invalidate any existing unused tokens for this user
     db.query(PasswordResetToken).filter(
@@ -238,11 +240,37 @@ def forgot_password(body: ForgotPasswordRequest, db: Session = Depends(get_db)):
     log_action(db, action="PASSWORD_RESET_REQUESTED", module="auth",
                user_id=user.id, user_email=user.email)
 
-    return {
-        "message": "Link de redefinição gerado com sucesso.",
-        "reset_token": token,
+    # Derive base URL from the incoming request
+    base_url = str(request.base_url).rstrip("/")
+    forwarded_host = request.headers.get("x-forwarded-host")
+    forwarded_proto = request.headers.get("x-forwarded-proto", "https")
+    if forwarded_host:
+        base_url = f"{forwarded_proto}://{forwarded_host}"
+
+    email_sent = False
+    try:
+        email_sent = send_password_reset_email(
+            db=db,
+            to_email=user.email,
+            reset_token=token,
+            base_url=base_url,
+            expires_hours=RESET_TOKEN_EXPIRE_HOURS,
+        )
+    except Exception as exc:
+        import logging
+        logging.getLogger("nexaops.auth").warning("Failed to send reset email: %s", exc)
+
+    response: dict = {
+        "message": "E-mail de redefinição enviado com sucesso." if email_sent
+                   else "Link de redefinição gerado com sucesso.",
+        "email_sent": email_sent,
         "expires_in_hours": RESET_TOKEN_EXPIRE_HOURS,
     }
+    # Only expose the raw token when email could not be delivered (fallback for admins)
+    if not email_sent:
+        response["reset_token"] = token
+
+    return response
 
 
 @router.post("/reset-password")
