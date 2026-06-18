@@ -13,7 +13,7 @@ from backend.core.infrastructure.database import SessionLocal
 from backend.core.infrastructure.security import get_password_hash
 from backend.core.domain.models import (
     Base, Organization, User, Role, Permission, RolePermission,
-    UserRole, Settings
+    UserRole, Settings, AssetType, Manufacturer, Tag,
 )
 from backend.core.infrastructure.database import engine
 
@@ -100,6 +100,56 @@ def seed():
             db.add(admin)
             db.flush()
             db.add(UserRole(user_id=admin.id, role_id=role_objs["super_admin"].id))
+
+        # ── Asset Types ────────────────────────────────────────────
+        asset_types_data = [
+            ("Server", "server", "Physical or virtual server", "server"),
+            ("Workstation", "workstation", "Desktop or laptop computer", "monitor"),
+            ("Switch", "switch", "Network switch", "network"),
+            ("Router", "router", "Network router", "router"),
+            ("Firewall", "firewall", "Network firewall", "shield"),
+            ("Access Point", "access_point", "Wireless access point", "wifi"),
+            ("Printer", "printer", "Printer or MFP", "printer"),
+            ("Storage", "storage", "NAS or SAN storage device", "hard-drive"),
+            ("Virtual Machine", "virtual_machine", "Virtual machine instance", "cpu"),
+            ("Cloud Resource", "cloud_resource", "Cloud service or resource", "cloud"),
+            ("UPS", "ups", "Uninterruptible Power Supply", "zap"),
+            ("IoT Device", "iot_device", "Internet of Things device", "radio"),
+            ("Application", "application", "Software application", "box"),
+            ("Database", "database", "Database server", "database"),
+        ]
+        for name, slug, desc, icon in asset_types_data:
+            at = db.query(AssetType).filter(AssetType.slug == slug).first()
+            if not at:
+                db.add(AssetType(name=name, slug=slug, description=desc, icon=icon))
+
+        # ── Manufacturers ───────────────────────────────────────────
+        manufacturers_data = [
+            "Cisco", "MikroTik", "Fortinet", "Sophos", "UniFi (Ubiquiti)",
+            "Aruba", "Huawei", "Juniper", "Dell", "HP", "Lenovo", "IBM",
+            "Supermicro", "Synology", "QNAP", "Brother", "Epson", "Lexmark",
+            "Canon", "Xerox", "VMware", "Microsoft", "Apple", "Intel", "AMD",
+        ]
+        for mfr_name in manufacturers_data:
+            m = db.query(Manufacturer).filter(Manufacturer.name == mfr_name).first()
+            if not m:
+                db.add(Manufacturer(name=mfr_name))
+
+        # ── Tags ────────────────────────────────────────────────────
+        tags_data = [
+            ("Production", "#ef4444"),
+            ("Backup", "#3b82f6"),
+            ("ERP", "#8b5cf6"),
+            ("Financial", "#f59e0b"),
+            ("Critical", "#dc2626"),
+            ("Laboratory", "#10b981"),
+            ("Development", "#06b6d4"),
+            ("DMZ", "#f97316"),
+        ]
+        for tag_name, color in tags_data:
+            t = db.query(Tag).filter(Tag.name == tag_name).first()
+            if not t:
+                db.add(Tag(name=tag_name, color=color))
 
         # ── Default Settings ───────────────────────────────────────
         default_settings = [

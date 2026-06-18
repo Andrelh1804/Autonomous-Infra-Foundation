@@ -13,6 +13,8 @@ from backend.api.v1.routes.roles import router as roles_router
 from backend.api.v1.routes.audit import router as audit_router
 from backend.api.v1.routes.dashboard import router as dashboard_router
 from backend.api.v1.routes.settings import router as settings_router
+from backend.api.v1.routes.assets import router as assets_router
+from backend.api.v1.routes.discovery import router as discovery_router
 
 limiter = Limiter(key_func=get_remote_address)
 
@@ -47,6 +49,8 @@ app.include_router(roles_router, prefix=PREFIX)
 app.include_router(audit_router, prefix=PREFIX)
 app.include_router(dashboard_router, prefix=PREFIX)
 app.include_router(settings_router, prefix=PREFIX)
+app.include_router(assets_router, prefix=PREFIX)
+app.include_router(discovery_router, prefix=PREFIX)
 
 
 @app.get("/api/v1/health")

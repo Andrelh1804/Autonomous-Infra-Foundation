@@ -113,3 +113,31 @@ export const settingsApi = {
   list: () => api.get('/settings'),
   update: (key: string, value: string) => api.patch(`/settings/${key}`, { value }),
 };
+
+// Assets (CMDB)
+export const assetsApi = {
+  list: (params?: object) => api.get('/assets', { params }),
+  get: (id: number) => api.get(`/assets/${id}`),
+  create: (data: object) => api.post('/assets', data),
+  update: (id: number, data: object) => api.patch(`/assets/${id}`, data),
+  delete: (id: number) => api.delete(`/assets/${id}`),
+  stats: () => api.get('/assets/stats'),
+  types: () => api.get('/assets/types'),
+  manufacturers: () => api.get('/assets/manufacturers'),
+  tags: () => api.get('/assets/tags'),
+  history: (id: number) => api.get(`/assets/${id}/history`),
+  relationships: (id: number) => api.get(`/assets/${id}/relationships`),
+  addRelationship: (id: number, data: object) => api.post(`/assets/${id}/relationships`, data),
+  deleteRelationship: (relId: number) => api.delete(`/assets/relationships/${relId}`),
+};
+
+// Discovery Engine
+export const discoveryApi = {
+  list: (params?: object) => api.get('/discovery', { params }),
+  start: (data: object) => api.post('/discovery/start', data),
+  get: (id: number) => api.get(`/discovery/${id}`),
+  results: (id: number, params?: object) => api.get(`/discovery/${id}/results`, { params }),
+  delete: (id: number) => api.delete(`/discovery/${id}`),
+  stats: () => api.get('/discovery/stats'),
+  allRelationships: () => api.get('/discovery/relationships/all'),
+};

@@ -1,0 +1,824 @@
+# FASE 2 — DISCOVERY ENGINE, INVENTÁRIO INTELIGENTE E CMDB
+
+## PAPEL DO AGENTE
+
+Atue como Arquiteto de Software Enterprise Sênior especializado em:
+
+* Network Discovery
+* Asset Management
+* CMDB
+* IT Asset Management (ITAM)
+* SNMP
+* WMI
+* SSH
+* Infraestrutura Corporativa
+* Observabilidade
+* FastAPI
+* PostgreSQL
+
+Você deve expandir a plataforma AII construída na Fase 1.
+
+NÃO recriar a plataforma.
+
+Utilizar toda a estrutura existente.
+
+Implementar apenas os novos módulos desta fase.
+
+---
+
+# OBJETIVO DA FASE
+
+Construir o núcleo de descoberta automática e inventário corporativo.
+
+A plataforma deve ser capaz de:
+
+* Descobrir ativos automaticamente
+* Classificar dispositivos
+* Criar CMDB inteligente
+* Atualizar inventário automaticamente
+* Detectar mudanças na infraestrutura
+* Mapear relacionamentos entre ativos
+
+Ao final da fase a plataforma deverá funcionar como uma combinação entre:
+
+* Discovery Engine
+* IT Asset Management
+* CMDB Corporativa
+
+Preparada para monitoramento na Fase 3.
+
+---
+
+# ARQUITETURA
+
+Criar novos módulos:
+
+backend/modules/
+
+discovery/
+
+inventory/
+
+cmdb/
+
+network_scan/
+
+asset_classification/
+
+relationship_engine/
+
+---
+
+# MÓDULO DISCOVERY ENGINE
+
+Criar motor de descoberta automática.
+
+Capaz de executar:
+
+* Descoberta manual
+* Descoberta agendada
+* Descoberta contínua
+
+Métodos:
+
+* ICMP
+* ARP
+* SNMP
+* WMI
+* SSH
+* DNS Reverse Lookup
+
+---
+
+# NETWORK DISCOVERY
+
+Permitir escanear:
+
+## Rede única
+
+Exemplo:
+
+192.168.1.0/24
+
+---
+
+## Faixa de IP
+
+Exemplo:
+
+192.168.1.10 - 192.168.1.250
+
+---
+
+## Múltiplas redes
+
+Exemplo:
+
+10.0.0.0/24
+
+172.16.0.0/24
+
+192.168.1.0/24
+
+---
+
+# PROCESSO DE DESCOBERTA
+
+Fluxo:
+
+1. Scan IP
+2. Identificação do host
+3. Coleta de informações
+4. Classificação
+5. Criação do ativo
+6. Associação ao tenant
+7. Atualização da CMDB
+
+---
+
+# CLASSIFICAÇÃO AUTOMÁTICA
+
+A plataforma deve identificar automaticamente:
+
+## Servidores
+
+Windows
+Linux
+Unix
+
+---
+
+## Workstations
+
+Windows
+Linux
+macOS
+
+---
+
+## Rede
+
+Switches
+Roteadores
+Firewalls
+
+---
+
+## Wireless
+
+Access Points
+
+---
+
+## Impressoras
+
+Laser
+Térmica
+Multifuncional
+
+---
+
+## Virtualização
+
+VMware
+Hyper-V
+Proxmox
+
+---
+
+## Storage
+
+NAS
+SAN
+
+---
+
+## Cloud
+
+AWS
+Azure
+Google Cloud
+
+---
+
+# COLETA DE INFORMAÇÕES
+
+Coletar:
+
+Hostname
+
+IP
+
+MAC
+
+Fabricante
+
+Modelo
+
+Serial
+
+Sistema Operacional
+
+Versão
+
+Firmware
+
+Tempo de atividade
+
+Descrição
+
+Localização
+
+Responsável
+
+---
+
+# FABRICANTES SUPORTADOS
+
+Identificar automaticamente:
+
+Cisco
+
+Mikrotik
+
+Fortinet
+
+Sophos
+
+UniFi
+
+Aruba
+
+Huawei
+
+Juniper
+
+Dell
+
+HP
+
+Lenovo
+
+IBM
+
+Supermicro
+
+Synology
+
+QNAP
+
+Brother
+
+Epson
+
+Lexmark
+
+Canon
+
+HP Printing
+
+Xerox
+
+---
+
+# SNMP DISCOVERY
+
+Implementar:
+
+SNMP v2
+
+SNMP v3
+
+Permitir configuração:
+
+Community
+
+Porta
+
+Credenciais
+
+Timeout
+
+Retry
+
+---
+
+# WMI DISCOVERY
+
+Windows:
+
+Coletar:
+
+CPU
+
+Memória
+
+Discos
+
+Sistema Operacional
+
+Versão
+
+Domínio
+
+Fabricante
+
+Modelo
+
+Usuário Logado
+
+---
+
+# SSH DISCOVERY
+
+Linux:
+
+Coletar:
+
+Hostname
+
+Kernel
+
+Distribuição
+
+CPU
+
+Memória
+
+Discos
+
+Interfaces
+
+Serviços
+
+---
+
+# DNS DISCOVERY
+
+Resolver:
+
+Hostname
+
+FQDN
+
+Aliases
+
+---
+
+# MODELAGEM DA CMDB
+
+Criar tabela:
+
+Assets
+
+Campos:
+
+id
+
+uuid
+
+organization_id
+
+site_id
+
+asset_type_id
+
+manufacturer_id
+
+model_id
+
+hostname
+
+fqdn
+
+ip_address
+
+mac_address
+
+serial_number
+
+operating_system
+
+firmware_version
+
+status
+
+criticality
+
+created_at
+
+updated_at
+
+---
+
+# ASSET TYPES
+
+Criar tabela:
+
+AssetTypes
+
+Valores:
+
+Server
+
+Workstation
+
+Switch
+
+Router
+
+Firewall
+
+Access Point
+
+Printer
+
+Storage
+
+Virtual Machine
+
+Cloud Resource
+
+UPS
+
+IoT Device
+
+Application
+
+Database
+
+---
+
+# FABRICANTES
+
+Criar tabela:
+
+Manufacturers
+
+---
+
+# MODELOS
+
+Criar tabela:
+
+Models
+
+---
+
+# TAGS
+
+Criar tabela:
+
+Tags
+
+Permitir:
+
+Produção
+
+Backup
+
+ERP
+
+Financeiro
+
+Crítico
+
+Laboratório
+
+---
+
+# RELACIONAMENTOS
+
+Criar Relationship Engine.
+
+Mapear:
+
+Servidor → Aplicação
+
+Servidor → Banco
+
+Switch → Servidor
+
+Firewall → Rede
+
+VM → Host
+
+Impressora → Departamento
+
+---
+
+# CHANGE DETECTION
+
+Detectar mudanças.
+
+Exemplos:
+
+Novo IP
+
+Novo Hostname
+
+Mudança de Firmware
+
+Mudança de Sistema Operacional
+
+Mudança de Serial
+
+Mudança de Configuração
+
+Registrar histórico.
+
+---
+
+# HISTÓRICO DE ATIVOS
+
+Criar Asset History.
+
+Registrar:
+
+Antes
+
+Depois
+
+Usuário
+
+Data
+
+Origem da alteração
+
+---
+
+# DASHBOARD DE INVENTÁRIO
+
+Criar dashboard.
+
+Exibir:
+
+Total de ativos
+
+Servidores
+
+Workstations
+
+Switches
+
+Firewalls
+
+Impressoras
+
+Cloud
+
+Storage
+
+---
+
+# MAPA DE REDE
+
+Criar visualização.
+
+Exibir:
+
+Ativos
+
+IPs
+
+Relacionamentos
+
+Sites
+
+---
+
+# CENTRO DE DESCOBERTA
+
+Criar tela:
+
+Discovery Center
+
+Funções:
+
+Nova descoberta
+
+Descoberta agendada
+
+Histórico
+
+Fila de descobertas
+
+Resultados
+
+Aprovação manual
+
+---
+
+# APROVAÇÃO DE ATIVOS
+
+Permitir:
+
+Aceitar
+
+Ignorar
+
+Bloquear
+
+Cadastrar automaticamente
+
+---
+
+# APIs
+
+Criar APIs REST completas.
+
+Exemplos:
+
+GET /api/v1/assets
+
+POST /api/v1/assets
+
+GET /api/v1/discovery
+
+POST /api/v1/discovery/start
+
+GET /api/v1/discovery/history
+
+GET /api/v1/relationships
+
+---
+
+# SEGURANÇA
+
+Toda descoberta deve respeitar:
+
+Tenant
+
+Permissões
+
+RBAC
+
+Auditoria
+
+---
+
+# AUDITORIA
+
+Registrar:
+
+Quem iniciou scan
+
+Quando iniciou
+
+Escopo
+
+Quantidade encontrada
+
+Alterações realizadas
+
+---
+
+# LOGS
+
+Criar logs específicos:
+
+Discovery Logs
+
+Asset Logs
+
+CMDB Logs
+
+---
+
+# PERFORMANCE
+
+Requisitos:
+
+Descobrir 500 hosts simultaneamente
+
+Utilizar processamento assíncrono
+
+Utilizar FastAPI Async
+
+Criar fila interna preparada para futura migração para Kafka
+
+---
+
+# FRONTEND
+
+Criar menus:
+
+Discovery
+
+Assets
+
+CMDB
+
+Network Map
+
+Relationships
+
+Asset History
+
+---
+
+# FILTROS
+
+Permitir filtrar por:
+
+Site
+
+Tipo
+
+Fabricante
+
+Modelo
+
+IP
+
+Hostname
+
+Status
+
+Criticidade
+
+Tags
+
+---
+
+# EXPORTAÇÃO
+
+Permitir exportar:
+
+CSV
+
+Excel
+
+PDF
+
+---
+
+# TESTES
+
+Criar:
+
+Testes unitários
+
+Testes integração
+
+Testes APIs
+
+Cobertura mínima:
+
+80%
+
+---
+
+# CRITÉRIOS DE ACEITE
+
+A fase será concluída quando:
+
+✓ Descoberta por IP funcionar
+
+✓ Descoberta por faixa funcionar
+
+✓ SNMP funcionar
+
+✓ WMI funcionar
+
+✓ SSH funcionar
+
+✓ CMDB criada
+
+✓ Inventário automático funcionando
+
+✓ Relacionamentos funcionando
+
+✓ Dashboard funcionando
+
+✓ Mapa de rede funcionando
+
+✓ Histórico funcionando
+
+✓ Auditoria funcionando
+
+✓ APIs documentadas
+
+✓ Docker funcionando
+
+✓ Testes aprovados
+
+---
+
+# ENTREGA FINAL
+
+Gerar:
+
+1. Discovery Engine completo
+2. CMDB completa
+3. Asset Management completo
+4. Relationship Engine
+5. Dashboard de inventário
+6. Discovery Center
+7. APIs REST
+8. Banco atualizado
+9. Migrations
+10. Testes
+11. Documentação
+
+Ao concluir, preparar a arquitetura para a Fase 3 — Monitoramento, Métricas, TimescaleDB, Alertas, Impressoras, UniFi, SNMP avançado e Observabilidade.

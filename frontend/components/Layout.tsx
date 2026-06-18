@@ -7,17 +7,38 @@ import { authApi } from '@/services/api';
 import { cn } from '@/lib/utils';
 import {
   LayoutDashboard, Building2, Users, MapPin, ShieldCheck,
-  Settings, LogOut, Bell, Sun, Moon, ChevronLeft, ChevronRight, Menu, ScrollText
+  Settings, LogOut, Bell, Sun, Moon, ChevronLeft, ChevronRight, Menu, ScrollText,
+  Radar, Server, Network, GitFork, History, ChevronDown
 } from 'lucide-react';
 
-const NAV = [
-  { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { href: '/organizations', icon: Building2, label: 'Organizations' },
-  { href: '/users', icon: Users, label: 'Users' },
-  { href: '/sites', icon: MapPin, label: 'Sites' },
-  { href: '/permissions', icon: ShieldCheck, label: 'Permissions' },
-  { href: '/audit', icon: ScrollText, label: 'Audit Log' },
-  { href: '/settings', icon: Settings, label: 'Settings' },
+const NAV_GROUPS = [
+  {
+    label: 'Platform',
+    items: [
+      { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+      { href: '/organizations', icon: Building2, label: 'Organizations' },
+      { href: '/users', icon: Users, label: 'Users' },
+      { href: '/sites', icon: MapPin, label: 'Sites' },
+    ],
+  },
+  {
+    label: 'Discovery & CMDB',
+    items: [
+      { href: '/discovery', icon: Radar, label: 'Discovery' },
+      { href: '/assets', icon: Server, label: 'Assets / CMDB' },
+      { href: '/network-map', icon: Network, label: 'Network Map' },
+      { href: '/relationships', icon: GitFork, label: 'Relationships' },
+      { href: '/asset-history', icon: History, label: 'Asset History' },
+    ],
+  },
+  {
+    label: 'Administration',
+    items: [
+      { href: '/permissions', icon: ShieldCheck, label: 'Permissions' },
+      { href: '/audit', icon: ScrollText, label: 'Audit Log' },
+      { href: '/settings', icon: Settings, label: 'Settings' },
+    ],
+  },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -70,26 +91,37 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 py-4 space-y-1 px-2 overflow-y-auto scrollbar-thin">
-          {NAV.map(({ href, icon: Icon, label }) => {
-            const active = pathname.startsWith(href);
-            return (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setMobileOpen(false)}
-                className={cn(
-                  'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150 group',
-                  active
-                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/25'
-                    : 'text-slate-400 hover:bg-white/5 hover:text-white'
-                )}
-              >
-                <Icon className="w-5 h-5 flex-shrink-0" />
-                {!collapsed && <span className="text-sm font-medium">{label}</span>}
-              </Link>
-            );
-          })}
+        <nav className="flex-1 py-3 px-2 overflow-y-auto scrollbar-thin space-y-4">
+          {NAV_GROUPS.map((group) => (
+            <div key={group.label}>
+              {!collapsed && (
+                <p className="px-3 mb-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                  {group.label}
+                </p>
+              )}
+              <div className="space-y-0.5">
+                {group.items.map(({ href, icon: Icon, label }) => {
+                  const active = pathname.startsWith(href);
+                  return (
+                    <Link
+                      key={href}
+                      href={href}
+                      onClick={() => setMobileOpen(false)}
+                      className={cn(
+                        'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-150',
+                        active
+                          ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/25'
+                          : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                      )}
+                    >
+                      <Icon className="w-5 h-5 flex-shrink-0" />
+                      {!collapsed && <span className="text-sm font-medium">{label}</span>}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </nav>
 
         {/* Collapse toggle */}

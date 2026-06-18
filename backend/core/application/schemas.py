@@ -252,3 +252,190 @@ class PaginatedResponse(BaseModel):
     page: int
     per_page: int
     pages: int
+
+
+# ── Phase 2: CMDB / Discovery Schemas ─────────────────────────────────────────
+
+class AssetTypeResponse(BaseModel):
+    id: int
+    name: str
+    slug: str
+    description: Optional[str]
+    icon: Optional[str]
+
+    class Config:
+        from_attributes = True
+
+
+class ManufacturerResponse(BaseModel):
+    id: int
+    name: str
+    website: Optional[str]
+    support_url: Optional[str]
+
+    class Config:
+        from_attributes = True
+
+
+class TagResponse(BaseModel):
+    id: int
+    name: str
+    color: str
+
+    class Config:
+        from_attributes = True
+
+
+class AssetCreate(BaseModel):
+    organization_id: Optional[int] = None
+    site_id: Optional[int] = None
+    asset_type_id: Optional[int] = None
+    manufacturer_id: Optional[int] = None
+    model_id: Optional[int] = None
+    hostname: Optional[str] = None
+    fqdn: Optional[str] = None
+    ip_address: Optional[str] = None
+    mac_address: Optional[str] = None
+    serial_number: Optional[str] = None
+    operating_system: Optional[str] = None
+    os_version: Optional[str] = None
+    firmware_version: Optional[str] = None
+    description: Optional[str] = None
+    location: Optional[str] = None
+    responsible: Optional[str] = None
+    status: str = "active"
+    criticality: str = "medium"
+    tag_ids: Optional[List[int]] = []
+
+
+class AssetUpdate(BaseModel):
+    site_id: Optional[int] = None
+    asset_type_id: Optional[int] = None
+    manufacturer_id: Optional[int] = None
+    model_id: Optional[int] = None
+    hostname: Optional[str] = None
+    fqdn: Optional[str] = None
+    ip_address: Optional[str] = None
+    mac_address: Optional[str] = None
+    serial_number: Optional[str] = None
+    operating_system: Optional[str] = None
+    os_version: Optional[str] = None
+    firmware_version: Optional[str] = None
+    description: Optional[str] = None
+    location: Optional[str] = None
+    responsible: Optional[str] = None
+    status: Optional[str] = None
+    criticality: Optional[str] = None
+    approval_status: Optional[str] = None
+    tag_ids: Optional[List[int]] = None
+
+
+class AssetResponse(BaseModel):
+    id: int
+    uuid: str
+    organization_id: int
+    site_id: Optional[int]
+    asset_type_id: Optional[int]
+    manufacturer_id: Optional[int]
+    model_id: Optional[int]
+    hostname: Optional[str]
+    fqdn: Optional[str]
+    ip_address: Optional[str]
+    mac_address: Optional[str]
+    serial_number: Optional[str]
+    operating_system: Optional[str]
+    os_version: Optional[str]
+    firmware_version: Optional[str]
+    description: Optional[str]
+    location: Optional[str]
+    responsible: Optional[str]
+    status: str
+    criticality: str
+    approval_status: str
+    last_seen: Optional[datetime]
+    created_at: datetime
+    updated_at: Optional[datetime]
+    asset_type: Optional[AssetTypeResponse] = None
+    manufacturer: Optional[ManufacturerResponse] = None
+    tags: List[TagResponse] = []
+
+    @classmethod
+    def model_validate(cls, obj, **kwargs):
+        instance = super().model_validate(obj, **kwargs)
+        if hasattr(obj, 'asset_tags'):
+            instance.tags = [TagResponse.model_validate(at.tag) for at in obj.asset_tags if at.tag]
+        return instance
+
+    class Config:
+        from_attributes = True
+
+
+class AssetHistoryResponse(BaseModel):
+    id: int
+    asset_id: int
+    changed_by: Optional[int]
+    change_source: str
+    changes: Optional[str]
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class AssetRelationshipCreate(BaseModel):
+    target_asset_id: int
+    relationship_type: str
+    description: Optional[str] = None
+
+
+class AssetRelationshipResponse(BaseModel):
+    id: int
+    source_asset_id: int
+    target_asset_id: int
+    relationship_type: str
+    description: Optional[str]
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class DiscoveryJobCreate(BaseModel):
+    name: Optional[str] = None
+    organization_id: Optional[int] = None
+    site_id: Optional[int] = None
+    targets: List[str]
+    methods: Optional[List[str]] = ["icmp", "dns"]
+
+
+class DiscoveryJobResponse(BaseModel):
+    id: int
+    uuid: str
+    organization_id: int
+    site_id: Optional[int]
+    name: Optional[str]
+    targets: Optional[str]
+    methods: Optional[str]
+    status: str
+    hosts_scanned: int
+    hosts_found: int
+    error_message: Optional[str]
+    started_at: Optional[datetime]
+    finished_at: Optional[datetime]
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class DiscoveryResultResponse(BaseModel):
+    id: int
+    discovery_job_id: int
+    asset_id: Optional[int]
+    ip_address: Optional[str]
+    hostname: Optional[str]
+    status: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True

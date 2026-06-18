@@ -85,3 +85,116 @@ export interface AuthUser {
   is_super_admin: boolean;
   roles: string[];
 }
+
+// ── Phase 2: CMDB / Discovery Types ───────────────────────────────────────────
+
+export interface AssetType {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string;
+  icon?: string;
+}
+
+export interface Manufacturer {
+  id: number;
+  name: string;
+  website?: string;
+  support_url?: string;
+}
+
+export interface Tag {
+  id: number;
+  name: string;
+  color: string;
+}
+
+export interface Asset {
+  id: number;
+  uuid: string;
+  organization_id: number;
+  site_id?: number;
+  asset_type_id?: number;
+  manufacturer_id?: number;
+  model_id?: number;
+  hostname?: string;
+  fqdn?: string;
+  ip_address?: string;
+  mac_address?: string;
+  serial_number?: string;
+  operating_system?: string;
+  os_version?: string;
+  firmware_version?: string;
+  description?: string;
+  location?: string;
+  responsible?: string;
+  status: string;
+  criticality: string;
+  approval_status: string;
+  last_seen?: string;
+  created_at: string;
+  updated_at?: string;
+  asset_type?: AssetType;
+  manufacturer?: Manufacturer;
+  tags: Tag[];
+}
+
+export interface AssetHistory {
+  id: number;
+  asset_id: number;
+  changed_by?: number;
+  change_source: string;
+  changes?: string;
+  created_at: string;
+}
+
+export interface AssetRelationship {
+  id: number;
+  source_asset_id: number;
+  target_asset_id: number;
+  relationship_type: string;
+  description?: string;
+  created_at: string;
+}
+
+export interface DiscoveryJob {
+  id: number;
+  uuid: string;
+  organization_id: number;
+  site_id?: number;
+  name?: string;
+  targets?: string;
+  methods?: string;
+  status: string;
+  hosts_scanned: number;
+  hosts_found: number;
+  error_message?: string;
+  started_at?: string;
+  finished_at?: string;
+  created_at: string;
+}
+
+export interface DiscoveryResult {
+  id: number;
+  discovery_job_id: number;
+  asset_id?: number;
+  ip_address?: string;
+  hostname?: string;
+  status: string;
+  created_at: string;
+}
+
+export interface AssetStats {
+  total: number;
+  by_type: Record<string, { name: string; count: number }>;
+  by_status: Record<string, number>;
+}
+
+export interface DiscoveryStats {
+  total_jobs: number;
+  completed: number;
+  running: number;
+  failed: number;
+  pending: number;
+  total_hosts_found: number;
+}
