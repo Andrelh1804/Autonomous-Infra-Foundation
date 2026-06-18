@@ -97,7 +97,7 @@ export default function LoginPage() {
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     required
-                    placeholder="admin@nexaops.local"
+                    placeholder="admin@aii.local"
                     className="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
                   />
                 </div>
@@ -130,9 +130,13 @@ export default function LoginPage() {
                 </button>
               </form>
 
-              <p className="mt-6 text-center text-xs text-slate-500">
-                Padrão: admin@aii.local / Admin@2024!
-              </p>
+              <button
+                type="button"
+                onClick={() => { setEmail('admin@aii.local'); setPassword('Admin@2024!'); }}
+                className="mt-6 w-full text-center text-xs text-slate-500 hover:text-slate-300 transition py-2 border border-white/5 hover:border-white/15 rounded-lg"
+              >
+                Preencher credenciais padrão: <span className="font-mono text-slate-400">admin@aii.local</span>
+              </button>
             </>
           ) : (
             <>
