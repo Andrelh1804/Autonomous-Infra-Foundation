@@ -7,7 +7,7 @@ import { authApi } from '@/services/api';
 import { cn } from '@/lib/utils';
 import {
   LayoutDashboard, Building2, Users, MapPin, ShieldCheck,
-  Settings, LogOut, Bell, Sun, Moon, ChevronLeft, ChevronRight, Menu
+  Settings, LogOut, Bell, Sun, Moon, ChevronLeft, ChevronRight, Menu, ScrollText
 } from 'lucide-react';
 
 const NAV = [
@@ -16,6 +16,7 @@ const NAV = [
   { href: '/users', icon: Users, label: 'Users' },
   { href: '/sites', icon: MapPin, label: 'Sites' },
   { href: '/permissions', icon: ShieldCheck, label: 'Permissions' },
+  { href: '/audit', icon: ScrollText, label: 'Audit Log' },
   { href: '/settings', icon: Settings, label: 'Settings' },
 ];
 

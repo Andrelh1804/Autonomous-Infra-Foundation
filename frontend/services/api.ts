@@ -93,6 +93,7 @@ export const permissionsApi = {
 // Audit
 export const auditApi = {
   list: (params?: object) => api.get('/audit', { params }),
+  meta: () => api.get('/audit/meta'),
 };
 
 // Dashboard
